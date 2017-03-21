@@ -102,6 +102,17 @@ Possible /api folder structure. New J-WS Classes, based on Joomla! Framework:
 			extensionname/Controller/Api or WebService
 		/api/includes	      
 
+###### Joomla! Framework Sample Applications
+
+To guide the implementation, we have several sample applications, poewered by Joomla! Framework:
+
+* https://framework.joomla.org - Application powering the internet home of the Joomla! Framework. [https://github.com/joomla/framework.joomla.org](https://github.com/joomla/framework.joomla.org)
+* https://help.joomla.org - Application powering the Joomla! Help Screen proxy serving help screens to Joomla! installations. [https://github.com/joomla/help.joomla.org](https://github.com/joomla/help.joomla.org)
+* Joomla Stats. Server for collecting environment stats for Joomla Installations. [https://github.com/joomla/statistics-server](https://github.com/joomla/statistics-server)
+* https://issues.joomla.org - Issue tracking application extending GitHub's issues and pull requests for the Joomla! project. [https://github.com/joomla/jissues](https://github.com/joomla/jissues)
+* jUpgradeNext. An application using Joomla! Framework with DI. [https://github.com/matware-lab/jUpgradeNext/blob/master/src/CliApplication.php](https://github.com/matware-lab/jUpgradeNext/blob/master/src/CliApplication.php)
+* How to register providers with [https://github.com/matware-lab/jUpgradeNext/blob/master/src/CliApplication.php#L121](https://github.com/matware-lab/jUpgradeNext/blob/master/src/CliApplication.php#L121)
+
 ##### b. Development Alternative: 3-Party Micro-framework 
 
 As an alternative, nowadays, several popular micro-frameworks can solve the project requirements. Following this argument, these are some suitable third-party micro-frameworks:
