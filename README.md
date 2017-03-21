@@ -102,7 +102,7 @@ Possible /api folder structure. New J-WS Classes, based on Joomla! Framework:
 			extensionname/Controller/Api or WebService
 		/api/includes	      
 
-###### Joomla! Framework Sample Applications
+###### [Joomla! Framework Sample Applications](#jf-samples)
 
 To guide the implementation, we have several sample applications, poewered by Joomla! Framework:
 
