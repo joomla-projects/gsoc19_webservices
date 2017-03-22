@@ -106,6 +106,7 @@ Possible /api folder structure. New J-WS Classes, based on Joomla! Framework:
 
 To guide the implementation, we have several sample applications, poewered by Joomla! Framework:
 
+* https://github.com/joomla-framework - Lot of useful information into libraries README [https://github.com/joomla-framework](https://github.com/joomla-framework)
 * https://framework.joomla.org - Application powering the internet home of the Joomla! Framework. [https://github.com/joomla/framework.joomla.org](https://github.com/joomla/framework.joomla.org)
 * https://help.joomla.org - Application powering the Joomla! Help Screen proxy serving help screens to Joomla! installations. [https://github.com/joomla/help.joomla.org](https://github.com/joomla/help.joomla.org)
 * Joomla Stats. Server for collecting environment stats for Joomla Installations. [https://github.com/joomla/statistics-server](https://github.com/joomla/statistics-server)
