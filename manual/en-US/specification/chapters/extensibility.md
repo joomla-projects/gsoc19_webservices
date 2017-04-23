@@ -1,4 +1,4 @@
-## 4. Extensibility
+## Extensibility
 
 Other extensions must be able to add new entry points. REST API for Joomla Contacts (com_contact)
 

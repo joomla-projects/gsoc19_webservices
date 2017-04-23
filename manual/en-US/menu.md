@@ -1,3 +1,10 @@
 - [Introduction](specification/introduction.md)
 - **Coding Standards**
     - [Basic Guidelines](specification/chapters/basic-guidelines.md)
+    - [Rest API](specification/chapters/rest-api.md)
+    - [Controllers](specification/chapters/controllers.md)
+    - [Extensibility](specification/chapters/extensibility.md)
+    - [Business Models](specification/chapters/business-models.md)
+    - [API Authentication](specification/chapters/api-key-authentication.md)
+    - [Resources](specification/chapters/resources.md)
+    - [Further Versions](specification/chapters/beyond-gsoc.md)
