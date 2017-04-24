@@ -1,10 +1,10 @@
 - [Introduction](specification/introduction.md)
-- **Coding Standards**
-    - [Basic Guidelines](specification/chapters/basic-guidelines.md)
-    - [Rest API](specification/chapters/rest-api.md)
-    - [Controllers](specification/chapters/controllers.md)
+- **About Joomla**
+    - [Introduction](about-joomla/introduction.md)
+- **Joomla's Proposed Webservices**
+    - [URLs and Routing](specification/chapters/urls-and-routing.md)
     - [Extensibility](specification/chapters/extensibility.md)
-    - [Business Models](specification/chapters/business-models.md)
-    - [API Authentication](specification/chapters/api-key-authentication.md)
+    - [User Interface](specification/chapters/user-interface.md)
+    - [API Authentication](specification/chapters/api-authentication.md)
     - [Resources](specification/chapters/resources.md)
     - [Further Versions](specification/chapters/beyond-gsoc.md)
