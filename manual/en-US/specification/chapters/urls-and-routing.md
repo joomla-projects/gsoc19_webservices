@@ -39,12 +39,26 @@ Move beyond simple serialization towards:
 ### The Joomla Framework Router
 The most important framework package we will start to use as part of the webservice project is the Framework routing package (version 2)
 
-This router is designed to map a URL to a controller. You can find sample code to define routes in Joomla! Framework at: [https://github.com/joomla/framework.joomla.org/blob/master/src/Service/ApplicationProvider.php#L227-L230](https://github.com/joomla/framework.joomla.org/blob/master/src/Service/ApplicationProvider.php#L227-L230)
+This router is designed to map a URL to a controller. You can find sample code to define routes in Joomla! Framework at: [https://github.com/joomla/framework.joomla.org/blob/master/src/Service/ApplicationProvider.php#L216-L263](https://github.com/joomla/framework.joomla.org/blob/master/src/Service/ApplicationProvider.php#L216-L263)
 
-	$router = new ContainerAwareRestRouter($container->get(Input::class));
-	$router->setControllerPrefix('Joomla\\FrameworkWebsite\\Controller\\Api\\')
-		->addMap('/api/v1/packages', 'StatusController')
-		->addMap('/api/v1/packages/:package', 'PackageController');
+	$router = new Router();
+	$router->get('/api/v1/packages', StatusControllerGet::class)
+		->get('/api/v1/packages/:package', PackageControllerGet::class);
+
+
+then to parse a route here [https://github.com/joomla/framework.joomla.org/blob/ddf9daaf6df42fd03a3f431d58c38dd2a4d3e557/src/WebApplication.php#L50-L60](https://github.com/joomla/framework.joomla.org/blob/ddf9daaf6df42fd03a3f431d58c38dd2a4d3e557/src/WebApplication.php#L50-L60)
+
+    $route = $this->router->parseRoute($this->get('uri.route'));
+
+    // Add variables to the input if not already set
+    foreach ($route['vars'] as $key => $value)
+    {
+        $this->input->def($key, $value);
+    }
+
+    /** @var ControllerInterface $controller */
+    $controller = $this->getContainer()->get($route['controller']);
+    $controller->execute();
 
 #### Phase 1
 All routes will likely map to the same controller, this will then parse the routing file to get the possible parameters,
