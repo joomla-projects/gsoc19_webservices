@@ -16,6 +16,10 @@ At this stage there is not a agreed approach however some options are as follows
  2. Endpoints as standard Joomla plugins
  3. A class/function that is called (like the traditional component router file)
 
+The reality is that there will likely need to be some sort of combination of these approaches. Extensions will not want 
+to have to provide a plugin per endpoint (this is going to be bloat for many extensions). However it's important that
+we can use plugins to provide custom routes.
+
 ### Business Models
 
 *Current Models*: Currently the state of the models is currently tightly coupled (populate state etc.) to web stuff and

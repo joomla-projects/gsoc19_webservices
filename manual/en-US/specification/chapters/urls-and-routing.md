@@ -19,15 +19,18 @@ The following are examples for the Joomla content component (com_content)
 We expect that responses to the framework will go through at least two phases:
 
 #### Phase 1
-Entity access level - Serialization from a model's getItem() - with appropriate formatting (e.g. custom fields should be moved as top level items etc.)
+Entity access level - Serialization from a model's getItem() - with limited formatting (e.g. custom fields should be
+moved to be top level items etc.).
 
-Note however that we do still expect responses to conform to the Richardson Maturity Model 
+Note however that we do still expect responses to conform to the Richardson Maturity Model Level 3
+
+**TODO: How should the routes from extensions be aware of each other for providing related links (related to
+[Extensibility](specification/chapters/extensibility.md))**
 
 #### Phase 2
 Either:
   - Full serialization (E.g. Sylius or FriendsOfSymfony/FOSRestBundle)
   - Column by column
-
 
 ### The Joomla Framework Router
 The most important framework package we will start to use as part of the webservice project is the Framework routing package (version 2)
@@ -39,3 +42,14 @@ This router is designed to map a URL to a controller. You can find sample code t
 		->addMap('/api/v1/packages', 'StatusController')
 		->addMap('/api/v1/packages/:package', 'PackageController');
 
+
+### Open API
+Open API (formerly swagger) is an initiative to describe and document RESTful APIs. It allows the creation of standardised test tools and
+documentation resources. [Version 2](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md) is used
+by many major software projects, and [Version 3](https://github.com/OAI/OpenAPI-Specification/blob/rc1-version-bump/versions/3.0.md)
+is reaching release candidate phase.
+
+The Open API standard appears to be a good match for Joomla, it should allow easy creation of documentation through
+various standard resources, it allows definitions of urls, request and response objects, and custom properties (which
+we can use to control the model class required and the mapping between the request parameters and the state, and the
+returned items and the state).

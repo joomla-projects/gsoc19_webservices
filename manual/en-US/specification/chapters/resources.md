@@ -1,7 +1,6 @@
 ## Resources
 
 ### Comparable Products
-
 * Joomla! Downloads - API [https://downloads.joomla.org/api-docs/](https://downloads.joomla.org/api-docs/)
 * Joomla! Downloads - Repository [https://github.com/joomla/downloads.joomla.org](https://github.com/joomla/downloads.joomla.org)
 
