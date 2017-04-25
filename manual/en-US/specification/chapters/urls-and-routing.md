@@ -20,7 +20,7 @@ We expect that responses to the framework will go through at least two phases:
 
 #### Phase 1
 Entity access level - Serialization from a model's getItem() - with limited formatting (e.g. custom fields should be
-moved to be top level items etc.).
+moved to be top level items etc.). This will only support JSON responses.
 
 Note however that we do still expect responses to conform to the Richardson Maturity Model Level 3
 
@@ -28,7 +28,11 @@ Note however that we do still expect responses to conform to the Richardson Matu
 [Extensibility](specification/chapters/extensibility.md))**
 
 #### Phase 2
-Either:
+Phase 2 will support content and language negotiations to format the responses using something similar to [this php
+library](https://github.com/willdurand/Negotiation).
+
+#### Phase 3
+Move beyond simple serialization towards:
   - Full serialization (E.g. Sylius or FriendsOfSymfony/FOSRestBundle)
   - Column by column
 
