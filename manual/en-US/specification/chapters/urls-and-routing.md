@@ -42,6 +42,12 @@ This router is designed to map a URL to a controller. You can find sample code t
 		->addMap('/api/v1/packages', 'StatusController')
 		->addMap('/api/v1/packages/:package', 'PackageController');
 
+### Phase 1
+All routes will likely map to the same controller, this will then parse the routing file to get the possible parameters,
+and then map the response from the model, to the defined response.
+
+### Phase 2
+We expect that extensions will be allowed to specify their own controllers to the router alongside the route information
 
 ### Open API
 Open API (formerly swagger) is an initiative to describe and document RESTful APIs. It allows the creation of standardised test tools and
