@@ -20,7 +20,7 @@ Initialization  | ✔         |
 Routing         | ✔         | 
 Authentication  | ✔         | 
 Extensibility   | ✔         | 
-Controllers     | ✔         | ✔
+Controllers     | ✔         |
 Controller Overrides |       | ✔
 Models          |            | ✔
 Tables          |            | ✔
