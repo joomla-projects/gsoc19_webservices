@@ -11,3 +11,9 @@
 * Official repository: [joomla-projects/gsoc17_webservices](https://github.com/joomla-projects/gsoc17_webservices)
 
 * **Status: Draft**
+* **Version: 0.1**
+
+### Changelog
+
+- 0.1 - Initial version
+

@@ -1,13 +1,13 @@
-- **About Joomla**
-    - [Introduction](about-joomla/introduction.md)
 - **About GSoC17 WS in J4 Spec**
     - [Introduction](specification/introduction.md)
+- **About Joomla**
+    - [Introduction](about-joomla/introduction.md)
+    - [External References](specification/chapters/external-references.md)    
 - **Joomla's Proposed Webservices**
     - [Architecture](specification/chapters/architecture.md)
     - [URLs and Routing](specification/chapters/urls-and-routing.md)
     - [Extensibility](specification/chapters/extensibility.md)
     - [User Interface](specification/chapters/user-interface.md)
     - [API Authentication](specification/chapters/api-authentication.md)
-    - [Resources](specification/chapters/resources.md)
-    - [Further Versions](specification/chapters/beyond-gsoc.md)
     - [Serialization](specification/chapters/serialization.md)
+    - [Further Versions](specification/chapters/beyond-gsoc.md)    

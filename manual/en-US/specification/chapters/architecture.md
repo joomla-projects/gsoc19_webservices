@@ -1,4 +1,40 @@
-## Joomla's Structure
+## Webservices in Joomla 4! - Architecture
+
+To solve the challenges faced by the Webservices in Joomla 4! implementation, we are going to follow these guidelines:
+
+### Webservices Entry Point
+
+The project will have its own entry point, URL: /api/index.php.
+
+This page will load the context to initialize the  Webservices stack and the integration with the CMS.
+
+### Joomla Framework Organization
+
+The project will implement the upper layers on Joomla Framework and integrate the lower layers of the Joomla! CMS. In this way, the project will incorporate the benefits of Joomla Framework, CMS and the extension ecosystem. The aim of this definition is to avoid code changes on the CMS and the extension ecosystem.
+
+In practice, this is how the Webservices stack will be organized:
+
+Topic           | Framework | CMS
+---------       | ----------| ----------
+Initialization  | ✔         | 
+Routing         | ✔         | 
+Authentication  | ✔         | 
+Extensibility   | ✔         | 
+Controllers     | ✔         | ✔
+Controller Overrides |       | ✔
+Models          |            | ✔
+Tables          |            | ✔
+Serialization   | ✔         | 
+User Interface  |           | ✔
+
+ ### Required Changes to the CMS and the extension ecosystem
+
+ To provision the API, these are the only code changes required to the CMS and the extension ecosystem.
+
+ - Routes Definition
+ - API Authentication
+
+
 Joomla! has evolved for more than 10 years, developed to solve its specific requirements to create an award-winning content management system (CMS), which enables you to build web sites and powerful online applications. 
 Joomla 4 will be the 5th major release of the Joomla CMS (following 1.0, 1.5, 2.5 and 3)
 
@@ -27,7 +63,7 @@ Most of the framework packages are originally designed for the CMS and have sinc
 Where possible we would like to continue using our Framework packages over those from 3rd party sources.
 
 ### The need for webservices and the challenges faced
-As the web has involved over the last 5-10 years, building API's to accompany a website has become an industry best practice. 
+As the web has involved over the last 5-10 years, building API's to accompany a website has become an industry best practice
 
 Joomla's challenges are unique in that we have a hugely popular extension ecosystem that is at the core of our community.
 Building an API requires integration with all these extensions and requiring extension developers to do the least work
