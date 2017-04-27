@@ -17,16 +17,20 @@ In practice, this is how the Webservices stack will be organized:
 Topic           | Framework | CMS
 ---------       | ----------| ----------
 Initialization  | ✔         | 
-Routing         | ✔         | 
-Authentication  | ✔         | 
- Global API Key  | ✔         | 
- Extension Auth  |          | ✔
+- Container     | ✔         | 
+- CMS           |            | ✔
+URLs and Routing         | ✔         | 
+API Authentication  | ✔         | 
+- Global API Key  | ✔         | 
+- Extension Auth  |          | ✔
 Extensibility   | ✔         | 
-Controllers     | ✔         |
- Controller Overrides |       | ✔
-Models          |            | ✔
-Tables          |            | ✔
-Serialization   | ✔         | 
+- Controllers     | ✔         |
+- Controller Overrides |       | ✔
+- Models          |            | ✔
+- Tables (DBAL)   |            | ✔
+- Serialization   | ✔         | 
+-- General       | ✔         |  
+-- Restrictions  |           | ✔
 User Interface  |           | ✔
 
  ### Required Changes to the CMS and the extension ecosystem

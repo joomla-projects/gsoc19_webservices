@@ -6,8 +6,7 @@
 - **Joomla's Proposed Webservices**
     - [Architecture](specification/chapters/architecture.md)
     - [URLs and Routing](specification/chapters/urls-and-routing.md)
+    - [API Authentication](specification/chapters/api-authentication.md)    
     - [Extensibility](specification/chapters/extensibility.md)
     - [User Interface](specification/chapters/user-interface.md)
-    - [API Authentication](specification/chapters/api-authentication.md)
-    - [Serialization](specification/chapters/serialization.md)
     - [Further Versions](specification/chapters/beyond-gsoc.md)    
