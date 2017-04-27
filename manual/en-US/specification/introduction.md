@@ -1,4 +1,4 @@
-## Introduction
+## GSoC17 Webservices in Joomla 4! - Introduction
 
 *Welcome to the Joomla! Google Summer of Code (GSoC) 2017 project: Webservices in Joomla 4!*
 
