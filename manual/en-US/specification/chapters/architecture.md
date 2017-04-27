@@ -38,5 +38,6 @@ User Interface  |           | ✔
  To provision the API, these are the only code changes required to the CMS and the extension ecosystem.
 
  - Routes Definition
- - Authentication - Extension Specific Authentication
+ - API Authentication - Extension Specific
  - Controller Overrides
+ - Serialization - Extension Parametrization
