@@ -30,7 +30,7 @@ Extensibility   | ✔         |
 - Tables (DBAL)   |            | ✔
 - Serialization   | ✔         | 
 -- General       | ✔         |  
--- Restrictions  |           | ✔
+-- Extension Param  |           | ✔
 User Interface  |           | ✔
 
  ### Required Changes to the CMS and the extension ecosystem
