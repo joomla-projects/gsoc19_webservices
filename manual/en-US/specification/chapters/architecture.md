@@ -16,7 +16,7 @@ In practice, this is how the Webservices stack will be organized:
 
 Topic           | Framework | CMS
 ---------       | ----------| ----------
-Initialization  | ✔         | 
+Initialization  |          | ✔
 - Container     | ✔         | 
 - CMS           |            | ✔
 URLs and Routing         | ✔         | 
