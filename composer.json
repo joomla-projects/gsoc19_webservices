@@ -59,6 +59,7 @@
         "joomla/string": "~2.0@dev",
         "joomla/uri": "~2.0@dev",
         "joomla/utilities": "~2.0@dev",
+        "joomla/router": "~2.0@dev",
         "ircmaxell/password-compat": "1.*",
         "paragonie/random_compat": "~2.0",
         "phpmailer/phpmailer": "~6.0@rc",

@@ -18,6 +18,7 @@ return array(
     'Joomla\\Uri\\' => array($vendorDir . '/joomla/uri/src'),
     'Joomla\\String\\' => array($vendorDir . '/joomla/string/src'),
     'Joomla\\Session\\' => array($vendorDir . '/joomla/session/src'),
+    'Joomla\\Router\\' => array($vendorDir . '/joomla/router/src'),
     'Joomla\\Registry\\' => array($vendorDir . '/joomla/registry/src'),
     'Joomla\\OAuth2\\' => array($vendorDir . '/joomla/oauth2/src'),
     'Joomla\\OAuth1\\' => array($vendorDir . '/joomla/oauth1/src'),
