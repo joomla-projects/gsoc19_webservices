@@ -51,6 +51,7 @@ class ComposerStaticInit423c8facdf90155590c7b49e979f3a1e
             'Joomla\\Uri\\' => 11,
             'Joomla\\String\\' => 14,
             'Joomla\\Session\\' => 15,
+            'Joomla\\Router\\' => 14,
             'Joomla\\Registry\\' => 16,
             'Joomla\\OAuth2\\' => 14,
             'Joomla\\OAuth1\\' => 14,
@@ -123,6 +124,10 @@ class ComposerStaticInit423c8facdf90155590c7b49e979f3a1e
         'Joomla\\Session\\' => 
         array (
             0 => __DIR__ . '/..' . '/joomla/session/src',
+        ),
+        'Joomla\\Router\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/joomla/router/src',
         ),
         'Joomla\\Registry\\' => 
         array (

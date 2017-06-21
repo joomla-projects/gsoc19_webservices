@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "48bfaafe8baa33842e617863b280b2cf",
+    "content-hash": "8d827e2860c16269d13f00f2cf4b20b6",
     "packages": [
         {
             "name": "composer/ca-bundle",
@@ -893,6 +893,55 @@
                 "registry"
             ],
             "time": "2017-05-27T01:17:43+00:00"
+        },
+        {
+            "name": "joomla/router",
+            "version": "dev-2.0-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/joomla-framework/router.git",
+                "reference": "328f7e49b38ea3a2915313e2a54e91d8e4b6738c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/joomla-framework/router/zipball/328f7e49b38ea3a2915313e2a54e91d8e4b6738c",
+                "reference": "328f7e49b38ea3a2915313e2a54e91d8e4b6738c",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^5.5.9|~7.0"
+            },
+            "require-dev": {
+                "jeremeamia/superclosure": "~1.0",
+                "phpunit/phpunit": "^4.8.35|^5.4.3|~6.0",
+                "squizlabs/php_codesniffer": "1.*"
+            },
+            "suggest": {
+                "jeremeamia/superclosure": "If you use Closure controllers, and want to be able to cache / serialize the router, please install jeremeamia/superclosure:~1.0"
+            },
+            "type": "joomla-package",
+            "extra": {
+                "branch-alias": {
+                    "dev-2.0-dev": "2.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Joomla\\Router\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "description": "Joomla Router Package",
+            "homepage": "https://github.com/joomla-framework/router",
+            "keywords": [
+                "framework",
+                "joomla",
+                "router"
+            ],
+            "time": "2017-05-27 01:17:54"
         },
         {
             "name": "joomla/session",
@@ -3400,6 +3449,7 @@
         "joomla/string": 20,
         "joomla/uri": 20,
         "joomla/utilities": 20,
+        "joomla/router": 20,
         "phpmailer/phpmailer": 5,
         "joomla/mediawiki": 20
     },
