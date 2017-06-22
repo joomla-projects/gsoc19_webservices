@@ -14,6 +14,7 @@ defined('_JEXEC') or die;
 use Joomla\Application\Web\WebClient;
 use Joomla\DI\Container;
 use Joomla\Registry\Registry;
+use Joomla\Router\Router;
 
 /**
  * Joomla! API Application class
@@ -22,6 +23,14 @@ use Joomla\Registry\Registry;
  */
 final class ApiApplication extends CMSApplication
 {
+	/**
+	 * The API router.
+	 *
+	 * @var    Router
+	 * @since  4.0
+	 */
+	public $router;
+
 	/**
 	 * Class constructor.
 	 *
@@ -53,6 +62,8 @@ final class ApiApplication extends CMSApplication
 		// Set the root in the URI based on the application name
 		\JUri::root(null, str_ireplace('/' . $this->getName(), '', \JUri::base(true)));
 
+		// Setup the router
+		$this->router = new ApiRouter();
 	}
 
 	/**
