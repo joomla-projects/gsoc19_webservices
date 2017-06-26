@@ -28,7 +28,6 @@ For more info: http://www.django-rest-framework.org/api-guide/routers/
 #### Cons
 - Can be hard to implement
 
-## RoR REST framework
 ## Laravel REST framework
 Laravel uses a similar approach to Django REST framework. A developer just specify a base route and matches it with the controller and the routing map is done. As simple as the following code snippet
 ```
@@ -58,5 +57,47 @@ For more info: https://laravel.com/docs/5.4/controllers#restful-resource-control
 #### Cons
 - Can be hard to implement
 
+## RoR REST framework
+This is the source of inspiration for all other frameworks' implementations for RESTful routing.
+In Rails, a resourceful route provides a mapping between HTTP verbs and URLs to controller actions. By convention, each action also maps to a specific CRUD operation in a database. A single entry in the routing file, such as:
+```
+resources :photos
+```
+creates seven different routes in your application, all mapping to the Photos controller:
+
+|HTTP Verb|Path|Controller#Action|Used for|
+|----|----|----|----|
+GET|/photos|photos#index|display a list of all photos
+GET|/photos/new|photos#new|return an HTML form for creating a new photo
+POST|/photos|photos#create|create a new photo
+GET|/photos/:id|photos#show|display a specific photo
+GET |/photos/:id/edit|photos#edit|return an HTML form for editing a photo
+PATCH/PUT|/photos/:id|photos#update|update a specific photo
+DELETE|/photos/:id|photos#destroy|delete a specific photo
+
+It uses the same concepts as other frameworks like **Nested Resources** , **Singular Resources**, etc.
+For further knowledge about RoR visit this link: http://guides.rubyonrails.org/routing.html
+
 ## Slim REST framework
-## ASP<span>.</span>NET framework
+Slim framework is a micro framework which is simple and good to build RESTful APIs.
+They build their routing within the app class as the developer specifies request by method, for example, if developer wants to add a route that handles only GET HTTP requests, it would be made as the following code.
+```
+$app = new \Slim\App();
+$app->get('/books/{id}', function ($request, $response, $args) {
+    // Show book identified by $args['id']
+});
+```
+Such approach is simple to understand, implement and apply in extensions, but it would take much work to specify a route for each method.
+## ASP<span>.</span>NET MVC framework
+ASP<span>.</span>NET MVC framework uses a basic routing like Joomla framework's Router class. As in the following code snippet.
+```
+app.UseMvc(routes =>
+{
+   routes.MapRoute("default", "{controller=Home}/{action=Index}/{id?}");
+});
+```
+There is a package that can be installed on top of ASP<span>.</span>NET to provide easier way to implement routing like this [package](http://restfulrouting.com/) .
+It uses the same approach used by DRF, RoR and Laravel.
+
+## Conclusion
+Almost all frameworks implements the routing the same way except for few touches by the framework's builders. I think it's recommended to use the approach of Laravel as I think it's the most suitable approach that matches our project.
