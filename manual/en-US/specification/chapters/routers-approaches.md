@@ -49,7 +49,7 @@ Route::resource('photos.comments', 'PhotoCommentController');
 ```
 This route will register a "nested" resource that may be accessed with URLs like the following: `photos/{photos}/comments/{comments}`.
 
-For more info: https://laravel.com/docs/5.1/controllers#restful-resource-controllers
+For more info: https://laravel.com/docs/5.4/controllers#restful-resource-controllers
 
 #### Pros
 - Easy to extend
