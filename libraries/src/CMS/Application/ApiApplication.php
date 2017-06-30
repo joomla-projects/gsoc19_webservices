@@ -113,44 +113,9 @@ final class ApiApplication extends CMSApplication
 	 */
 	protected function respond()
 	{
-		// Send the content-type header.
-		if (!$this->getResponse()->hasHeader('Content-Type'))
-		{
-			$this->setHeader('Content-Type', $this->mimeType . '; charset=' . $this->charSet);
-		}
-
-		// If the response is set to uncachable, we need to set some appropriate headers so browsers don't cache the response.
-		if (!$this->allowCache())
-		{
-			// Expires in the past.
-			$this->setHeader('Expires', 'Wed, 17 Aug 2005 00:00:00 GMT', true);
-
-			// Always modified.
-			$this->setHeader('Last-Modified', gmdate('D, d M Y H:i:s') . ' GMT', true);
-			$this->setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0', false);
-
-			// HTTP 1.0
-			$this->setHeader('Pragma', 'no-cache');
-		}
-		else
-		{
-			// Expires.
-			if (!$this->getResponse()->hasHeader('Expires'))
-			{
-				$this->setHeader('Expires', gmdate('D, d M Y H:i:s', time() + 900) . ' GMT');
-			}
-
-			// Last modified.
-			if (!$this->getResponse()->hasHeader('Last-Modified') && $this->modifiedDate instanceof \DateTime)
-			{
-				$this->modifiedDate->setTimezone(new \DateTimeZone('UTC'));
-				$this->setHeader('Last-Modified', $this->modifiedDate->format('D, d M Y H:i:s') . ' GMT');
-			}
-		}
-
-		$this->sendHeaders();
-
-		echo json_encode($this->getBody());
+		$this->setBody(json_encode($this->getBody()));
+		// Parent function can be overridden later on for debugging.
+		parent::respond();
 	}
 
 	/**
