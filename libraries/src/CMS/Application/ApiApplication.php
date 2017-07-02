@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @package    Joomla.API
  *
@@ -19,7 +18,7 @@ use Joomla\CMS\Router\ApiRouter;
 /**
  * Joomla! API Application class
  *
- * @since  4.0
+ * @since  __DEPLOY_VERSION__
  */
 final class ApiApplication extends CMSApplication
 {
@@ -27,25 +26,25 @@ final class ApiApplication extends CMSApplication
 	 * The API router.
 	 *
 	 * @var    ApiRouter
-	 * @since  4.0
+	 * @since  __DEPLOY_VERSION__
 	 */
 	protected $router;
 
 	/**
 	 * Class constructor.
 	 *
-	 * @param   \JInput   $input       An optional argument to provide dependency injection for the application's input
+	 * @param   \JInput    $input      An optional argument to provide dependency injection for the application's input
 	 *                                 object.  If the argument is a JInput object that object will become the
 	 *                                 application's input object, otherwise a default input object is created.
-	 * @param   Registry  $config      An optional argument to provide dependency injection for the application's config
+	 * @param   Registry   $config     An optional argument to provide dependency injection for the application's config
 	 *                                 object.  If the argument is a Registry object that object will become the
 	 *                                 application's config object, otherwise a default config object is created.
-	 * @param   WebClient $client      An optional argument to provide dependency injection for the application's client
+	 * @param   WebClient  $client     An optional argument to provide dependency injection for the application's client
 	 *                                 object.  If the argument is a WebClient object that object will become the
 	 *                                 application's client object, otherwise a default client object is created.
-	 * @param   Container $container   Dependency injection container.
+	 * @param   Container  $container  Dependency injection container.
 	 *
-	 * @since   3.2
+	 * @since   __DEPLOY_VERSION__
 	 */
 
 	public function __construct(\JInput $input = null, Registry $config = null, WebClient $client = null, Container $container = null)
@@ -65,9 +64,11 @@ final class ApiApplication extends CMSApplication
 		// Set the root in the URI based on the application name
 		\JUri::root(null, str_ireplace('/' . $this->getName(), '', \JUri::base(true)));
 
-		// Setup the router
-		// TODO: Router class not ready
-		// $this->router = new ApiRouter();
+		/**
+		 * Setup the router
+		 * TODO: Router class not ready
+		 * $this->router = new ApiRouter();
+		 */
 	}
 
 
@@ -78,7 +79,7 @@ final class ApiApplication extends CMSApplication
 	 *
 	 * @return  void
 	 *
-	 * @since   1.0
+	 * @since   __DEPLOY_VERSION__
 	 */
 	protected function doExecute()
 	{
@@ -94,7 +95,7 @@ final class ApiApplication extends CMSApplication
 	 *
 	 * @return  void
 	 *
-	 * @since   3.2
+	 * @since   __DEPLOY_VERSION__
 	 *
 	 * @note    Rendering should be overridden to get rid of the theme files.
 	 */
@@ -109,11 +110,12 @@ final class ApiApplication extends CMSApplication
 	 *
 	 * @return  void
 	 *
-	 * @since   1.0
+	 * @since   __DEPLOY_VERSION__
 	 */
 	protected function respond()
 	{
 		$this->setBody(json_encode($this->getBody()));
+
 		// Parent function can be overridden later on for debugging.
 		parent::respond();
 	}
@@ -121,18 +123,16 @@ final class ApiApplication extends CMSApplication
 	/**
 	 * Gets the name of the current template.
 	 *
-	 * @param   boolean $params True to return the template parameters
+	 * @param   boolean  $params  True to return the template parameters
 	 *
 	 * @return  string
 	 *
-	 * @since   1.0
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function getTemplate($params = false)
 	{
 		// The API application should not need to use a template
 		return 'system';
 	}
-
-
 }
 
