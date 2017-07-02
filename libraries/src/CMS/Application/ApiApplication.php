@@ -14,6 +14,7 @@ defined('_JEXEC') or die;
 use Joomla\Application\Web\WebClient;
 use Joomla\DI\Container;
 use Joomla\Registry\Registry;
+use Joomla\CMS\Router\ApiRouter;
 
 /**
  * Joomla! API Application class
@@ -22,6 +23,14 @@ use Joomla\Registry\Registry;
  */
 final class ApiApplication extends CMSApplication
 {
+	/**
+	 * The API router.
+	 *
+	 * @var    ApiRouter
+	 * @since  4.0
+	 */
+	protected $router;
+
 	/**
 	 * Class constructor.
 	 *
@@ -47,27 +56,20 @@ final class ApiApplication extends CMSApplication
 		// Register the client ID 
 		$this->clientId = 3;
 
+		// Set format to JSON (uses JDocumentJson)
+		$this->input->set('format', $input->get('format', 'json'));
+
 		// Execute the parent constructor
 		parent::__construct($input, $config, $client, $container);
 
 		// Set the root in the URI based on the application name
 		\JUri::root(null, str_ireplace('/' . $this->getName(), '', \JUri::base(true)));
 
+		// Setup the router
+		// TODO: Router class not ready
+		// $this->router = new ApiRouter();
 	}
 
-	/**
-	 * Dispatch the application
-	 *
-	 * @param   string $component The component which is being rendered.
-	 *
-	 * @return  void
-	 *
-	 * @since   3.2
-	 */
-	public function dispatch($component = null)
-	{
-
-	}
 
 	/**
 	 * Method to run the application routines.
@@ -80,20 +82,8 @@ final class ApiApplication extends CMSApplication
 	 */
 	protected function doExecute()
 	{
-
-	}
-
-	/**
-	 * Initialise the application.
-	 *
-	 * @param   array $options An optional associative array of configuration settings.
-	 *
-	 * @return  void
-	 *
-	 * @since   3.2
-	 */
-	protected function initialiseApp($options = array())
-	{
+		// Initialise the application
+		$this->initialiseApp();
 
 	}
 
@@ -110,8 +100,39 @@ final class ApiApplication extends CMSApplication
 	 */
 	protected function render()
 	{
-
+		// Render the document
+		$this->setBody($this->document->render($this->allowCache()));
 	}
+
+	/**
+	 * Method to send the application response to the client.  All headers will be sent prior to the main application output data.
+	 *
+	 * @return  void
+	 *
+	 * @since   1.0
+	 */
+	protected function respond()
+	{
+		$this->setBody(json_encode($this->getBody()));
+		// Parent function can be overridden later on for debugging.
+		parent::respond();
+	}
+
+	/**
+	 * Gets the name of the current template.
+	 *
+	 * @param   boolean $params True to return the template parameters
+	 *
+	 * @return  string
+	 *
+	 * @since   1.0
+	 */
+	public function getTemplate($params = false)
+	{
+		// The API application should not need to use a template
+		return 'system';
+	}
+
 
 }
 
