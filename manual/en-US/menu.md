@@ -8,5 +8,7 @@
     - [URLs and Routing](specification/chapters/urls-and-routing.md)
     - [API Authentication](specification/chapters/api-authentication.md)    
     - [Extensibility](specification/chapters/extensibility.md)
+    - [JSON Response Formats](specification/chapters/json-response-formats.md)
     - [User Interface](specification/chapters/user-interface.md)
+    - [Comparison with other Web Service Frameworks](specification/chapters/routers-approaches.md)
     - [Further Versions](specification/chapters/beyond-gsoc.md)    
