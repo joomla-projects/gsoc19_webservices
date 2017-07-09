@@ -1,8 +1,8 @@
-The most important factor when defining an API response is the standardized format of the response. 
-Most every enterprise has defined their own custom API format, usually a JSON response that maps neatly to their own data model. 
+The most important factor when defining an API response is the standardised format of the response. 
+Most enterprises have defined their own custom API format, usually a JSON response that maps neatly to their own data model. 
 For Joomla, we will look at the most useful and most commonly used response formats which are created by the open source community.
 
-All JSON response standards below supports HATEOAS approach.
+All JSON response standards below supports [HATEOAS](https://en.wikipedia.org/wiki/HATEOAS) approach.
 
 ##  [JSON API](http://jsonapi.org/format/)
 
