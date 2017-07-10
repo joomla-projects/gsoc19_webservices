@@ -1,4 +1,4 @@
-The most important factor when defining an API response is the standardised format of the response. 
+The most important factor when designing an API response is having a standardised format of the response. 
 Most enterprises have defined their own custom API format, usually a JSON response that maps neatly to their own data model. 
 For Joomla, we will look at the most useful and most commonly used response formats which are created by the open source community.
 
@@ -50,6 +50,7 @@ Content-Type: application/vnd.api+json
 * Does not use child documents and instead flattens the entire graph of objects at the top level.
 * Attributes and relationships of a given resource are separate. (Relationships can be excluded if not needed by the receiver/client).
 * Advised for large-scale public APIs.
+* (Relatively) easily understandable specification.
 
 ### Minus Side
 * Doesn’t offer smooth migration for already-built APIs.
@@ -104,7 +105,6 @@ Example HTTP 200 Response
 * Relatively complex specification.
 
 ### Error Handling
-
 * Advanced: Uses error types.
 
 
@@ -156,3 +156,4 @@ Hypertext Application Language (HAL) is a simple format that gives a consistent 
 It is referred as an Internet Draft a “work in progress” standard convention for defining hypermedia such as links to external resources within JSON or XML code. 
 
 ## Conclusion
+Since the aim is having an API that will serve to many developers from various backgrounds, and also considering the wide variety of data type and amount the API will need to handle, I believe it the best option would be using [JSON API](http://jsonapi.org/format/) for Joomla Webservices API.
