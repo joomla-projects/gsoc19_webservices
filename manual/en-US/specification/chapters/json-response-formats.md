@@ -151,6 +151,34 @@ Example Error Response
 
 ## Also Worth Considering
 
+### [Collection+JSON](https://github.com/collection-json/spec)
+Collection+JSON is a JSON-based read/write hypermedia-type designed to support management and querying of simple collections.
+At a minimum a Collection+JSON response must contain a collection object with a version and a URI pointing to itself.
+
+Example GET request (HTTP 200)
+```javascript
+
+GET https://api.example.com/player/1234567890
+
+{
+    "collection": {
+        "version": "1.0",
+        "href": "https://api.example.com/player",
+        "items": [
+            {
+                "href": "https://api.example.com/player/1234567890",
+                "data": [
+                      { "name": "playerId", "value": "1234567890", "prompt": "Identifier" },
+                      { "name": "name", "value": "Kevin Sookocheff", "prompt": "Full Name" },
+                      { "name": "alternateName", "value": "soofaloofa", "prompt": "Alias" }
+                ]
+            }
+        ]
+    }
+}
+
+```
+
 ### [Hypertext Application Language or HAL in short](http://stateless.co/hal_specification.html)
 Hypertext Application Language (HAL) is a simple format that gives a consistent and easy way to hyperlink between resources in your API. 
 It is referred as an Internet Draft a “work in progress” standard convention for defining hypermedia such as links to external resources within JSON or XML code. 
