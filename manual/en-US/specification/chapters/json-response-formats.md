@@ -184,4 +184,4 @@ Hypertext Application Language (HAL) is a simple format that gives a consistent 
 It is referred as an Internet Draft a “work in progress” standard convention for defining hypermedia such as links to external resources within JSON or XML code. 
 
 ## Conclusion
-Since the aim is having an API that will serve to many developers from various backgrounds, and also considering the wide variety of data type and amount the API will need to handle, I believe the best option would be the [JSON API](http://jsonapi.org/format/) for Joomla Webservices API.
+The aim of this discussion is to choose a standarised API response format which *should* help many developers from various backgrounds. Considering the wide variety of data type and amount this API will need to handle, I believe the best option would be using the [JSON API](http://jsonapi.org/format/) for Joomla Webservices API, however, [Collection+JSON](https://github.com/collection-json/spec) and [JSON-LD](https://en.wikipedia.org/wiki/JSON-LD) are also capable of performing this task.
