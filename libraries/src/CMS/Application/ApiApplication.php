@@ -11,6 +11,7 @@ namespace Joomla\CMS\Application;
 defined('JPATH_PLATFORM') or die;
 
 use Joomla\Application\Web\WebClient;
+use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Router\ApiRouter;
 use Joomla\DI\Container;
 use Joomla\Registry\Registry;
@@ -71,6 +72,20 @@ final class ApiApplication extends CMSApplication
 		// Initialise the application
 		$this->initialiseApp();
 
+		// Mark afterInitialise in the profiler.
+		JDEBUG ? $this->profiler->mark('afterInitialise') : null;
+
+		// Route the application
+		$this->route();
+
+		// Mark afterApiRoute in the profiler.
+		JDEBUG ? $this->profiler->mark('afterApiRoute') : null;
+
+		// Dispatch the application
+		$this->dispatch();
+
+		// Mark afterDispatch in the profiler.
+		JDEBUG ? $this->profiler->mark('afterDispatch') : null;
 	}
 
 	/**
@@ -148,11 +163,32 @@ final class ApiApplication extends CMSApplication
 	protected function route()
 	{
 		$uri    = \JUri::getInstance();
-		$router = static::getRouter();
+		$router = $this->getApiRouter();
 
 		// Trigger the onBeforeApiRoute event.
 		PluginHelper::importPlugin('webservices');
 		$this->triggerEvent('onBeforeApiRoute', &$router);
+
+		$route = $router->parseRoute($uri::current(), $this->input->getMethod());
+
+		$this->input->set('option', $route['vars']['component']);
+		$this->input->set('controller', $route['controller']);
+		$this->input->set('task', $route['task']);
+
+		foreach ($route['vars'] as $key => $value)
+		{
+			if ($key !== 'component')
+			{
+				if ($this->input->getMethod() === 'POST')
+				{
+					$this->input->post->set($key, $value);
+				}
+				else
+				{
+					$this->input->set($key, $value);
+				}
+			}
+		}
 	}
 
 	/**
@@ -165,5 +201,41 @@ final class ApiApplication extends CMSApplication
 	public function getApiRouter()
 	{
 		return JFactory::getContainer()->get('ApiRouter');
+	}
+
+	/**
+	 * Dispatch the application
+	 *
+	 * @param   string  $component  The component which is being rendered.
+	 *
+	 * @return  void
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function dispatch($component = null)
+	{
+		$app = \JFactory::getApplication();
+
+		// Get the component if not set.
+		if (!$component)
+		{
+			$component = $this->input->get('option', null);
+		}
+
+		// Load the document to the API
+		$this->loadDocument();
+
+		// Set up the params
+		$document = \JFactory::getDocument();
+
+		// Register the document object with \JFactory
+		\JFactory::$document = $document;
+
+		$contents = ComponentHelper::renderComponent($component);
+		$document->setBuffer($contents, 'component');
+
+		// Trigger the onAfterDispatch event.
+		PluginHelper::importPlugin('system');
+		$this->triggerEvent('onAfterDispatch');
 	}
 }

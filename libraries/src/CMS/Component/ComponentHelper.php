@@ -313,11 +313,14 @@ class ComponentHelper
 	{
 		$app = \JFactory::getApplication();
 
-		// Load template language files.
-		$template = $app->getTemplate(true)->template;
-		$lang = \JFactory::getLanguage();
-		$lang->load('tpl_' . $template, JPATH_BASE, null, false, true)
-			|| $lang->load('tpl_' . $template, JPATH_THEMES . "/$template", null, false, true);
+		if (!$app->isClient('api'))
+		{
+			// Load template language files.
+			$template = $app->getTemplate(true)->template;
+			$lang = \JFactory::getLanguage();
+			$lang->load('tpl_' . $template, JPATH_BASE, null, false, true)
+				|| $lang->load('tpl_' . $template, JPATH_THEMES . "/$template", null, false, true);
+		}
 
 		if (empty($option))
 		{
