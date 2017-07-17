@@ -8,12 +8,12 @@
 
 namespace Joomla\CMS\Application;
 
-defined('_JEXEC') or die;
+defined('JPATH_PLATFORM') or die;
 
 use Joomla\Application\Web\WebClient;
+use Joomla\CMS\Router\ApiRouter;
 use Joomla\DI\Container;
 use Joomla\Registry\Registry;
-use Joomla\CMS\Router\ApiRouter;
 
 /**
  * Joomla! API Application class
@@ -93,16 +93,29 @@ final class ApiApplication extends CMSApplication
 	/**
 	 * Method to send the application response to the client.  All headers will be sent prior to the main application output data.
 	 *
+	 * @param   array  $options  An optional argument to enable CORS. (Temporary)
+	 *
 	 * @return  void
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	protected function respond()
+	protected function respond($options = array())
 	{
 		$this->setBody(json_encode($this->getBody()));
 
+		// Set the Joomla! API signature
+		$this->setHeader('X-Powered-By', 'JoomlaAPI/1.0', true);
+
+		if (array_key_exists('cors', $options))
+		{
+			// Enable CORS (Cross-origin resource sharing)
+			$this->setHeader('Access-Control-Allow-Origin', '*', true);
+			$this->setHeader('Access-Control-Allow-Headers', 'Authorization');
+		}
+
 		// Parent function can be overridden later on for debugging.
 		parent::respond();
+
 	}
 
 	/**
@@ -134,7 +147,7 @@ final class ApiApplication extends CMSApplication
 	 */
 	protected function route()
 	{
-		$uri = \JUri::getInstance();
+		$uri    = \JUri::getInstance();
 		$router = static::getRouter();
 
 		// Trigger the onBeforeApiRoute event.
