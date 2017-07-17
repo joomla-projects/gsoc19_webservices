@@ -187,14 +187,14 @@ It is referred as an Internet Draft a “work in progress” standard convention
 
 |Name|Structure|HyperMedia Support|Migration|Documentation|Ease of Use <br />(for third parties)|
 |----|----|----|----|----|----|
-JSON API|Flattened Nodes|High|CN|Extensive|Easy
-JSON-LD|Nested Nodes|High|NCN|Extensive (Complex)|Hard
+JSON API|Flattened Nodes|Medium/High|CN|Extensive|Easy
+JSON-LD|Nested Nodes|Medium/High|NCN|Extensive (Complex)|Hard
 Collection+JSON|Collection Nodes|High|CN|Inadequate|Average
 JSend|Flattened Nodes|Low|NCN|Inadequate|Easy
-OData|Flattened Nodes|-|-|Extensive |Average
-Siren|Flattened Nodes|-|-|Adequate|Easy
+OData|Flattened Nodes|Medium|CN|Extensive |Average
+Siren|Flattened Nodes|Medium|CN|Adequate|Easy
 
-CN*: Changes needed for the back-end.
-<br />NCN*: No change needed for the back-end.
+CN*: (Major) Changes needed for the back-end.
+<br />NCN*: No/Minor change(s) needed for the back-end.
 
 The aim of this discussion is to choose a standarised API response format which *should* help many developers from various backgrounds. Considering the wide variety of data type and amount this API will need to handle, I believe the best option would be using the [JSON API](http://jsonapi.org/format/) for Joomla Webservices API, however, [Collection+JSON](https://github.com/collection-json/spec) and [JSON-LD](https://en.wikipedia.org/wiki/JSON-LD) are also capable of performing this task.
