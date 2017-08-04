@@ -70,7 +70,6 @@ class ApiRouter extends Router
 	/**
 	 * Parse the given route and return the name of a controller mapped to the given route.
 	 *
-	 * @param   string  $route   The route string for which to find and execute a controller.
 	 * @param   string  $method  Request method to match. One of GET, POST, PUT, DELETE, HEAD, OPTIONS, TRACE or PATCH
 	 *
 	 * @return  array   An array containing the controller and the matched variables.
@@ -78,7 +77,7 @@ class ApiRouter extends Router
 	 * @since   __DEPLOY_VERSION__
 	 * @throws  \InvalidArgumentException
 	 */
-	public function parseRoute($route, $method = 'GET')
+	public function parseApiRoute($method = 'GET')
 	{
 		$method = strtoupper($method);
 
@@ -88,7 +87,8 @@ class ApiRouter extends Router
 		}
 
 		// Get the path from the route and remove and leading or trailing slash.
-		$route = trim(parse_url($route, PHP_URL_PATH), ' /');
+		$route = trim(JUri::getInstance()->getPath(), '/');
+		$query = JUri::getInstance()->getQuery(true);
 
 		// Iterate through all of the known routes looking for a match.
 		foreach ($this->routes[$method] as $rule)
@@ -104,6 +104,7 @@ class ApiRouter extends Router
 				}
 
 				$controller = preg_split("/[.]+/", $rule['controller']);
+				$vars       = array_merge($vars, $query);
 
 				return [
 					'controller' => $controller[0],
