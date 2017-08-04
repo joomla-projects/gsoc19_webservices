@@ -120,7 +120,7 @@ class Api extends Controller
 	 * @param   string  $key     The name of the primary key of the URL variable.
 	 * @param   string  $urlVar  The name of the URL variable if different from the primary key (sometimes required to avoid router collisions).
 	 *
-	 * @return  boolean  True if the record can be added, false if not.
+	 * @return  boolean  True if the record is added, false if not.
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
@@ -153,7 +153,7 @@ class Api extends Controller
 	 * @param   string  $urlVar  The name of the URL variable if different from the primary key
 	 *                           (sometimes required to avoid router collisions).
 	 *
-	 * @return  boolean  True if access level check and checkout passes, false otherwise.
+	 * @return  boolean  True if save succeeded after access level check and checkout passes, false otherwise.
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
@@ -201,7 +201,7 @@ class Api extends Controller
 			$this->holdEditId($context, $recordId);
 			\JFactory::getApplication()->setUserState($context . '.data', null);
 
-			return true;
+			return $this->save($key, $urlVar);
 		}
 	}
 
@@ -238,13 +238,6 @@ class Api extends Controller
 
 		$recordKey = $this->input->get($urlVar);
 		$data[$key] = $recordKey;
-
-		if (!$this->allowSave($data, $key))
-		{
-			$this->setMessage(\JText::_('JLIB_APPLICATION_ERROR_SAVE_NOT_PERMITTED'), 'error');
-
-			return false;
-		}
 
 		// Validate the posted data.
 		// Sometimes the form needs some posted data, such as for plugins and modules.
@@ -320,32 +313,6 @@ class Api extends Controller
 		$this->postSaveHook($model, $validData);
 
 		return true;
-	}
-
-	/**
-	 * Method to check if you can save a new or existing record.
-	 *
-	 * Extended classes can override this if necessary.
-	 *
-	 * @param   array   $data  An array of input data.
-	 * @param   string  $key   The name of the key for the primary key.
-	 *
-	 * @return  boolean
-	 *
-	 * @since   __DEPLOY_VERSION__
-	 */
-	protected function allowSave($data, $key = 'id')
-	{
-		$recordId = isset($data[$key]) ? $data[$key] : '0';
-
-		if ($recordId)
-		{
-			return $this->allowEdit($data, $key);
-		}
-		else
-		{
-			return $this->allowAdd($data);
-		}
 	}
 
 	/**
