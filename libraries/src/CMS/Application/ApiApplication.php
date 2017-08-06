@@ -11,6 +11,7 @@ namespace Joomla\CMS\Application;
 defined('JPATH_PLATFORM') or die;
 
 use Joomla\Application\Web\WebClient;
+use Joomla\CMS\Plugin\PluginHelper;
 use Joomla\Input\Json as JInputJson;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Router\ApiRouter;
@@ -48,11 +49,11 @@ final class ApiApplication extends CMSApplication
 		// Register the client ID
 		$this->clientId = 3;
 
-		// Set format to JSON (uses JDocumentJson)
-		$this->input->set('format', $input->get('format', 'json'));
-
 		// Execute the parent constructor
 		parent::__construct($input, $config, $client, $container);
+
+		// Set format to JSON (uses JDocumentJson)
+		$this->input->set('format', $this->input->get('format', 'json'));
 
 		// Set the root in the URI based on the application name
 		\JUri::root(null, str_ireplace('/' . $this->getName(), '', \JUri::base(true)));
@@ -168,7 +169,7 @@ final class ApiApplication extends CMSApplication
 
 		// Trigger the onBeforeApiRoute event.
 		PluginHelper::importPlugin('webservices');
-		$this->triggerEvent('onBeforeApiRoute', &$router);
+		$this->triggerEvent('onBeforeApiRoute', [&$router]);
 
 		$route = $router->parseApiRoute($this->input->getMethod());
 
@@ -201,7 +202,7 @@ final class ApiApplication extends CMSApplication
 	 */
 	public function getApiRouter()
 	{
-		return JFactory::getContainer()->get('ApiRouter');
+		return \JFactory::getContainer()->get('ApiRouter');
 	}
 
 	/**
