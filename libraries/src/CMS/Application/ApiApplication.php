@@ -11,6 +11,7 @@ namespace Joomla\CMS\Application;
 defined('JPATH_PLATFORM') or die;
 
 use Joomla\Application\Web\WebClient;
+use Joomla\CMS\Plugin\PluginHelper;
 use Joomla\Input\Json as JInputJson;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Router\ApiRouter;
