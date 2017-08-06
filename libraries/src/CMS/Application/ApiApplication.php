@@ -44,7 +44,7 @@ final class ApiApplication extends CMSApplication
 	public function __construct(JInputJson $input = null, Registry $config = null, WebClient $client = null, Container $container = null)
 	{
 		// Register the application name
-		$this->name = 'japi';
+		$this->name = 'api';
 
 		// Register the client ID
 		$this->clientId = 3;
