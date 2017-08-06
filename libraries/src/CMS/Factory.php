@@ -518,7 +518,7 @@ abstract class Factory
 			->registerServiceProvider(new \Joomla\CMS\Service\Provider\Document)
 			->registerServiceProvider(new \Joomla\CMS\Service\Provider\Menu)
 			->registerServiceProvider(new \Joomla\CMS\Service\Provider\Session)
-			->registerServiceProvider(new \Joomla\CMS\Service\Provider\Toolbar),
+			->registerServiceProvider(new \Joomla\CMS\Service\Provider\Toolbar)
 			->registerServiceProvider(new \Joomla\CMS\Service\Provider\ApiRouter);
 
 		return $container;
