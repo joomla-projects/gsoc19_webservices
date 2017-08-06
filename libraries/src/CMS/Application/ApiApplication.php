@@ -202,7 +202,7 @@ final class ApiApplication extends CMSApplication
 	 */
 	public function getApiRouter()
 	{
-		return JFactory::getContainer()->get('ApiRouter');
+		return \JFactory::getContainer()->get('ApiRouter');
 	}
 
 	/**
