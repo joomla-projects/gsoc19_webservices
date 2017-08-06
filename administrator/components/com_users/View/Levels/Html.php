@@ -115,12 +115,6 @@ class Html extends HtmlView
 			\JToolbarHelper::addNew('level.add');
 		}
 
-		if ($canDo->get('core.edit'))
-		{
-			\JToolbarHelper::editList('level.edit');
-			\JToolbarHelper::divider();
-		}
-
 		if ($canDo->get('core.delete'))
 		{
 			\JToolbarHelper::deleteList('JGLOBAL_CONFIRM_DELETE', 'level.delete', 'JTOOLBAR_DELETE');
@@ -147,8 +141,8 @@ class Html extends HtmlView
 	{
 		return array(
 			'a.ordering' => \JText::_('JGRID_HEADING_ORDERING'),
-			'a.title' => \JText::_('COM_USERS_HEADING_LEVEL_NAME'),
-			'a.id' => \JText::_('JGRID_HEADING_ID')
+			'a.title'    => \JText::_('COM_USERS_HEADING_LEVEL_NAME'),
+			'a.id'       => \JText::_('JGRID_HEADING_ID'),
 		);
 	}
 }

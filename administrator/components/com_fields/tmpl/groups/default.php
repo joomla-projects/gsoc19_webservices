@@ -11,7 +11,6 @@ defined('_JEXEC') or die;
 // Include the component HTML helpers.
 JHtml::addIncludePath(JPATH_COMPONENT . '/helpers/html');
 
-JHtml::_('bootstrap.tooltip');
 JHtml::_('behavior.multiselect');
 JHtml::_('formbehavior.chosen', '.advancedSelect');
 
@@ -41,10 +40,12 @@ if ($saveOrder)
 
 <form action="<?php echo JRoute::_('index.php?option=com_fields&view=groups'); ?>" method="post" name="adminForm" id="adminForm">
 	<div class="row">
+		<?php if (!empty($this->sidebar)) { ?>
 		<div id="j-sidebar-container" class="col-md-2">
 			<?php echo $this->sidebar; ?>
 		</div>
-		<div class="col-md-10">
+		<?php } ?>
+		<div class="<?php if (!empty($this->sidebar)) {echo 'col-md-10'; } else { echo 'col-md-12'; } ?>">
 			<div id="j-main-container" class="j-main-container">
 				<?php echo JLayoutHelper::render('joomla.searchtools.default', array('view' => $this, 'options' => array('selectorFieldName' => 'context'))); ?>
 				<?php if (empty($this->items)) : ?>
@@ -121,8 +122,9 @@ if ($saveOrder)
 												<?php echo JHtml::_('jgrid.checkedout', $i, $item->editor, $item->checked_out_time, 'groups.', $canCheckin); ?>
 											<?php endif; ?>
 											<?php if ($canEdit || $canEditOwn) : ?>
-												<a href="<?php echo JRoute::_('index.php?option=com_fields&task=group.edit&id=' . $item->id); ?>">
-													<?php echo $this->escape($item->title); ?></a>
+												<?php $editIcon = $item->checked_out ? '' : '<span class="fa fa-pencil-square mr-2" aria-hidden="true"></span>'; ?>
+												<a href="<?php echo JRoute::_('index.php?option=com_fields&task=group.edit&id=' . $item->id); ?>" title="<?php echo JText::_('JACTION_EDIT'); ?> <?php echo $this->escape(addslashes($item->title)); ?>">
+													<?php echo $editIcon; ?><?php echo $this->escape($item->title); ?></a>
 											<?php else : ?>
 												<?php echo $this->escape($item->title); ?>
 											<?php endif; ?>

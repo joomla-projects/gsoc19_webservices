@@ -96,11 +96,6 @@ class Html extends HtmlView
 
 		\JToolbarHelper::title(\JText::_('COM_PLUGINS_MANAGER_PLUGINS'), 'power-cord plugin');
 
-		if ($canDo->get('core.edit'))
-		{
-			\JToolbarHelper::editList('plugin.edit');
-		}
-
 		if ($canDo->get('core.edit.state'))
 		{
 			\JToolbarHelper::publish('plugins.publish', 'JTOOLBAR_ENABLE', true);
@@ -127,13 +122,13 @@ class Html extends HtmlView
 	protected function getSortFields()
 	{
 		return array(
-				'ordering' => \JText::_('JGRID_HEADING_ORDERING'),
-				'enabled' => \JText::_('JSTATUS'),
-				'name' => \JText::_('JGLOBAL_TITLE'),
-				'folder' => \JText::_('COM_PLUGINS_FOLDER_HEADING'),
-				'element' => \JText::_('COM_PLUGINS_ELEMENT_HEADING'),
-				'access' => \JText::_('JGRID_HEADING_ACCESS'),
-				'extension_id' => \JText::_('JGRID_HEADING_ID')
+			'ordering'     => \JText::_('JGRID_HEADING_ORDERING'),
+			'enabled'      => \JText::_('JSTATUS'),
+			'name'         => \JText::_('JGLOBAL_TITLE'),
+			'folder'       => \JText::_('COM_PLUGINS_FOLDER_HEADING'),
+			'element'      => \JText::_('COM_PLUGINS_ELEMENT_HEADING'),
+			'access'       => \JText::_('JGRID_HEADING_ACCESS'),
+			'extension_id' => \JText::_('JGRID_HEADING_ID'),
 		);
 	}
 }

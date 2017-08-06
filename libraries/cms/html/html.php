@@ -68,9 +68,9 @@ abstract class JHtml
 		// Check to see whether we need to load a helper file
 		$parts = explode('.', $key);
 
-		$prefix = (count($parts) == 3 ? array_shift($parts) : 'JHtml');
-		$file = (count($parts) == 2 ? array_shift($parts) : '');
-		$func = array_shift($parts);
+		$prefix = count($parts) === 3 ? array_shift($parts) : 'JHtml';
+		$file   = count($parts) === 2 ? array_shift($parts) : '';
+		$func   = array_shift($parts);
 
 		return array(strtolower($prefix . '.' . $file . '.' . $func), $prefix, $file, $func);
 	}
@@ -97,7 +97,7 @@ abstract class JHtml
 		if (array_key_exists($key, static::$registry))
 		{
 			$function = static::$registry[$key];
-			$args = func_get_args();
+			$args     = func_get_args();
 
 			// Remove function name from arguments
 			array_shift($args);
@@ -121,6 +121,15 @@ abstract class JHtml
 			if (!class_exists($className))
 			{
 				throw new InvalidArgumentException(sprintf('%s not found.', $className), 500);
+			}
+		}
+
+		// If calling a method from this class, do not allow access to internal methods
+		if ($className === __CLASS__)
+		{
+			if (!((new ReflectionMethod($className, $func))->isPublic()))
+			{
+				throw new InvalidArgumentException('Access to internal class methods is not allowed.');
 			}
 		}
 
@@ -727,6 +736,74 @@ abstract class JHtml
 	}
 
 	/**
+	 * Loads the name and path of a custom element or webcomponent into the scriptOptions object
+	 *
+	 * @param   array  $component  The name and path of the web component.
+	 *                             Also passing a key = fullPolyfill and value= true we force the whole polyfill instead
+	 *                             of just the custom element. (Polyfills loaded as needed, no force load)
+	 * @param   array  $options    The relative, version, detect browser and detect debug options for the custom element
+	 *                             or web component. Files need to have a -es5(.min).js (or -es5(.min).html) for the non ES6
+	 *                             Browsers.
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 *
+	 * @return  void
+	 */
+	public static function webcomponent($component = [], $options = [])
+	{
+		if (empty($component))
+		{
+			return;
+		}
+
+		// Script core.js is responsible for the polyfills and the async loading of the web components
+		static::_('behavior.core');
+
+		foreach ($component as $key => $value)
+		{
+			if ($key === 'fullPolyfill' && $value === true)
+			{
+				JFactory::getDocument()->addScriptOptions('webcomponents', ['fullPolyfill' => true]);
+				continue;
+			}
+			$version      = '';
+			$mediaVersion = \JFactory::getDocument()->getMediaVersion();
+			$includes     = static::includeRelativeFiles(
+				'webcomponents',
+				$value,
+				isset($options['relative']) ? $options['relative'] : true,
+				isset($options['detectBrowser']) ? $options['detectBrowser'] : false,
+				isset($options['detectDebug']) ? $options['detectDebug'] : false
+			);
+
+			if (count($includes) === 0)
+			{
+				continue;
+			}
+
+			if (isset($options['version']))
+			{
+				if ($options['version'] === 'auto')
+				{
+					$version = '?' . $mediaVersion;
+				}
+				else
+				{
+					$version = '?' . $options['version'];
+				}
+			}
+
+			if (count($includes) === 1)
+			{
+				JFactory::getDocument()->addScriptOptions('webcomponents', [$key => $includes[0] . ((strpos($includes[0], '?') === false) ? $version : '')]);
+				continue;
+			}
+
+			JFactory::getDocument()->addScriptOptions('webcomponents', [$key => $includes . ((strpos($includes, '?') === false) ? $version : '')]);
+		}
+	}
+
+	/**
 	 * Set format related options.
 	 *
 	 * Updates the formatOptions array with all valid values in the passed array.
@@ -874,7 +951,7 @@ abstract class JHtml
 			$tip = $text;
 		}
 
-		if ($class == 'hasTip')
+		if ($class === 'hasTip')
 		{
 			// Still using MooTools tooltips!
 			$tooltip = htmlspecialchars($tooltip, ENT_COMPAT, 'UTF-8');
@@ -911,10 +988,10 @@ abstract class JHtml
 		$result = '';
 
 		// Don't process empty strings
-		if ($content != '' || $title != '')
+		if ($content !== '' || $title !== '')
 		{
 			// Split title into title and content if the title contains '::' (old Mootools format).
-			if ($content == '' && !(strpos($title, '::') === false))
+			if ($content === '' && !(strpos($title, '::') === false))
 			{
 				list($title, $content) = explode('::', $title, 2);
 			}
@@ -927,17 +1004,17 @@ abstract class JHtml
 			}
 
 			// Use only the content if no title is given.
-			if ($title == '')
+			if ($title === '')
 			{
 				$result = $content;
 			}
 			// Use only the title, if title and text are the same.
-			elseif ($title == $content)
+			elseif ($title === $content)
 			{
 				$result = '<strong>' . $title . '</strong>';
 			}
 			// Use a formatted string combining the title and content.
-			elseif ($content != '')
+			elseif ($content !== '')
 			{
 				$result = '<strong>' . $title . '</strong><br>' . $content;
 			}
@@ -1002,12 +1079,12 @@ abstract class JHtml
 			$localesPath = 'system/fields/calendar-locales/' . strtolower(substr($tag, 0, -3)) . '.js';
 		}
 
-		$readonly     = isset($attribs['readonly']) && $attribs['readonly'] == 'readonly';
-		$disabled     = isset($attribs['disabled']) && $attribs['disabled'] == 'disabled';
-		$autocomplete = isset($attribs['autocomplete']) && $attribs['autocomplete'] == '';
-		$autofocus    = isset($attribs['autofocus']) && $attribs['autofocus'] == '';
-		$required     = isset($attribs['required']) && $attribs['required'] == '';
-		$filter       = isset($attribs['filter']) && $attribs['filter'] == '';
+		$readonly     = isset($attribs['readonly']) && $attribs['readonly'] === 'readonly';
+		$disabled     = isset($attribs['disabled']) && $attribs['disabled'] === 'disabled';
+		$autocomplete = isset($attribs['autocomplete']) && $attribs['autocomplete'] === '';
+		$autofocus    = isset($attribs['autofocus']) && $attribs['autofocus'] === '';
+		$required     = isset($attribs['required']) && $attribs['required'] === '';
+		$filter       = isset($attribs['filter']) && $attribs['filter'] === '';
 		$todayBtn     = isset($attribs['todayBtn']) ? $attribs['todayBtn'] : true;
 		$weekNumbers  = isset($attribs['weekNumbers']) ? $attribs['weekNumbers'] : true;
 		$showTime     = isset($attribs['showTime']) ? $attribs['showTime'] : false;
@@ -1025,7 +1102,7 @@ abstract class JHtml
 		$singleHeader = ($singleHeader) ? "1" : "0";
 
 		// Format value when not nulldate ('0000-00-00 00:00:00'), otherwise blank it as it would result in 1970-01-01.
-		if ($value && $value != JFactory::getDbo()->getNullDate() && strtotime($value) !== false)
+		if ($value && $value !== JFactory::getDbo()->getNullDate() && strtotime($value) !== false)
 		{
 			$tz = date_default_timezone_get();
 			date_default_timezone_set('UTC');
@@ -1078,11 +1155,8 @@ abstract class JHtml
 	 */
 	public static function addIncludePath($path = '')
 	{
-		// Force path to array
-		settype($path, 'array');
-
 		// Loop through the path directories
-		foreach ($path as $dir)
+		foreach ((array) $path as $dir)
 		{
 			if (!empty($dir) && !in_array($dir, static::$includePaths))
 			{
@@ -1116,7 +1190,7 @@ abstract class JHtml
 		foreach ($array as $k => $v)
 		{
 			// Don't encode either of these types
-			if (is_null($v) || is_resource($v))
+			if ($v === null || is_resource($v))
 			{
 				continue;
 			}

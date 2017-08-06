@@ -110,6 +110,12 @@ class JFormFieldComponentlayout extends JFormField
 			// Build the search paths for component layouts.
 			$component_path = JPath::clean($client->path . '/components/' . $extension . '/views/' . $view . '/tmpl');
 
+			// Check if the old layouts folder exists, else use the new one
+			if (!file_exists($component_path))
+			{
+				$component_path = JPath::clean($client->path . '/components/' . $extension . '/tmpl/' . $view);
+			}
+
 			// Prepare array of component layouts
 			$component_layouts = array();
 
@@ -193,8 +199,8 @@ class JFormFieldComponentlayout extends JFormField
 						foreach ($files as $i => $file)
 						{
 							// Remove layout files that exist in the component folder or that have XML files
-							if ((in_array(basename($file, '.php'), $component_layouts))
-								|| (in_array(basename($file, '.php'), $xml_files)))
+							if (in_array(basename($file, '.php'), $component_layouts)
+								|| in_array(basename($file, '.php'), $xml_files))
 							{
 								unset($files[$i]);
 							}
