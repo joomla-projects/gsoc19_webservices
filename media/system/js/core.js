@@ -40,7 +40,7 @@ Joomla.editors.instances = Joomla.editors.instances || {
 	 *
 	 * jInsertEditorText() @deprecated 4.0
 	 */
-	};
+};
 
 (function( Joomla, document ) {
 	"use strict";
@@ -60,7 +60,12 @@ Joomla.editors.instances = Joomla.editors.instances || {
 
 		// Toggle HTML5 validation
 		form.noValidate = !validate;
-		form.setAttribute('novalidate', !validate);
+
+		if (!validate) {
+			form.setAttribute('novalidate', '');
+		} else if (form.hasAttribute('novalidate')) {
+			form.removeAttribute('novalidate');
+		}
 
 		// Submit the form.
 		// Create the input type="submit"
@@ -316,23 +321,46 @@ Joomla.editors.instances = Joomla.editors.instances || {
 			// Array of messages of this type
 			typeMessages = messages[ type ];
 
-			// Create the alert box
-			messagesBox = document.createElement( 'div' );
+			if (typeof window.customElements === 'object' && typeof window.customElements.get('joomla-alert') === 'function') {
+				messagesBox = document.createElement( 'joomla-alert' );
 
-			// Message class
-			alertClass = (type == 'notice') ? 'alert-info' : 'alert-' + type;
-			alertClass = (type == 'message') ? 'alert-success' : alertClass;
-			alertClass = (type == 'error') ? 'alert-danger' : alertClass;
+				if (['notice','message', 'error'].indexOf(type) > -1) {
+					alertClass = (type === 'notice') ? 'info' : type;
+					alertClass = (type === 'message') ? 'success' : alertClass;
+					alertClass = (type === 'error') ? 'danger' : alertClass;
+				} else {
+					alertClass = 'info';
+				}
 
-			messagesBox.className = 'alert ' + alertClass;
+				messagesBox.setAttribute('level', alertClass);
+				messagesBox.setAttribute('dismiss', 'true');
 
-			// Close button
-			var buttonWrapper = document.createElement( 'button' );
-			buttonWrapper.setAttribute('type', 'button');
-			buttonWrapper.setAttribute('data-dismiss', 'alert');
-			buttonWrapper.className = 'close';
-			buttonWrapper.innerHTML = '×';
-			messagesBox.appendChild( buttonWrapper );
+				if (timeout && parseInt(timeout) > 0) {
+					messagesBox.setAttribute('autodismiss', timeout);
+				}
+			} else {
+				// Create the alert box
+				messagesBox = document.createElement( 'div' );
+
+				// Message class
+				if (['notice','message', 'error'].indexOf(type) > -1) {
+					alertClass = (type === 'notice') ? 'info' : type;
+					alertClass = (type === 'message') ? 'success' : alertClass;
+					alertClass = (type === 'error') ? 'danger' : alertClass;
+				} else {
+					alertClass = 'info';
+				}
+
+				messagesBox.className = 'alert ' + alertClass;
+
+				// Close button
+				var buttonWrapper = document.createElement( 'button' );
+				buttonWrapper.setAttribute('type', 'button');
+				buttonWrapper.setAttribute('data-dismiss', 'alert');
+				buttonWrapper.className = 'close';
+				buttonWrapper.innerHTML = '×';
+				messagesBox.appendChild( buttonWrapper );
+			}
 
 			// Title
 			title = Joomla.JText._( type );
@@ -341,7 +369,7 @@ Joomla.editors.instances = Joomla.editors.instances || {
 			if ( typeof title != 'undefined' ) {
 				titleWrapper = document.createElement( 'h4' );
 				titleWrapper.className = 'alert-heading';
-				titleWrapper.innerHTML = Joomla.JText._( type );
+				titleWrapper.innerHTML = Joomla.JText._( type ) ? Joomla.JText._( type ) : type;
 				messagesBox.appendChild( titleWrapper );
 			}
 
@@ -354,10 +382,12 @@ Joomla.editors.instances = Joomla.editors.instances || {
 
 			messageContainer.appendChild( messagesBox );
 
-			if (timeout && parseInt(timeout) > 0) {
-				setTimeout(function() {
-					Joomla.removeMessages(messageContainer);
-				}, timeout);
+			if (typeof window.customElements !== 'object' && typeof window.customElements.get('joomla-alert') !== 'function') {
+				if (timeout && parseInt(timeout) > 0) {
+					setTimeout(function () {
+						Joomla.removeMessages(messageContainer);
+					}, timeout);
+				}
 			}
 		}
 	};
@@ -373,19 +403,28 @@ Joomla.editors.instances = Joomla.editors.instances || {
 	Joomla.removeMessages = function( container ) {
 		var messageContainer;
 
-		if (typeof container === 'undefined') {
-			messageContainer = document.getElementById( 'system-message-container' );
-		} else {
+		if (container) {
 			messageContainer = container;
+		} else {
+			messageContainer = document.getElementById( 'system-message-container' );
 		}
 
-		// Empty container with a while for Chrome performance issues
-		while ( messageContainer.firstChild ) messageContainer.removeChild( messageContainer.firstChild );
+		if (typeof window.customElements === 'object' && window.customElements.get('joomla-alert')) {
+			var messages = messageContainer.querySelectorAll('joomla-alert');
+			if (messages.length) {
+				for (var i = 0, l = messages.length; i < l; i++) {
+					messages[i].close();
+				}
+			}
+		} else {
+			// Empty container with a while for Chrome performance issues
+			while ( messageContainer.firstChild ) messageContainer.removeChild( messageContainer.firstChild );
 
-		// Fix Chrome bug not updating element height
-		messageContainer.style.display = 'none';
-		messageContainer.offsetHeight;
-		messageContainer.style.display = '';
+			// Fix Chrome bug not updating element height
+			messageContainer.style.display = 'none';
+			messageContainer.offsetHeight;
+			messageContainer.style.display = '';
+		}
 	};
 
 	/**
@@ -491,13 +530,13 @@ Joomla.editors.instances = Joomla.editors.instances || {
 	 */
 	Joomla.popupWindow = function( mypage, myname, w, h, scroll ) {
 		var winl = ( screen.width - w ) / 2,
-			wint = ( screen.height - h ) / 2,
-			winprops = 'height=' + h +
-				',width=' + w +
-				',top=' + wint +
-				',left=' + winl +
-				',scrollbars=' + scroll +
-				',resizable';
+		    wint = ( screen.height - h ) / 2,
+		    winprops = 'height=' + h +
+			    ',width=' + w +
+			    ',top=' + wint +
+			    ',left=' + winl +
+			    ',scrollbars=' + scroll +
+			    ',resizable';
 
 		window.open( mypage, myname, winprops )
 			.window.focus();
@@ -537,9 +576,9 @@ Joomla.editors.instances = Joomla.editors.instances || {
 	 */
 	window.writeDynaList = function ( selectParams, source, key, orig_key, orig_val, element ) {
 		var html = '<select ' + selectParams + '>',
-			hasSelection = key == orig_key,
-			i = 0,
-			selected, x, item;
+		    hasSelection = key == orig_key,
+		    i = 0,
+		    selected, x, item;
 
 		for ( x in source ) {
 			if (!source.hasOwnProperty(x)) { continue; }
@@ -586,8 +625,8 @@ Joomla.editors.instances = Joomla.editors.instances || {
 	 */
 	window.changeDynaList = function ( listname, source, key, orig_key, orig_val ) {
 		var list = document.adminForm[ listname ],
-			hasSelection = key == orig_key,
-			i, x, item, opt;
+		    hasSelection = key == orig_key,
+		    i, x, item, opt;
 
 		// empty the list
 		while ( list.firstChild ) list.removeChild( list.firstChild );
@@ -654,7 +693,7 @@ Joomla.editors.instances = Joomla.editors.instances || {
 	 */
 	window.getSelectedValue = function ( frmName, srcListName ) {
 		var srcList = document[ frmName ][ srcListName ],
-			i = srcList.selectedIndex;
+		    i = srcList.selectedIndex;
 
 		if ( i !== null && i > -1 ) {
 			return srcList.options[ i ].value;
@@ -927,6 +966,162 @@ Joomla.editors.instances = Joomla.editors.instances || {
 		return xhr;
 	};
 
+	/**
+	 * Check if HTML5 localStorage enabled on the browser
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	Joomla.localStorageEnabled = function() {
+		var test = 'joomla-cms';
+		try {
+			localStorage.setItem(test, test);
+			localStorage.removeItem(test);
+			return true;
+		} catch(e) {
+			return false;
+		}
+	};
+
+	/**
+	 * Loads any needed polyfill for web components and async load any web components
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	Joomla.WebComponents = function() {
+		var wc, polyfills = [];
+
+		/* Get the web components */
+		if (Joomla.getOptions && typeof Joomla.getOptions === "function") {
+			wc = Joomla.getOptions('webcomponents', {});
+		}
+
+		/* Check if ES6 then apply the shim */
+		var checkES6 = function () {
+			try {
+				new Function("(a = 0) => a");
+				return true;
+			}
+			catch (err) {
+				return false;
+			}
+		};
+
+		/* Check if we need the full polyfill set */
+		var checkWC = function (wc) {
+			if (wc.hasOwnProperty('fullPolyfill') && wc['fullPolyfill'] === true) {
+				return true;
+			}
+			return false;
+		};
+
+		/* Load web components async */
+		var loadWC = function (wc) {
+			var el, p, es5;
+			for (p in wc) {
+				if (wc.hasOwnProperty(p) && p !== 'fullPolyfill') {
+					if (wc[p].match(/\.js/g)) {
+						el = document.createElement('script');
+						if (!checkES6()) {
+							// Browser is not ES6!
+							if (wc[p].match(/\.min\.js/g)) {
+								es5 = wc[p].replace(/\.min\.js/g, '-es5.min.js')
+							} else if (wc[p].match(/\.js/g)) {
+								es5 = wc[p].replace(/\.js/g, '-es5.js')
+							}
+							el.src = es5;
+						} else {
+							el.src = wc[p];
+						}
+					} else if (wc[p].match(/\.html/)) {
+						el = document.createElement('link');
+						if (checkES6()) {
+							// Browser is not ES6!
+							if (wc[p].match(/\.min\.html/)) {
+								el.setAttribute('href', wc[p].replace(/\.min\.html/, '-es5.min.html'));
+							} else {
+								el.setAttribute('href', wc[p].replace(/\.html/, '-es5.html'));
+							}
+						} else {
+							el.src = wc[p];
+						}
+
+						el.setAttribute('rel', 'import');
+					}
+					if (el) {
+						document.head.appendChild(el);
+					}
+				}
+			}
+		};
+
+		if (checkWC(wc)) {
+			if (!('import' in document.createElement('link'))) {
+				polyfills.push('hi');
+			}
+			if (!('attachShadow' in Element.prototype && 'getRootNode' in Element.prototype) || (window.ShadyDOM && window.ShadyDOM.force)) {
+				polyfills.push('sd');
+			}
+			if (!window.customElements || window.customElements.forcePolyfill) {
+				polyfills.push('ce');
+			}
+			if (!('content' in document.createElement('template')) || !window.Promise || !Array.from || !(document.createDocumentFragment().cloneNode() instanceof DocumentFragment)) {
+				polyfills = ['lite'];
+			}
+		} else {
+			if (!window.customElements || window.customElements.forcePolyfill) {
+				polyfills.push('ce');
+			}
+		}
+
+		if (polyfills.length) {
+			var name = "core.min.js", script = document.querySelector('script[src*="' + name + '"]')
+			if (!script) {
+				name = "core.js";
+				script = document.querySelector('script[src*="' + name + '"]')
+			}
+
+			if (!script) {
+				throw new Error('core(.min).js is not registered correctly!')
+			}
+
+			var newScript = document.createElement('script'),
+			    replacement = 'media/system/js/polyfills/webcomponents/webcomponents-' + polyfills.join('-') + '.min.js',
+			    mediaVersion = script.src.match(/\?.*/)[0],
+			    base = Joomla.getOptions('system.paths');
+
+			if (!base) {
+				throw new Error('core(.min).js is not registered correctly!')
+			}
+
+			newScript.src = base.rootFull + replacement + (mediaVersion ? mediaVersion : '');
+
+			if (document.readyState === 'loading' && ('import' in document.createElement('link'))) {
+				document.write(newScript.outerHTML);
+			} else {
+				document.head.insertAdjacentElement('beforeend', newScript);
+			}
+
+			document.addEventListener('WebComponentsReady', function () {
+				loadWC(wc);
+			});
+		} else {
+			var fire = function () {
+				requestAnimationFrame(function () {
+					document.dispatchEvent(new CustomEvent('WebComponentsReady', { bubbles: true }));
+					loadWC(wc);
+				});
+			};
+
+			if (document.readyState !== 'loading') {
+				fire();
+			} else {
+				document.addEventListener('readystatechange', function wait() {
+					fire();
+					document.removeEventListener('readystatechange', wait);
+				});
+			}
+		}
+	};
 }( Joomla, document ));
 
 /**
@@ -1001,21 +1196,12 @@ Joomla.editors.instances = Joomla.editors.instances || {
 
 		element.addEventListener(name, onceCallback);
 	};
-
-	/**
-	 * Check if HTML5 localStorage enabled on the browser
-	 *
-	 * @since   __DEPLOY_VERSION__
-	 */
-	Joomla.localStorageEnabled = function() {
-		var test = 'joomla-cms';
-		try {
-			localStorage.setItem(test, test);
-			localStorage.removeItem(test);
-			return true;
-		} catch(e) {
-			return false;
-		}
-	}
-
 })( window, Joomla );
+
+/**
+ * Load any web components and any polyfills required
+ */
+document.addEventListener('DOMContentLoaded', function() {
+	Joomla.WebComponents();
+});
+

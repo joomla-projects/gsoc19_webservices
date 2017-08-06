@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit423c8facdf90155590c7b49e979f3a1e
+class ComposerStaticInitb3d02fdb524998126a892e7a875fab39
 {
     public static $files = array (
         '2fb9d6f23c8e8faefc193a4cde0cab4f' => __DIR__ . '/..' . '/joomla/string/src/phputf8/utf8.php',
@@ -41,10 +41,12 @@ class ComposerStaticInit423c8facdf90155590c7b49e979f3a1e
             'Symfony\\Polyfill\\Util\\' => 22,
             'Symfony\\Polyfill\\Php56\\' => 23,
             'Symfony\\Component\\Yaml\\' => 23,
+            'Symfony\\Component\\WebLink\\' => 26,
         ),
         'P' => 
         array (
             'Psr\\Log\\' => 8,
+            'Psr\\Link\\' => 9,
             'Psr\\Http\\Message\\' => 17,
             'Psr\\Container\\' => 14,
             'PHPMailer\\PHPMailer\\' => 20,
@@ -67,12 +69,21 @@ class ComposerStaticInit423c8facdf90155590c7b49e979f3a1e
             'Joomla\\Http\\' => 12,
             'Joomla\\Filter\\' => 14,
             'Joomla\\Event\\' => 13,
+            'Joomla\\Database\\' => 16,
             'Joomla\\Data\\' => 12,
             'Joomla\\DI\\' => 10,
             'Joomla\\Crypt\\' => 13,
             'Joomla\\Controller\\' => 18,
             'Joomla\\Application\\' => 19,
             'Joomla\\' => 7,
+        ),
+        'F' => 
+        array (
+            'Fig\\Link\\' => 9,
+        ),
+        'D' => 
+        array (
+            'Defuse\\Crypto\\' => 14,
         ),
         'C' => 
         array (
@@ -101,9 +112,17 @@ class ComposerStaticInit423c8facdf90155590c7b49e979f3a1e
         array (
             0 => __DIR__ . '/..' . '/symfony/yaml',
         ),
+        'Symfony\\Component\\WebLink\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/web-link',
+        ),
         'Psr\\Log\\' => 
         array (
             0 => __DIR__ . '/..' . '/psr/log/Psr/Log',
+        ),
+        'Psr\\Link\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/psr/link/src',
         ),
         'Psr\\Http\\Message\\' => 
         array (
@@ -181,6 +200,10 @@ class ComposerStaticInit423c8facdf90155590c7b49e979f3a1e
         array (
             0 => __DIR__ . '/..' . '/joomla/event/src',
         ),
+        'Joomla\\Database\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/joomla/database/src',
+        ),
         'Joomla\\Data\\' => 
         array (
             0 => __DIR__ . '/..' . '/joomla/data/src',
@@ -205,6 +228,14 @@ class ComposerStaticInit423c8facdf90155590c7b49e979f3a1e
         array (
             0 => __DIR__ . '/../../..' . '/libraries/src',
         ),
+        'Fig\\Link\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/fig/link-util/src',
+        ),
+        'Defuse\\Crypto\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/defuse/php-encryption/src',
+        ),
         'Composer\\CaBundle\\' => 
         array (
             0 => __DIR__ . '/..' . '/composer/ca-bundle/src',
@@ -213,29 +244,15 @@ class ComposerStaticInit423c8facdf90155590c7b49e979f3a1e
 
     public static $classMap = array (
         'CallbackFilterIterator' => __DIR__ . '/..' . '/joomla/compat/src/CallbackFilterIterator.php',
-        'Defuse\\Crypto\\Core' => __DIR__ . '/..' . '/defuse/php-encryption/src/Core.php',
-        'Defuse\\Crypto\\Crypto' => __DIR__ . '/..' . '/defuse/php-encryption/src/Crypto.php',
-        'Defuse\\Crypto\\DerivedKeys' => __DIR__ . '/..' . '/defuse/php-encryption/src/DerivedKeys.php',
-        'Defuse\\Crypto\\Encoding' => __DIR__ . '/..' . '/defuse/php-encryption/src/Encoding.php',
-        'Defuse\\Crypto\\Exception\\BadFormatException' => __DIR__ . '/..' . '/defuse/php-encryption/src/Exception/BadFormatException.php',
-        'Defuse\\Crypto\\Exception\\CryptoException' => __DIR__ . '/..' . '/defuse/php-encryption/src/Exception/CryptoException.php',
-        'Defuse\\Crypto\\Exception\\EnvironmentIsBrokenException' => __DIR__ . '/..' . '/defuse/php-encryption/src/Exception/EnvironmentIsBrokenException.php',
-        'Defuse\\Crypto\\Exception\\IOException' => __DIR__ . '/..' . '/defuse/php-encryption/src/Exception/IOException.php',
-        'Defuse\\Crypto\\Exception\\WrongKeyOrModifiedCiphertextException' => __DIR__ . '/..' . '/defuse/php-encryption/src/Exception/WrongKeyOrModifiedCiphertextException.php',
-        'Defuse\\Crypto\\File' => __DIR__ . '/..' . '/defuse/php-encryption/src/File.php',
-        'Defuse\\Crypto\\Key' => __DIR__ . '/..' . '/defuse/php-encryption/src/Key.php',
-        'Defuse\\Crypto\\KeyOrPassword' => __DIR__ . '/..' . '/defuse/php-encryption/src/KeyOrPassword.php',
-        'Defuse\\Crypto\\KeyProtectedByPassword' => __DIR__ . '/..' . '/defuse/php-encryption/src/KeyProtectedByPassword.php',
-        'Defuse\\Crypto\\RuntimeTests' => __DIR__ . '/..' . '/defuse/php-encryption/src/RuntimeTests.php',
         'JsonSerializable' => __DIR__ . '/..' . '/joomla/compat/src/JsonSerializable.php',
     );
 
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit423c8facdf90155590c7b49e979f3a1e::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit423c8facdf90155590c7b49e979f3a1e::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit423c8facdf90155590c7b49e979f3a1e::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitb3d02fdb524998126a892e7a875fab39::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitb3d02fdb524998126a892e7a875fab39::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitb3d02fdb524998126a892e7a875fab39::$classMap;
 
         }, null, ClassLoader::class);
     }

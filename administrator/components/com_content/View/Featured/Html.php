@@ -129,11 +129,6 @@ class Html extends HtmlView
 			\JToolbarHelper::addNew('article.add');
 		}
 
-		if ($canDo->get('core.edit'))
-		{
-			\JToolbarHelper::editList('article.edit');
-		}
-
 		if ($canDo->get('core.edit.state'))
 		{
 			\JToolbarHelper::publish('articles.publish', 'JTOOLBAR_PUBLISH', true);
@@ -170,15 +165,15 @@ class Html extends HtmlView
 	protected function getSortFields()
 	{
 		return array(
-			'fp.ordering' => \JText::_('JGRID_HEADING_ORDERING'),
-			'a.state' => \JText::_('JSTATUS'),
-			'a.title' => \JText::_('JGLOBAL_TITLE'),
+			'fp.ordering'    => \JText::_('JGRID_HEADING_ORDERING'),
+			'a.state'        => \JText::_('JSTATUS'),
+			'a.title'        => \JText::_('JGLOBAL_TITLE'),
 			'category_title' => \JText::_('JCATEGORY'),
-			'access_level' => \JText::_('JGRID_HEADING_ACCESS'),
-			'a.created_by' => \JText::_('JAUTHOR'),
-			'language' => \JText::_('JGRID_HEADING_LANGUAGE'),
-			'a.created' => \JText::_('JDATE'),
-			'a.id' => \JText::_('JGRID_HEADING_ID')
+			'access_level'   => \JText::_('JGRID_HEADING_ACCESS'),
+			'a.created_by'   => \JText::_('JAUTHOR'),
+			'language'       => \JText::_('JGRID_HEADING_LANGUAGE'),
+			'a.created'      => \JText::_('JDATE'),
+			'a.id'           => \JText::_('JGRID_HEADING_ID'),
 		);
 	}
 }
