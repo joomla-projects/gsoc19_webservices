@@ -53,7 +53,7 @@ final class ApiApplication extends CMSApplication
 		parent::__construct($input, $config, $client, $container);
 
 		// Set format to JSON (uses JDocumentJson)
-		$this->input->set('format', $input->get('format', 'json'));
+		$this->input->set('format', $this->input->get('format', 'json'));
 
 		// Set the root in the URI based on the application name
 		\JUri::root(null, str_ireplace('/' . $this->getName(), '', \JUri::base(true)));
