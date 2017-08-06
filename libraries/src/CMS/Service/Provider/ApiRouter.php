@@ -36,7 +36,7 @@ class ApiRouter implements ServiceProviderInterface
 			'Joomla\CMS\Router\ApiRouter',
 			function (Container $container)
 			{
-				return new ApiRouter;
+				return new \Joomla\CMS\Router\ApiRouter;
 			},
 			true
 		);
