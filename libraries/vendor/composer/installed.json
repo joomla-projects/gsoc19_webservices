@@ -1482,12 +1482,12 @@
         "source": {
             "type": "git",
             "url": "https://github.com/joomla-framework/router.git",
-            "reference": "328f7e49b38ea3a2915313e2a54e91d8e4b6738c"
+            "reference": "919cc4a6f66a5495ca0fec8e495e589aabdca388"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/joomla-framework/router/zipball/328f7e49b38ea3a2915313e2a54e91d8e4b6738c",
-            "reference": "328f7e49b38ea3a2915313e2a54e91d8e4b6738c",
+            "url": "https://api.github.com/repos/joomla-framework/router/zipball/919cc4a6f66a5495ca0fec8e495e589aabdca388",
+            "reference": "919cc4a6f66a5495ca0fec8e495e589aabdca388",
             "shasum": ""
         },
         "require": {
@@ -1501,7 +1501,7 @@
         "suggest": {
             "jeremeamia/superclosure": "If you use Closure controllers, and want to be able to cache / serialize the router, please install jeremeamia/superclosure:~1.0"
         },
-        "time": "2017-05-27T01:17:54+00:00",
+        "time": "2017-08-06T17:34:43+00:00",
         "type": "joomla-package",
         "extra": {
             "branch-alias": {
