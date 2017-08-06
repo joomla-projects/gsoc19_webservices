@@ -87,13 +87,45 @@ class ApiRouter extends Router
 		}
 
 		// Get the path from the route and remove and leading or trailing slash.
-		$route = trim(\JUri::getInstance()->getPath(), '/');
+		$uri = \JUri::getInstance();
+		$path = urldecode($uri->getPath());
+
+		/**
+		 * In some environments (e.g. CLI we can't form a valid base URL). In this case we catch the exception thrown
+		 * by URI and set an empty base URI for further work.
+		 * TODO: This should probably be handled better
+		 */
+		try
+		{
+			$baseUri = \JUri::base(true);
+		}
+		catch (\RuntimeException $e)
+		{
+			$baseUri = '';
+		}
+
+		// Remove the base URI path.
+		$path = substr_replace($path, '', 0, strlen($baseUri));
+
+		if (!\JFactory::getApplication()->get('sef_rewrite'))
+		{
+			// Transform the route
+			if ($path === 'index.php')
+			{
+				$path = '';
+			}
+			else
+			{
+				$path = str_replace('index.php/', '', $path);
+			}
+		}
+
 		$query = \JUri::getInstance()->getQuery(true);
 
 		// Iterate through all of the known routes looking for a match.
 		foreach ($this->routes[$method] as $rule)
 		{
-			if (preg_match($rule['regex'], $route, $matches))
+			if (preg_match($rule['regex'], ltrim($path, '/'), $matches))
 			{
 				// If we have gotten this far then we have a positive match.
 				$vars = $rule['defaults'];
@@ -114,6 +146,6 @@ class ApiRouter extends Router
 			}
 		}
 
-		throw new \InvalidArgumentException(sprintf('Unable to handle request for route `%s`.', $route), 404);
+		throw new \InvalidArgumentException(sprintf('Unable to handle request for route `%s`.', $path), 404);
 	}
 }

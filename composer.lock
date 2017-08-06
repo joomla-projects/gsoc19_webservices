@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "82921e36ee94f78d52a10ffed5b130f6",
+    "content-hash": "49f7f62fe134190a06bfbf8e630c007b",
     "packages": [
         {
             "name": "composer/ca-bundle",
@@ -465,7 +465,7 @@
                 "framework",
                 "joomla"
             ],
-            "time": "2017-06-23 02:45:48"
+            "time": "2017-06-23T02:45:48+00:00"
         },
         {
             "name": "joomla/database",
@@ -1010,7 +1010,7 @@
                 "joomla",
                 "registry"
             ],
-            "time": "2017-05-27 01:17:43"
+            "time": "2017-05-27T01:17:43+00:00"
         },
         {
             "name": "joomla/router",
@@ -1018,12 +1018,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/joomla-framework/router.git",
-                "reference": "328f7e49b38ea3a2915313e2a54e91d8e4b6738c"
+                "reference": "919cc4a6f66a5495ca0fec8e495e589aabdca388"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/joomla-framework/router/zipball/328f7e49b38ea3a2915313e2a54e91d8e4b6738c",
-                "reference": "328f7e49b38ea3a2915313e2a54e91d8e4b6738c",
+                "url": "https://api.github.com/repos/joomla-framework/router/zipball/919cc4a6f66a5495ca0fec8e495e589aabdca388",
+                "reference": "919cc4a6f66a5495ca0fec8e495e589aabdca388",
                 "shasum": ""
             },
             "require": {
@@ -1059,7 +1059,7 @@
                 "joomla",
                 "router"
             ],
-            "time": "2017-05-27T01:17:54+00:00"
+            "time": "2017-08-06 17:34:43"
         },
         {
             "name": "joomla/session",
@@ -2024,7 +2024,7 @@
             ],
             "authors": [
                 {
-                    "name": "Dariusz Rumi??ski",
+                    "name": "Dariusz Rumiński",
                     "email": "dariusz.ruminski@gmail.com"
                 },
                 {

@@ -164,7 +164,6 @@ final class ApiApplication extends CMSApplication
 	 */
 	protected function route()
 	{
-		$uri    = \JUri::getInstance();
 		$router = $this->getApiRouter();
 
 		// Trigger the onBeforeApiRoute event.
@@ -216,8 +215,6 @@ final class ApiApplication extends CMSApplication
 	 */
 	public function dispatch($component = null)
 	{
-		$app = \JFactory::getApplication();
-
 		// Get the component if not set.
 		if (!$component)
 		{
