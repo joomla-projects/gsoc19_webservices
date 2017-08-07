@@ -40,6 +40,14 @@ class Api extends Controller
 	protected $text_prefix;
 
 	/**
+	 * The context for storing internal data, e.g. record.
+	 *
+	 * @var    string
+	 * @since  __DEPLOY_VERSION__
+	 */
+	protected $context;
+
+	/**
 	 * Constructor.
 	 *
 	 * @param   array                $config   An optional associative array of configuration settings.
@@ -65,6 +73,19 @@ class Api extends Controller
 		if (empty($this->text_prefix))
 		{
 			$this->text_prefix = strtoupper($this->option);
+		}
+
+		// Guess the context as the suffix, eg: OptionControllerContent.
+		if (empty($this->context))
+		{
+			$r = null;
+
+			if (!preg_match('/(.*)Controller(.*)/i', get_class($this), $r))
+			{
+				throw new \Exception(\JText::_('JLIB_APPLICATION_ERROR_CONTROLLER_GET_NAME'), 500);
+			}
+
+			$this->context = str_replace('\\', '', strtolower($r[2]));
 		}
 	}
 
