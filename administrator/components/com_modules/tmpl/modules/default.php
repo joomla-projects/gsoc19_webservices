@@ -9,9 +9,7 @@
 
 defined('_JEXEC') or die;
 
-JHtml::_('bootstrap.tooltip');
 JHtml::_('behavior.multiselect');
-
 
 $clientId  = (int) $this->state->get('client_id', 0);
 $user      = JFactory::getUser();
@@ -83,7 +81,7 @@ $colSpan = $clientId === 1 ? 8 : 10;
 					$canCheckin = $user->authorise('core.manage',     'com_checkin') || $item->checked_out == $user->get('id')|| $item->checked_out == 0;
 					$canChange  = $user->authorise('core.edit.state', 'com_modules.module.' . $item->id) && $canCheckin;
 				?>
-					<tr class="row<?php echo $i % 2; ?>" data-dragable-group="<?php echo $item->position ? $item->position : 'none'; ?>">
+					<tr class="row<?php echo $i % 2; ?>" data-dragable-group="<?php echo $item->position ?: 'none'; ?>">
 						<td class="order nowrap text-center hidden-sm-down">
 							<?php
 							$iconClass = '';
@@ -127,8 +125,9 @@ $colSpan = $clientId === 1 ? 8 : 10;
 									<?php echo JHtml::_('jgrid.checkedout', $i, $item->editor, $item->checked_out_time, 'modules.', $canCheckin); ?>
 								<?php endif; ?>
 								<?php if ($canEdit) : ?>
-									<a class="hasTooltip" href="<?php echo JRoute::_('index.php?option=com_modules&task=module.edit&id=' . (int) $item->id); ?>" title="<?php echo JText::_('JACTION_EDIT'); ?>">
-										<?php echo $this->escape($item->title); ?></a>
+									<?php $editIcon = $item->checked_out ? '' : '<span class="fa fa-pencil-square mr-2" aria-hidden="true"></span>'; ?>
+									<a class="hasTooltip" href="<?php echo JRoute::_('index.php?option=com_modules&task=module.edit&id=' . (int) $item->id); ?>" title="<?php echo JText::_('JACTION_EDIT'); ?> <?php echo $this->escape(addslashes($item->title)); ?>">
+										<?php echo $editIcon; ?><?php echo $this->escape($item->title); ?></a>
 								<?php else : ?>
 									<?php echo $this->escape($item->title); ?>
 								<?php endif; ?>
@@ -184,8 +183,8 @@ $colSpan = $clientId === 1 ? 8 : 10;
 				'bootstrap.renderModal',
 				'collapseModal',
 				array(
-					'title' => JText::_('COM_MODULES_BATCH_OPTIONS'),
-					'footer' => $this->loadTemplate('batch_footer')
+					'title'  => JText::_('COM_MODULES_BATCH_OPTIONS'),
+					'footer' => $this->loadTemplate('batch_footer'),
 				),
 				$this->loadTemplate('batch_body')
 			); ?>

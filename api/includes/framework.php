@@ -19,7 +19,7 @@ JError::setErrorHandling(E_ERROR, 'callback', array('JApiError', 'handleError'))
 // Installation check, and check on removal of the install directory.
 if (!file_exists(JPATH_CONFIGURATION . '/configuration.php')
 	|| (filesize(JPATH_CONFIGURATION . '/configuration.php') < 10)
-	|| (file_exists(JPATH_INSTALLATION . '/index.php') && (false === $version->isInDevelopmentState())))
+	|| (file_exists(JPATH_INSTALLATION . '/index.php') && (false === (new JVersion)->isInDevelopmentState())))
 {
 	{
 		echo 'No configuration file found.  Please ensure you have installed Joomla before using this application.';

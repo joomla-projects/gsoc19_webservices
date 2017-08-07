@@ -23,7 +23,8 @@ class Router implements \Serializable
 	 * Example: array(
 	 *     'regex' => $regex,
 	 *     'vars' => $vars,
-	 *     'controller' => $controller
+	 *     'controller' => $controller,
+	 *     'defaults' => $defaults,
 	 * )
 	 *
 	 * @var    array
@@ -62,19 +63,21 @@ class Router implements \Serializable
 	 * @param   string  $pattern     The route pattern to use for matching.
 	 * @param   mixed   $controller  The controller to map to the given pattern.
 	 * @param   array   $rules       An array of regex rules keyed using the named route variables.
+	 * @param   array   $defaults    An array of default values that are used when the URL is matched.
 	 *
 	 * @return  $this
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function addRoute($method, $pattern, $controller, array $rules = [])
+	public function addRoute($method, $pattern, $controller, array $rules = [], array $defaults = [])
 	{
 		list($regex, $vars) = $this->buildRegexAndVarList($pattern, $rules);
 
 		$this->routes[strtoupper($method)][] = [
 			'regex'      => $regex,
 			'vars'       => $vars,
-			'controller' => $controller
+			'controller' => $controller,
+			'defaults'   => $defaults
 		];
 
 		return $this;
@@ -178,11 +181,12 @@ class Router implements \Serializable
 				throw new \UnexpectedValueException('Route map must contain a controller variable.');
 			}
 
-			// If rules have been specified, add them as well.
-			$rules  = array_key_exists('rules', $route) ? $route['rules'] : [];
-			$method = array_key_exists('method', $route) ? $route['method'] : 'GET';
+			// If defaults, rules have been specified, add them as well.
+			$defaults = array_key_exists('defaults', $route) ? $route['defaults'] : [];
+			$rules    = array_key_exists('rules', $route) ? $route['rules'] : [];
+			$method   = array_key_exists('method', $route) ? $route['method'] : 'GET';
 
-			$this->addRoute($method, $route['pattern'], $route['controller'], $rules);
+			$this->addRoute($method, $route['pattern'], $route['controller'], $rules, $defaults);
 		}
 
 		return $this;
@@ -217,7 +221,7 @@ class Router implements \Serializable
 			if (preg_match($rule['regex'], $route, $matches))
 			{
 				// If we have gotten this far then we have a positive match.
-				$vars = [];
+				$vars = $rule['defaults'];
 
 				foreach ($rule['vars'] as $i => $var)
 				{
@@ -240,14 +244,15 @@ class Router implements \Serializable
 	 * @param   string  $pattern     The route pattern to use for matching.
 	 * @param   mixed   $controller  The controller to map to the given pattern.
 	 * @param   array   $rules       An array of regex rules keyed using the route variables.
+	 * @param   array   $defaults    An array of default values that are used when the URL is matched.
 	 *
 	 * @return  $this
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function get($pattern, $controller, array $rules = [])
+	public function get($pattern, $controller, array $rules = [], array $defaults = [])
 	{
-		return $this->addRoute('GET', $pattern, $controller, $rules);
+		return $this->addRoute('GET', $pattern, $controller, $rules, $defaults);
 	}
 
 	/**
@@ -256,14 +261,15 @@ class Router implements \Serializable
 	 * @param   string  $pattern     The route pattern to use for matching.
 	 * @param   mixed   $controller  The controller to map to the given pattern.
 	 * @param   array   $rules       An array of regex rules keyed using the route variables.
+	 * @param   array   $defaults    An array of default values that are used when the URL is matched.
 	 *
 	 * @return  $this
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function post($pattern, $controller, array $rules = [])
+	public function post($pattern, $controller, array $rules = [], array $defaults = [])
 	{
-		return $this->addRoute('POST', $pattern, $controller, $rules);
+		return $this->addRoute('POST', $pattern, $controller, $rules, $defaults);
 	}
 
 	/**
@@ -272,14 +278,15 @@ class Router implements \Serializable
 	 * @param   string  $pattern     The route pattern to use for matching.
 	 * @param   mixed   $controller  The controller to map to the given pattern.
 	 * @param   array   $rules       An array of regex rules keyed using the route variables.
+	 * @param   array   $defaults    An array of default values that are used when the URL is matched.
 	 *
 	 * @return  $this
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function put($pattern, $controller, array $rules = [])
+	public function put($pattern, $controller, array $rules = [], array $defaults = [])
 	{
-		return $this->addRoute('PUT', $pattern, $controller, $rules);
+		return $this->addRoute('PUT', $pattern, $controller, $rules, $defaults);
 	}
 
 	/**
@@ -288,14 +295,15 @@ class Router implements \Serializable
 	 * @param   string  $pattern     The route pattern to use for matching.
 	 * @param   mixed   $controller  The controller to map to the given pattern.
 	 * @param   array   $rules       An array of regex rules keyed using the route variables.
+	 * @param   array   $defaults    An array of default values that are used when the URL is matched.
 	 *
 	 * @return  $this
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function delete($pattern, $controller, array $rules = [])
+	public function delete($pattern, $controller, array $rules = [], array $defaults = [])
 	{
-		return $this->addRoute('DELETE', $pattern, $controller, $rules);
+		return $this->addRoute('DELETE', $pattern, $controller, $rules, $defaults);
 	}
 
 	/**
@@ -304,14 +312,15 @@ class Router implements \Serializable
 	 * @param   string  $pattern     The route pattern to use for matching.
 	 * @param   mixed   $controller  The controller to map to the given pattern.
 	 * @param   array   $rules       An array of regex rules keyed using the route variables.
+	 * @param   array   $defaults    An array of default values that are used when the URL is matched.
 	 *
 	 * @return  $this
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function head($pattern, $controller, array $rules = [])
+	public function head($pattern, $controller, array $rules = [], array $defaults = [])
 	{
-		return $this->addRoute('HEAD', $pattern, $controller, $rules);
+		return $this->addRoute('HEAD', $pattern, $controller, $rules, $defaults);
 	}
 
 	/**
@@ -320,14 +329,15 @@ class Router implements \Serializable
 	 * @param   string  $pattern     The route pattern to use for matching.
 	 * @param   mixed   $controller  The controller to map to the given pattern.
 	 * @param   array   $rules       An array of regex rules keyed using the route variables.
+	 * @param   array   $defaults    An array of default values that are used when the URL is matched.
 	 *
 	 * @return  $this
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function options($pattern, $controller, array $rules = [])
+	public function options($pattern, $controller, array $rules = [], array $defaults = [])
 	{
-		return $this->addRoute('OPTIONS', $pattern, $controller, $rules);
+		return $this->addRoute('OPTIONS', $pattern, $controller, $rules, $defaults);
 	}
 
 	/**
@@ -336,14 +346,15 @@ class Router implements \Serializable
 	 * @param   string  $pattern     The route pattern to use for matching.
 	 * @param   mixed   $controller  The controller to map to the given pattern.
 	 * @param   array   $rules       An array of regex rules keyed using the route variables.
+	 * @param   array   $defaults    An array of default values that are used when the URL is matched.
 	 *
 	 * @return  $this
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function trace($pattern, $controller, array $rules = [])
+	public function trace($pattern, $controller, array $rules = [], array $defaults = [])
 	{
-		return $this->addRoute('TRACE', $pattern, $controller, $rules);
+		return $this->addRoute('TRACE', $pattern, $controller, $rules, $defaults);
 	}
 
 	/**
@@ -352,14 +363,15 @@ class Router implements \Serializable
 	 * @param   string  $pattern     The route pattern to use for matching.
 	 * @param   mixed   $controller  The controller to map to the given pattern.
 	 * @param   array   $rules       An array of regex rules keyed using the route variables.
+	 * @param   array   $defaults    An array of default values that are used when the URL is matched.
 	 *
 	 * @return  $this
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function patch($pattern, $controller, array $rules = [])
+	public function patch($pattern, $controller, array $rules = [], array $defaults = [])
 	{
-		return $this->addRoute('PATCH', $pattern, $controller, $rules);
+		return $this->addRoute('PATCH', $pattern, $controller, $rules, $defaults);
 	}
 
 	/**
