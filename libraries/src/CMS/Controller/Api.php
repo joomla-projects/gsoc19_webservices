@@ -309,7 +309,7 @@ class Api extends Controller
 		}
 
 		// Clear the record id and data from the session.
-		$this->releaseEditId($context, $recordId);
+		$this->releaseEditId($context, $validData[$key]);
 		$app->setUserState($context . '.data', null);
 
 		// Invoke the postSave method to allow for the child class to access the model.
