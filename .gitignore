@@ -201,6 +201,14 @@ Desktop.ini
 /libraries/vendor/simplepie/simplepie/build
 /libraries/vendor/simplepie/simplepie/idn/ReadMe.txt
 /libraries/vendor/simplepie/simplepie/composer.json
+/libraries/vendor/willdurand/negotiation/tests
+/libraries/vendor/willdurand/negotiation/composer.json
+/libraries/vendor/willdurand/negotiation/.gitignore
+/libraries/vendor/willdurand/negotiation/phpunit.xml.dist
+/libraries/vendor/willdurand/negotiation/README.md
+/libraries/vendor/willdurand/negotiation/CONTRIBUTING.md
+/libraries/vendor/willdurand/negotiation/.travis.yml
+/libraries/vendor/willdurand/negotiation/appveyor.yml
 /libraries/vendor/zendframework/zend-diactoros/.coveralls.yml
 /libraries/vendor/zendframework/zend-diactoros/CHANGELOG.md
 /libraries/vendor/zendframework/zend-diactoros/composer.json
