@@ -17,6 +17,8 @@ use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Router\ApiRouter;
 use Joomla\DI\Container;
 use Joomla\Registry\Registry;
+use Negotiation\Accept;
+use Negotiation\Negotiator;
 
 /**
  * Joomla! API Application class
@@ -172,6 +174,28 @@ final class ApiApplication extends CMSApplication
 
 		$route = $router->parseApiRoute($this->input->getMethod());
 
+		/**
+		 * Now we have an API perform content negotation to ensure we have a valid header. Assume if the route doesn't
+		 * tell us otherwise it uses the pain JSON API
+		 */
+		$priorities = ['application/vnd.api+json'];
+
+		if (array_key_exists('format', $route['vars']))
+		{
+			$priorities = $route['vars']['format'];
+		}
+
+		$negotiator = new Negotiator();
+		$mediaType = $negotiator->getBest($this->input->server->get('Accept'), $priorities);
+
+		// If we can't find a match bail with a 406 - Not Acceptable
+		if ($mediaType === null)
+		{
+			throw new \RuntimeException('Could not match accept header', 406);
+		}
+
+		/** @var $mediaType Accept */
+		$this->input->set('format', $mediaType->getValue());
 		$this->input->set('option', $route['vars']['component']);
 		$this->input->set('controller', $route['controller']);
 		$this->input->set('task', $route['task']);
