@@ -40,6 +40,14 @@ class Api extends Controller
 	protected $text_prefix;
 
 	/**
+	 * The context for storing internal data, e.g. record.
+	 *
+	 * @var    string
+	 * @since  __DEPLOY_VERSION__
+	 */
+	protected $context;
+
+	/**
 	 * Constructor.
 	 *
 	 * @param   array                $config   An optional associative array of configuration settings.
@@ -65,6 +73,19 @@ class Api extends Controller
 		if (empty($this->text_prefix))
 		{
 			$this->text_prefix = strtoupper($this->option);
+		}
+
+		// Guess the context as the suffix, eg: OptionControllerContent.
+		if (empty($this->context))
+		{
+			$r = null;
+
+			if (!preg_match('/(.*)Controller(.*)/i', get_class($this), $r))
+			{
+				throw new \Exception(\JText::_('JLIB_APPLICATION_ERROR_CONTROLLER_GET_NAME'), 500);
+			}
+
+			$this->context = str_replace('\\', '', strtolower($r[2]));
 		}
 	}
 
@@ -97,30 +118,12 @@ class Api extends Controller
 	}
 
 	/**
-	 * Typical view method for MVC based architecture
-	 *
-	 * This function is provide as a default implementation, in most cases
-	 * you will need to override it in your own controllers.
-	 *
-	 * @param   boolean  $cachable   If true, the view output will be cached
-	 * @param   array    $urlparams  An array of safe url parameters and their variable types, for valid values see {@link \JFilterInput::clean()}.
-	 *
-	 * @return  static  A \JControllerLegacy object to support chaining.
-	 *
-	 * @since   __DEPLOY_VERSION__
-	 */
-	public function display($cachable = false, $urlparams = array())
-	{
-
-	}
-
-	/**
 	 * Method to add a new record.
 	 *
 	 * @param   string  $key     The name of the primary key of the URL variable.
 	 * @param   string  $urlVar  The name of the URL variable if different from the primary key (sometimes required to avoid router collisions).
 	 *
-	 * @return  boolean  True if the record can be added, false if not.
+	 * @return  boolean  True if the record is added, false if not.
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
@@ -153,7 +156,7 @@ class Api extends Controller
 	 * @param   string  $urlVar  The name of the URL variable if different from the primary key
 	 *                           (sometimes required to avoid router collisions).
 	 *
-	 * @return  boolean  True if access level check and checkout passes, false otherwise.
+	 * @return  boolean  True if save succeeded after access level check and checkout passes, false otherwise.
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
@@ -198,10 +201,10 @@ class Api extends Controller
 		else
 		{
 			// Check-out succeeded, push the new record id into the session.
-			$this->holdEditId($context, $recordId);
-			\JFactory::getApplication()->setUserState($context . '.data', null);
+			$this->holdEditId($this->context, $recordId);
+			\JFactory::getApplication()->setUserState($this->context . '.data', null);
 
-			return true;
+			return $this->save($key, $urlVar);
 		}
 	}
 
@@ -238,13 +241,6 @@ class Api extends Controller
 
 		$recordKey = $this->input->get($urlVar);
 		$data[$key] = $recordKey;
-
-		if (!$this->allowSave($data, $key))
-		{
-			$this->setMessage(\JText::_('JLIB_APPLICATION_ERROR_SAVE_NOT_PERMITTED'), 'error');
-
-			return false;
-		}
 
 		// Validate the posted data.
 		// Sometimes the form needs some posted data, such as for plugins and modules.
@@ -313,39 +309,13 @@ class Api extends Controller
 		}
 
 		// Clear the record id and data from the session.
-		$this->releaseEditId($context, $recordId);
+		$this->releaseEditId($context, $validData[$key]);
 		$app->setUserState($context . '.data', null);
 
 		// Invoke the postSave method to allow for the child class to access the model.
 		$this->postSaveHook($model, $validData);
 
 		return true;
-	}
-
-	/**
-	 * Method to check if you can save a new or existing record.
-	 *
-	 * Extended classes can override this if necessary.
-	 *
-	 * @param   array   $data  An array of input data.
-	 * @param   string  $key   The name of the key for the primary key.
-	 *
-	 * @return  boolean
-	 *
-	 * @since   __DEPLOY_VERSION__
-	 */
-	protected function allowSave($data, $key = 'id')
-	{
-		$recordId = isset($data[$key]) ? $data[$key] : '0';
-
-		if ($recordId)
-		{
-			return $this->allowEdit($data, $key);
-		}
-		else
-		{
-			return $this->allowAdd($data);
-		}
 	}
 
 	/**
