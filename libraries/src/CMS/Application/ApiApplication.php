@@ -18,6 +18,7 @@ use Joomla\CMS\Router\ApiRouter;
 use Joomla\DI\Container;
 use Joomla\Registry\Registry;
 use Negotiation\Accept;
+use Negotiation\Exception\InvalidArgument;
 use Negotiation\Negotiator;
 
 /**
@@ -186,7 +187,15 @@ final class ApiApplication extends CMSApplication
 		}
 
 		$negotiator = new Negotiator();
-		$mediaType = $negotiator->getBest($this->input->server->get('Accept'), $priorities);
+
+		try
+		{
+			$mediaType = $negotiator->getBest($this->input->server->getString('HTTP_ACCEPT'), $priorities);
+		}
+		catch (InvalidArgument $e)
+		{
+			$mediaType = null;
+		}
 
 		// If we can't find a match bail with a 406 - Not Acceptable
 		if ($mediaType === null)
