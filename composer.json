@@ -70,7 +70,8 @@
         "symfony/polyfill-php56": "~1.0",
         "symfony/web-link": "3.3.*",
         "symfony/yaml": "3.3.*",
-        "tobscure/json-api": "^0.4.1"
+        "tobscure/json-api": "^0.4.1",
+        "willdurand/negotiation": "^2.3"
     },
     "require-dev": {
         "phpunit/phpunit": "^4.8.35",
