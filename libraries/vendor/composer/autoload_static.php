@@ -51,6 +51,10 @@ class ComposerStaticInitb3d02fdb524998126a892e7a875fab39
             'Psr\\Container\\' => 14,
             'PHPMailer\\PHPMailer\\' => 20,
         ),
+        'N' => 
+        array (
+            'Negotiation\\' => 12,
+        ),
         'J' => 
         array (
             'Joomla\\Utilities\\' => 17,
@@ -135,6 +139,10 @@ class ComposerStaticInitb3d02fdb524998126a892e7a875fab39
         'PHPMailer\\PHPMailer\\' => 
         array (
             0 => __DIR__ . '/..' . '/phpmailer/phpmailer/src',
+        ),
+        'Negotiation\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/willdurand/negotiation/src/Negotiation',
         ),
         'Joomla\\Utilities\\' => 
         array (

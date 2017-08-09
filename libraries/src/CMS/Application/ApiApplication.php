@@ -17,6 +17,9 @@ use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Router\ApiRouter;
 use Joomla\DI\Container;
 use Joomla\Registry\Registry;
+use Negotiation\Accept;
+use Negotiation\Exception\InvalidArgument;
+use Negotiation\Negotiator;
 
 /**
  * Joomla! API Application class
@@ -51,9 +54,6 @@ final class ApiApplication extends CMSApplication
 
 		// Execute the parent constructor
 		parent::__construct($input, $config, $client, $container);
-
-		// Set format to JSON (uses JDocumentJson)
-		$this->input->set('format', $this->input->get('format', 'json'));
 
 		// Set the root in the URI based on the application name
 		\JUri::root(null, str_ireplace('/' . $this->getName(), '', \JUri::base(true)));
@@ -172,6 +172,36 @@ final class ApiApplication extends CMSApplication
 
 		$route = $router->parseApiRoute($this->input->getMethod());
 
+		/**
+		 * Now we have an API perform content negotation to ensure we have a valid header. Assume if the route doesn't
+		 * tell us otherwise it uses the pain JSON API
+		 */
+		$priorities = ['application/vnd.api+json'];
+
+		if (array_key_exists('format', $route['vars']))
+		{
+			$priorities = $route['vars']['format'];
+		}
+
+		$negotiator = new Negotiator();
+
+		try
+		{
+			$mediaType = $negotiator->getBest($this->input->server->getString('HTTP_ACCEPT'), $priorities);
+		}
+		catch (InvalidArgument $e)
+		{
+			$mediaType = null;
+		}
+
+		// If we can't find a match bail with a 406 - Not Acceptable
+		if ($mediaType === null)
+		{
+			throw new \RuntimeException('Could not match accept header', 406);
+		}
+
+		/** @var $mediaType Accept */
+		$this->input->set('format', $mediaType->getValue());
 		$this->input->set('option', $route['vars']['component']);
 		$this->input->set('controller', $route['controller']);
 		$this->input->set('task', $route['task']);
