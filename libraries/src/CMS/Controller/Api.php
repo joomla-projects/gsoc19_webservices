@@ -201,8 +201,8 @@ class Api extends Controller
 		else
 		{
 			// Check-out succeeded, push the new record id into the session.
-			$this->holdEditId($context, $recordId);
-			\JFactory::getApplication()->setUserState($context . '.data', null);
+			$this->holdEditId($this->context, $recordId);
+			\JFactory::getApplication()->setUserState($this->context . '.data', null);
 
 			return $this->save($key, $urlVar);
 		}
