@@ -34,7 +34,7 @@ final class ApiApplication extends CMSApplication
 	 * @var    array
 	 * @since  __DEPLOY_VERSION__
 	 */
-	protected $formatMapper = [];
+	public $formatMapper = [];
 
 	/**
 	 * Class constructor.
@@ -62,11 +62,6 @@ final class ApiApplication extends CMSApplication
 
 		// Execute the parent constructor
 		parent::__construct($input, $config, $client, $container);
-
-		$this->triggerEvent('onGetApiFormats', [$this->formatMapper]);
-
-		// This is a core supported type so force it!
-		$this->formatMapper['application/vnd.api+json'] = 'jsonapi';
 
 		// Set the root in the URI based on the application name
 		\JUri::root(null, str_ireplace('/' . $this->getName(), '', \JUri::base(true)));
@@ -101,6 +96,23 @@ final class ApiApplication extends CMSApplication
 
 		// Mark afterDispatch in the profiler.
 		JDEBUG ? $this->profiler->mark('afterDispatch') : null;
+	}
+
+	/**
+	 * Initialise the application.
+	 *
+	 * @param   array  $options  An optional associative array of configuration settings.
+	 *
+	 * @return  void
+	 *
+	 * @since   3.2
+	 */
+	protected function initialiseApp($options = array())
+	{
+		parent::initialiseApp($options);
+
+		// This is a core supported type so force it!
+		$this->formatMapper['application/vnd.api+json'] = 'jsonapi';
 	}
 
 	/**
