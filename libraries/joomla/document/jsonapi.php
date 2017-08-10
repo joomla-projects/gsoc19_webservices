@@ -13,12 +13,12 @@ use Tobscure\JsonApi\Document;
 use Tobscure\JsonApi\ElementInterface;
 
 /**
- * JDocumentApiJsonapi class, provides an easy interface to parse output in JSON-API format.
+ * JDocumentJsonapi class, provides an easy interface to parse output in JSON-API format.
  *
  * @link   http://www.jsonapi.org/
  * @since  __DEPLOY VERSION__
  */
-class JDocumentApiJsonapi extends JDocumentJson implements JsonSerializable
+class JDocumentJsonapi extends JDocumentJson implements JsonSerializable
 {
 	/**
 	 * The JsonApi Document object.
