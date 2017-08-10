@@ -34,7 +34,7 @@ final class ApiApplication extends CMSApplication
 	 * @var    array
 	 * @since  __DEPLOY_VERSION__
 	 */
-	public $formatMapper = [];
+	protected $formatMapper = [];
 
 	/**
 	 * Class constructor.
@@ -62,6 +62,8 @@ final class ApiApplication extends CMSApplication
 
 		// Execute the parent constructor
 		parent::__construct($input, $config, $client, $container);
+
+		$this->addFormatMap('application/vnd.api+json', 'jsonapi');
 
 		// Set the root in the URI based on the application name
 		\JUri::root(null, str_ireplace('/' . $this->getName(), '', \JUri::base(true)));
@@ -99,20 +101,17 @@ final class ApiApplication extends CMSApplication
 	}
 
 	/**
-	 * Initialise the application.
+	 * Adds a mapping from a content type to the format stored. Note the format type cannot be overwritten.
 	 *
-	 * @param   array  $options  An optional associative array of configuration settings.
-	 *
-	 * @return  void
-	 *
-	 * @since   3.2
+	 * @param   string  $contentHeader  The content header
+	 * @param $format
 	 */
-	protected function initialiseApp($options = array())
+	public function addFormatMap($contentHeader, $format)
 	{
-		parent::initialiseApp($options);
-
-		// This is a core supported type so force it!
-		$this->formatMapper['application/vnd.api+json'] = 'jsonapi';
+		if (!array_key_exists($contentHeader, $this->formatMapper))
+		{
+			$this->formatMapper[$contentHeader] = $format;
+		}
 	}
 
 	/**
