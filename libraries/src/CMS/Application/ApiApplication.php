@@ -142,8 +142,6 @@ final class ApiApplication extends CMSApplication
 	 */
 	protected function respond($options = array())
 	{
-		$this->setBody(json_encode($this->getBody()));
-
 		// Set the Joomla! API signature
 		$this->setHeader('X-Powered-By', 'JoomlaAPI/1.0', true);
 
