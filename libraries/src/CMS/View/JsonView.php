@@ -26,7 +26,7 @@ class JsonView extends AbstractView
 	 * The base path of the view
 	 *
 	 * @var    string
-	 * @since  3.0
+	 * @since  __DEPLOY_VERSION__
 	 */
 	protected $_basePath = null;
 
@@ -72,5 +72,20 @@ class JsonView extends AbstractView
 		{
 			$this->_basePath = JPATH_COMPONENT;
 		}
+	}
+
+	/**
+	 * Execute and display a template script.
+	 *
+	 * @param   string  $tpl  The name of the template file to parse; automatically searches through the template paths.
+	 *
+	 * @return  void
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function display($tpl = null)
+	{
+		$result = json_encode($this->_output);
+		$this->document->setBuffer($result);
 	}
 }
