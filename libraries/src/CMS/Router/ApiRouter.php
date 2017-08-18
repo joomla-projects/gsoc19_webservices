@@ -33,13 +33,13 @@ class ApiRouter extends Router
 			array(
 				'method' => 'GET',
 				'pattern' => $baseName,
-				'controller' => $controller . '.display',
+				'controller' => $controller . '.displayList',
 				'defaults' => $defaults
 			),
 			array(
 				'method' => 'GET',
 				'pattern' => $baseName . '/:id',
-				'controller' => $controller . '.display',
+				'controller' => $controller . '.displayItem',
 				'rules' => array('id' => '(\d+)'),
 				'defaults' => $defaults
 			),
