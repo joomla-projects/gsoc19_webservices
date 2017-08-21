@@ -114,9 +114,9 @@ class Api extends Controller
 			$this->input->set('view', $viewname);
 		}
 
-		if (empty($model->getState($model->getName().'id')))
+		if (empty($model->getState($model->getName() . 'id')))
 		{
-			$model->setState($model->getName().'id', $id);
+			$model->setState($model->getName() . 'id', $id);
 		}
 
 		parent::display($cachable, $urlparams);

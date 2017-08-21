@@ -105,7 +105,9 @@ final class ApiApplication extends CMSApplication
 	 * Adds a mapping from a content type to the format stored. Note the format type cannot be overwritten.
 	 *
 	 * @param   string  $contentHeader  The content header
-	 * @param $format
+	 * @param   $format
+	 *
+	 * @return  void
 	 */
 	public function addFormatMap($contentHeader, $format)
 	{
@@ -206,7 +208,7 @@ final class ApiApplication extends CMSApplication
 			$priorities = $route['vars']['format'];
 		}
 
-		$negotiator = new Negotiator();
+		$negotiator = new Negotiator;
 
 		try
 		{
