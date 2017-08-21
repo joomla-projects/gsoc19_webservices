@@ -105,10 +105,18 @@ class Api extends Controller
 	 */
 	public function displayItem($cachable = false, $urlparams = array())
 	{
+		$model = $this->model;
+		$id    = $id = $this->input->get('id', 0, 'int');
+
 		if (empty($this->input->get('view')))
 		{
 			$viewname = $this->getName() . 'item';
 			$this->input->set('view', $viewname);
+		}
+
+		if (empty($model->getState($model->getName().'id')))
+		{
+			$model->setState($model->getName().'id', $id);
 		}
 
 		parent::display($cachable, $urlparams);

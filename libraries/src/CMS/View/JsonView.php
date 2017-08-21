@@ -10,9 +10,6 @@ namespace Joomla\CMS\View;
 
 defined('JPATH_PLATFORM') or die;
 
-use Joomla\CMS\Application\ApplicationHelper;
-use Joomla\CMS\Model\Model;
-
 /**
  * Base class for a Joomla Json View
  *
@@ -37,6 +34,14 @@ class JsonView extends AbstractView
 	 * @since  __DEPLOY_VERSION__
 	 */
 	protected $_charset = 'UTF-8';
+
+	/**
+	 * The output of the view.
+	 *
+	 * @var    array
+	 * @since  __DEPLOY_VERSION__
+	 */
+	protected $_output = array();
 
 	/**
 	 * Constructor
@@ -85,7 +90,10 @@ class JsonView extends AbstractView
 	 */
 	public function display($tpl = null)
 	{
+		// Serializing the output
 		$result = json_encode($this->_output);
+
+		// Pushing output to the document
 		$this->document->setBuffer($result);
 	}
 }
