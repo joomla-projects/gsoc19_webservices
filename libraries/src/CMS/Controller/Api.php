@@ -105,21 +105,30 @@ class Api extends Controller
 	 */
 	public function displayItem($cachable = false, $urlparams = array())
 	{
-		$model = $this->model;
-		$id    = $id = $this->input->get('id', 0, 'int');
+		$id = $this->input->get('id', 0, 'int');
 
-		if (empty($this->input->get('view')))
+		$document = \JFactory::getDocument();
+		$viewType = $document->getType();
+		$viewName = $this->input->get('view', 'ItemJsonView');
+		$viewLayout = $this->input->get('layout', 'default', 'string');
+
+		$view = $this->getView($viewName, $viewType, '', array('base_path' => $this->basePath, 'layout' => $viewLayout));
+
+		// Get/Create the model
+		if ($model = $this->getModel())
 		{
-			$viewname = $this->getName() . 'item';
-			$this->input->set('view', $viewname);
+			// Push the model into the view (as default)
+			$view->setModel($model, true);
 		}
+
+		$view->document = $document;
 
 		if (empty($model->getState($model->getName() . 'id')))
 		{
 			$model->setState($model->getName() . 'id', $id);
 		}
 
-		parent::display($cachable, $urlparams);
+		$view->display();
 
 		return $this;
 	}
@@ -139,13 +148,23 @@ class Api extends Controller
 	 */
 	public function displayList($cachable = false, $urlparams = array())
 	{
-		if (empty($this->input->get('view')))
+		$document = \JFactory::getDocument();
+		$viewType = $document->getType();
+		$viewName = $this->input->get('view', 'ListJsonView');
+		$viewLayout = $this->input->get('layout', 'default', 'string');
+
+		$view = $this->getView($viewName, $viewType, '', array('base_path' => $this->basePath, 'layout' => $viewLayout));
+
+		// Get/Create the model
+		if ($model = $this->getModel($viewName))
 		{
-			$viewname = $this->getName() . 'list';
-			$this->input->set('view', $viewname);
+			// Push the model into the view (as default)
+			$view->setModel($model, true);
 		}
 
-		parent::display($cachable, $urlparams);
+		$view->document = $document;
+
+		$view->display();
 
 		return $this;
 	}

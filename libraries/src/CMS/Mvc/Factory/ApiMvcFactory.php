@@ -79,6 +79,18 @@ final class ApiMvcFactory extends MvcFactory
 	 */
 	public function createView($name, $prefix = '', $type = '', array $config = array())
 	{
-		return new Jsonapi($config);
+		// Clean the parameters
+		$name   = preg_replace('/[^A-Z0-9_]/i', '', $name);
+		$prefix = preg_replace('/[^A-Z0-9_]/i', '', $prefix);
+		$type   = preg_replace('/[^A-Z0-9_]/i', '', $type);
+
+		$className = 'Joomla\\CMS\\View\\' . ucfirst($name);
+
+		if (!$className)
+		{
+			return null;
+		}
+
+		return new $className($config);
 	}
 }

@@ -145,7 +145,7 @@ class JDocumentJsonapi extends JDocumentJson implements JsonSerializable
 		$app->mimeType = $this->_mime;
 		$app->charSet  = $this->_charset;
 
-		return (string) $this;
+		return json_encode($this->document);
 	}
 
 	/**

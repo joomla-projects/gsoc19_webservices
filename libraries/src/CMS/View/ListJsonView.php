@@ -10,6 +10,31 @@ namespace Joomla\CMS\View;
 
 defined('_JEXEC') or die;
 
+use Joomla\Utilities\ArrayHelper;
+use Tobscure\JsonApi\Collection;
+use Tobscure\JsonApi\AbstractSerializer;
+
+class ItemsSerializer extends AbstractSerializer
+{
+    protected $type = 'items';
+
+    public function getAttributes($post, array $fields = null)
+    {
+        return [
+					'typeAlias' => $post->typeAlias,
+					'id'  => $post->id,
+					'asset_id'  => $post->asset_id,
+					'title' => $post->title,
+					'introtext'  => $post->introtext,
+					'fulltext' => $post->fulltext,
+					'state'  => $post->state,
+					'catid' => $post->catid,
+					'created'  => $post->created,
+        ];
+    }
+}
+
+
 /**
  * Base class for a Joomla Json List View
  *
@@ -44,8 +69,10 @@ class ListJsonView extends JsonView
 	 */
 	public function display($tpl = null)
 	{
-		$this->item = $this->get('Items');
-		$this->state = $this->get('State');
+		$model = $this->getModel();
+
+		$this->items = $model->get('Items');
+		$this->state = $model->get('State');
 
 		// Check for errors.
 		if (count($errors = $this->get('Errors')))
@@ -53,8 +80,10 @@ class ListJsonView extends JsonView
 			throw new \JViewGenericdataexception(implode("\n", $errors), 500);
 		}
 
-		$this->_output = $this->items;
+		$element = new Collection($this->items, new ItemSerializer);
 
-		parent::display($tpl);
+		$this->document->setData($element);
+		$this->document->addLink('self', \JUri::current());
+		$this->document->render();
 	}
 }

@@ -166,7 +166,7 @@ class MvcFactory implements MvcFactoryInterface
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	private function getClassName($suffix, $prefix)
+	public function getClassName($suffix, $prefix)
 	{
 		if (!$prefix)
 		{

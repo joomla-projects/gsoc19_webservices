@@ -9,8 +9,30 @@
 namespace Joomla\CMS\View;
 
 use Joomla\Utilities\ArrayHelper;
+use Tobscure\JsonApi\Resource;
+use Tobscure\JsonApi\AbstractSerializer;
 
 defined('_JEXEC') or die;
+
+class ItemSerializer extends AbstractSerializer
+{
+    protected $type = 'items';
+
+    public function getAttributes($post, array $fields = null)
+    {
+        return [
+					'typeAlias' => $post->typeAlias,
+					'id'  => $post->id,
+					'asset_id'  => $post->asset_id,
+					'title' => $post->title,
+					'introtext'  => $post->introtext,
+					'fulltext' => $post->fulltext,
+					'state'  => $post->state,
+					'catid' => $post->catid,
+					'created'  => $post->created,
+        ];
+    }
+}
 
 /**
  * Base class for a Joomla Json Item View
@@ -46,7 +68,8 @@ class ItemJsonView extends JsonView
 	 */
 	public function display($tpl = null)
 	{
-		$this->item = $this->get('Item');
+		$model = $this->getModel();
+		$this->item = $model->getItem();
 
 		// Check for errors.
 		if (count($errors = $this->get('Errors')))
@@ -54,8 +77,10 @@ class ItemJsonView extends JsonView
 			throw new \JViewGenericdataexception(implode("\n", $errors), 500);
 		}
 
-		$this->_output = ArrayHelper::fromObject($this->item);
+		$element = new Resource($this->item, new ItemSerializer);
 
-		parent::display($tpl);
+		$this->document->setData($element);
+		$this->document->addLink('self', \JUri::current());
+		$this->document->render();
 	}
 }
