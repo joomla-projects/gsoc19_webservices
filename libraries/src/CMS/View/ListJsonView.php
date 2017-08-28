@@ -60,7 +60,7 @@ class ListJsonView extends JsonView
 			throw new \JViewGenericdataexception(implode("\n", $errors), 500);
 		}
 
-		$element = new Collection($this->items, new ItemsSerializer);
+		$element = new Collection($this->items, new ItemSerializer);
 
 		$this->document->setData($element);
 		$this->document->addLink('self', \JUri::current());
