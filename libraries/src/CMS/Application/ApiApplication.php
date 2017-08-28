@@ -34,7 +34,7 @@ final class ApiApplication extends CMSApplication
 	 * @var    array
 	 * @since  __DEPLOY_VERSION__
 	 */
-	protected $formatMapper = [];
+	protected $formatMapper = array();
 
 	/**
 	 * Class constructor.
@@ -105,7 +105,7 @@ final class ApiApplication extends CMSApplication
 	 * Adds a mapping from a content type to the format stored. Note the format type cannot be overwritten.
 	 *
 	 * @param   string  $contentHeader  The content header
-	 * @param   string  $format  The content type format
+	 * @param   string  $format         The content type format
 	 *
 	 * @return  void
 	 */
@@ -193,7 +193,7 @@ final class ApiApplication extends CMSApplication
 
 		// Trigger the onBeforeApiRoute event.
 		PluginHelper::importPlugin('webservices');
-		$this->triggerEvent('onBeforeApiRoute', [&$router]);
+		$this->triggerEvent('onBeforeApiRoute', array(&$router));
 
 		$route = $router->parseApiRoute($this->input->getMethod());
 
@@ -201,7 +201,7 @@ final class ApiApplication extends CMSApplication
 		 * Now we have an API perform content negotation to ensure we have a valid header. Assume if the route doesn't
 		 * tell us otherwise it uses the pain JSON API
 		 */
-		$priorities = ['application/vnd.api+json'];
+		$priorities = array('application/vnd.api+json');
 
 		if (array_key_exists('format', $route['vars']))
 		{
