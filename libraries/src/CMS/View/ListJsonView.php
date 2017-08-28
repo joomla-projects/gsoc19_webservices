@@ -11,48 +11,9 @@ namespace Joomla\CMS\View;
 defined('_JEXEC') or die;
 
 use Joomla\Utilities\ArrayHelper;
+use Joomla\Component\Content\Api\Serializer\ItemSerializer;
 use Tobscure\JsonApi\Collection;
 use Tobscure\JsonApi\AbstractSerializer;
-
-/**
- * Temporary serializer
- *
- * @since  __DEPLOY_VERSION__
- */
-class ItemsSerializer extends AbstractSerializer
-{
-	/**
-	 * The items object
-	 *
-	 * @var  array
-	 */
-	protected $type = 'items';
-
-	/**
-	 * Get the attributes array.
-	 *
-	 * @param   mixed  $post    The model
-	 * @param   array  $fields  The fields can be array or null
-	 *
-	 * @since  __DEPLOY_VERSION__
-	 * @return array
-	 */
-	public function getAttributes($post, array $fields = null)
-	{
-		return  array(
-		'typeAlias' => $post->typeAlias,
-		'id'        => $post->id,
-		'asset_id'  => $post->asset_id,
-		'title'     => $post->title,
-		'introtext' => $post->introtext,
-		'fulltext'  => $post->fulltext,
-		'state'     => $post->state,
-		'catid'     => $post->catid,
-		'created'   => $post->created,
-		);
-	}
-}
-
 
 /**
  * Base class for a Joomla Json List View
