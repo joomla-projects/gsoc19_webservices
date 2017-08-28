@@ -31,8 +31,8 @@ class ItemsSerializer extends AbstractSerializer
 	/**
 	 * Get the attributes array.
 	 *
-	 * @param   mixed  $post   The model
-	 * @param   array  $fields The fields can be array or null
+	 * @param   mixed  $post    The model
+	 * @param   array  $fields  The fields can be array or null
 	 *
 	 * @since  __DEPLOY_VERSION__
 	 * @return array

@@ -13,7 +13,13 @@ defined('_JEXEC') or die;
 
 use Joomla\CMS\View\ListJsonView;
 
-
+/**
+ * Override class for a Joomla Json List View
+ *
+ * Class holding methods for displaying presentation data.
+ *
+ * @since  __DEPLOY_VERSION__
+ */
 class Jsonapi extends ListJsonView
 {
 }

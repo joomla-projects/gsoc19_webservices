@@ -30,7 +30,7 @@ class PlgWebservicesContent extends CMSPlugin
 	/**
 	 * Registers com_content's API's routes in the application
 	 *
-	 * @param   object  $router  The API Routing object
+	 * @param   object  &$router  The API Routing object
 	 *
 	 * @return  void
 	 *
@@ -38,6 +38,6 @@ class PlgWebservicesContent extends CMSPlugin
 	 */
 	public function onBeforeApiRoute(&$router)
 	{
-		$router->createCRUDRoutes('article', 'article', ['component' => 'com_content']);
+		$router->createCRUDRoutes('article', 'article', array('component' => 'com_content'));
 	}
 }
