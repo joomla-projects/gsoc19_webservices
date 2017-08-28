@@ -105,7 +105,7 @@ final class ApiApplication extends CMSApplication
 	 * Adds a mapping from a content type to the format stored. Note the format type cannot be overwritten.
 	 *
 	 * @param   string  $contentHeader  The content header
-	 * @param   $format
+	 * @param   string  $format  The content type format
 	 *
 	 * @return  void
 	 */

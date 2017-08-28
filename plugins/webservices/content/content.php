@@ -30,7 +30,7 @@ class PlgWebservicesContent extends CMSPlugin
 	/**
 	 * Registers com_content's API's routes in the application
 	 *
-	 * @param   APIRouter  $router  The API Routing object
+	 * @param   object  $router  The API Routing object
 	 *
 	 * @return  void
 	 *

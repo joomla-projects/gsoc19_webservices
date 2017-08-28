@@ -14,24 +14,29 @@ use Joomla\Utilities\ArrayHelper;
 use Tobscure\JsonApi\Collection;
 use Tobscure\JsonApi\AbstractSerializer;
 
+/**
+ * Temporary serializer
+ *
+ * @since  __DEPLOY_VERSION__
+ */
 class ItemsSerializer extends AbstractSerializer
 {
-    protected $type = 'items';
+  protected $type = 'items';
 
-    public function getAttributes($post, array $fields = null)
-    {
-        return [
-					'typeAlias' => $post->typeAlias,
-					'id'  => $post->id,
-					'asset_id'  => $post->asset_id,
-					'title' => $post->title,
-					'introtext'  => $post->introtext,
-					'fulltext' => $post->fulltext,
-					'state'  => $post->state,
-					'catid' => $post->catid,
-					'created'  => $post->created,
-        ];
-    }
+  public function getAttributes($post, array $fields = null)
+  {
+    return [
+      'typeAlias' => $post->typeAlias,
+      'id'  => $post->id,
+      'asset_id'  => $post->asset_id,
+      'title' => $post->title,
+      'introtext'  => $post->introtext,
+      'fulltext' => $post->fulltext,
+      'state'  => $post->state,
+      'catid' => $post->catid,
+      'created'  => $post->created,
+    ];
+  }
 }
 
 

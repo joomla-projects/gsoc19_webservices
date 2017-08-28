@@ -388,9 +388,11 @@ class ComponentHelper
 		}
 		elseif ($app->isClient('api'))
 		{
-			// We're in the API App and the component doesn't have a API integration yet. So we are going to use our
-			// 'special' dispatcher that is going to pipe all it's traffic through, and do it's own rendering. We just
-			// need some mappings we'll grab from the existing (and previously unused) $params array
+			/*
+			 * We're in the API App and the component doesn't have a API integration yet. So we are going to use our
+			 * 'special' dispatcher that is going to pipe all it's traffic through, and do it's own rendering. We just
+			 *  need some mappings we'll grab from the existing (and previously unused) $params array
+			 */
 			$contents = static::dispatchComponent(new ApiDispatcher($app, $app->input));
 		}
 		else
