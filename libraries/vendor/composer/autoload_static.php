@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitb3d02fdb524998126a892e7a875fab39
+class ComposerStaticInit617e807c0295e83e43d06f48ce3f5f43
 {
     public static $files = array (
         '2fb9d6f23c8e8faefc193a4cde0cab4f' => __DIR__ . '/..' . '/joomla/string/src/phputf8/utf8.php',
@@ -24,6 +24,7 @@ class ComposerStaticInitb3d02fdb524998126a892e7a875fab39
         '87465e33b7551b401bf051928f220e9a' => __DIR__ . '/..' . '/joomla/string/src/phputf8/utils/validation.php',
         '5255c38a0faeba867671b61dfda6d864' => __DIR__ . '/..' . '/paragonie/random_compat/lib/random.php',
         'e40631d46120a9c38ea139981f8dab26' => __DIR__ . '/..' . '/ircmaxell/password-compat/lib/password.php',
+        '3109cb1a231dcd04bee1f9f620d46975' => __DIR__ . '/..' . '/paragonie/sodium_compat/autoload.php',
         'bd9634f2d41831496de0d3dfe4c94881' => __DIR__ . '/..' . '/symfony/polyfill-php56/bootstrap.php',
     );
 
@@ -72,14 +73,16 @@ class ComposerStaticInitb3d02fdb524998126a892e7a875fab39
             'Joomla\\Image\\' => 13,
             'Joomla\\Http\\' => 12,
             'Joomla\\Filter\\' => 14,
+            'Joomla\\Filesystem\\' => 18,
             'Joomla\\Event\\' => 13,
             'Joomla\\Database\\' => 16,
             'Joomla\\Data\\' => 12,
             'Joomla\\DI\\' => 10,
             'Joomla\\Crypt\\' => 13,
             'Joomla\\Controller\\' => 18,
+            'Joomla\\CMS\\' => 11,
+            'Joomla\\Archive\\' => 15,
             'Joomla\\Application\\' => 19,
-            'Joomla\\' => 7,
         ),
         'F' => 
         array (
@@ -204,6 +207,10 @@ class ComposerStaticInitb3d02fdb524998126a892e7a875fab39
         array (
             0 => __DIR__ . '/..' . '/joomla/filter/src',
         ),
+        'Joomla\\Filesystem\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/joomla/filesystem/src',
+        ),
         'Joomla\\Event\\' => 
         array (
             0 => __DIR__ . '/..' . '/joomla/event/src',
@@ -228,13 +235,17 @@ class ComposerStaticInitb3d02fdb524998126a892e7a875fab39
         array (
             0 => __DIR__ . '/..' . '/joomla/controller/src',
         ),
+        'Joomla\\CMS\\' => 
+        array (
+            0 => __DIR__ . '/../../..' . '/libraries/src',
+        ),
+        'Joomla\\Archive\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/joomla/archive/src',
+        ),
         'Joomla\\Application\\' => 
         array (
             0 => __DIR__ . '/..' . '/joomla/application/src',
-        ),
-        'Joomla\\' => 
-        array (
-            0 => __DIR__ . '/../../..' . '/libraries/src',
         ),
         'Fig\\Link\\' => 
         array (
@@ -258,9 +269,9 @@ class ComposerStaticInitb3d02fdb524998126a892e7a875fab39
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitb3d02fdb524998126a892e7a875fab39::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitb3d02fdb524998126a892e7a875fab39::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitb3d02fdb524998126a892e7a875fab39::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit617e807c0295e83e43d06f48ce3f5f43::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit617e807c0295e83e43d06f48ce3f5f43::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit617e807c0295e83e43d06f48ce3f5f43::$classMap;
 
         }, null, ClassLoader::class);
     }
