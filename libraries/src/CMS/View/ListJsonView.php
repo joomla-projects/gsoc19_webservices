@@ -71,7 +71,7 @@ class ListJsonView extends JsonView
 	{
 		$model = $this->getModel();
 
-		$this->items = $model->get('Items');
+		$this->items = $model->getItems();
 		$this->state = $model->get('State');
 
 		// Check for errors.

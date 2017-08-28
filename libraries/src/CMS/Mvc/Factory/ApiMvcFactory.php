@@ -84,11 +84,11 @@ final class ApiMvcFactory extends MvcFactory
 		$prefix = preg_replace('/[^A-Z0-9_]/i', '', $prefix);
 		$type   = preg_replace('/[^A-Z0-9_]/i', '', $type);
 
-		$className = 'Joomla\\CMS\\View\\' . ucfirst($name);
+		$className = $this->getClassName('View\\' . ucfirst($name) . '\\' . ucfirst($type), $prefix);
 
 		if (!$className)
 		{
-			return null;
+			$className = 'Joomla\\CMS\\View\\' . ucfirst($name);
 		}
 
 		return new $className($config);
