@@ -8,6 +8,7 @@
 
 namespace Joomla\CMS\View;
 
+use Joomla\CMS\Router\Exception\RouteNotFoundException;
 use Joomla\Utilities\ArrayHelper;
 use Joomla\Component\Content\Api\Serializer\ItemSerializer;
 use Tobscure\JsonApi\Resource;
@@ -51,6 +52,11 @@ class ItemJsonView extends JsonView
 	{
 		$model = $this->getModel();
 		$this->item = $model->getItem();
+
+		if ($this->item->id === null)
+		{
+			throw new RouteNotFoundException('Item does not exist');
+		}
 
 		// Check for errors.
 		if (count($errors = $this->get('Errors')))
