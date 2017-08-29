@@ -191,7 +191,7 @@ class Api extends Controller
 		}
 		else
 		{
-			$this->setMessage($model->getError(), 'error');
+			throw new \RuntimeException($model->getError(), 500);
 		}
 	}
 
