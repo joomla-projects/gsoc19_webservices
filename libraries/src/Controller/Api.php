@@ -10,6 +10,7 @@ namespace Joomla\CMS\Controller;
 
 defined('JPATH_PLATFORM') or die;
 
+use Joomla\CMS\Access\Exception\NotAllowed;
 use Joomla\CMS\Application\CMSApplication;
 use Joomla\CMS\Mvc\Factory\MvcFactoryInterface;
 
@@ -209,12 +210,8 @@ class Api extends Controller
 		// Access check.
 		if (!$this->allowAdd())
 		{
-			// Set the internal error.
-			$this->setMessage(\JText::_('JLIB_APPLICATION_ERROR_CREATE_RECORD_NOT_PERMITTED'), 'error');
-
-			return false;
+			throw new NotAllowed('JLIB_APPLICATION_ERROR_CREATE_RECORD_NOT_PERMITTED', 403);
 		}
-
 		else
 		{
 			if (empty($urlVar))
@@ -222,7 +219,13 @@ class Api extends Controller
 				$urlVar = 'id';
 			}
 
-			return $this->save($key, $urlVar);
+			// TODO: Error handling. We have error messages set into the controller
+			$success = $this->save($key, $urlVar);
+
+			if ($success)
+			{
+				$this->displayItem();
+			}
 		}
 	}
 
@@ -328,7 +331,7 @@ class Api extends Controller
 
 		if (!$form)
 		{
-			$app->enqueueMessage($model->getError(), 'error');
+			$this->setMessage($model->getError(), 'error');
 
 			return false;
 		}
@@ -347,11 +350,11 @@ class Api extends Controller
 			{
 				if ($errors[$i] instanceof \Exception)
 				{
-					$app->enqueueMessage($errors[$i]->getMessage(), 'warning');
+					$this->setMessage($errors[$i]->getMessage(), 'warning');
 				}
 				else
 				{
-					$app->enqueueMessage($errors[$i], 'warning');
+					$this->setMessage($errors[$i], 'warning');
 				}
 			}
 
