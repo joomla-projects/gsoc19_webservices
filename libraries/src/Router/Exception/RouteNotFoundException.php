@@ -24,10 +24,15 @@ class RouteNotFoundException extends \InvalidArgumentException
 	 * @param   integer     $code      The Exception code.
 	 * @param   \Exception  $previous  The previous exception used for the exception chaining.
 	 *
-	 * @since   3.7.0
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function __construct($message = '', $code = 404, \Exception $previous = null)
 	{
+		if (empty($message))
+		{
+			$message = 'URL was not found';
+		}
+
 		parent::__construct($message, $code, $previous);
 	}
 }

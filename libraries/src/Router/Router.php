@@ -12,6 +12,8 @@ use Joomla\CMS\Router\Exception\RouteNotFoundException;
 
 defined('JPATH_PLATFORM') or die;
 
+use Joomla\CMS\Router\Exception\RouteNotFoundException;
+
 /**
  * Class to create and parse routes
  *
