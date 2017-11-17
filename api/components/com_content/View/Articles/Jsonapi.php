@@ -11,7 +11,7 @@ namespace Joomla\Component\Content\Api\View\Articles;
 
 defined('_JEXEC') or die;
 
-use Joomla\CMS\View\ListJsonView;
+use Joomla\CMS\MVC\View\ListJsonView;
 
 /**
  * Override class for a Joomla Json List View

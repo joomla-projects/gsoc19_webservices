@@ -6,7 +6,7 @@
  * @license    GNU General Public License version 2 or later; see LICENSE.txt
  */
 
-namespace Joomla\CMS\Controller;
+namespace Joomla\CMS\MVC\Controller;
 
 defined('JPATH_PLATFORM') or die;
 
@@ -22,7 +22,7 @@ use Joomla\CMS\Mvc\Factory\MvcFactoryInterface;
  *
  * @since  __DEPLOY_VERSION__
  */
-class Api extends Controller
+class Api extends BaseController
 {
 	/**
 	 * The URL option for the component.

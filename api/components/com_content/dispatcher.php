@@ -9,6 +9,7 @@
 
 defined('_JEXEC') or die;
 
+use Joomla\CMS\MVC\Controller\BaseController;
 use Joomla\CMS\Dispatcher\Dispatcher;
 use Joomla\CMS\Mvc\Factory\ApiMvcFactory;
 
@@ -35,11 +36,11 @@ class ContentDispatcher extends Dispatcher
 	 * @param   string  $client  Optional client (like Administrator, Site etc.)
 	 * @param   array   $config  Optional controller config
 	 *
-	 * @return  Controller
+	 * @return  BaseController
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function getController($name, $client = null, $config = array())
+	public function getController(string $name, string $client = '', array $config = array()): BaseController
 	{
 		// Set up the namespace
 		$namespace = rtrim($this->namespace, '\\') . '\\';

@@ -6,7 +6,7 @@
  * @license    GNU General Public License version 2 or later; see LICENSE.txt
  */
 
-namespace Joomla\CMS\View;
+namespace Joomla\CMS\MVC\View;
 
 use Joomla\CMS\Router\Exception\RouteNotFoundException;
 use Joomla\Utilities\ArrayHelper;

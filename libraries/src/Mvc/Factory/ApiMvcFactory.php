@@ -27,7 +27,7 @@ final class ApiMvcFactory extends MvcFactory
 	 * @param   string  $prefix  Optional model prefix.
 	 * @param   array   $config  Optional configuration array for the model.
 	 *
-	 * @return  \Joomla\CMS\Model\Model  The model object
+	 * @return  \Joomla\CMS\MVC\Model\BaseModel  The model object
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 * @throws  \Exception
@@ -72,7 +72,7 @@ final class ApiMvcFactory extends MvcFactory
 	 * @param   string  $type    Optional type of view.
 	 * @param   array   $config  Optional configuration array for the view.
 	 *
-	 * @return  \Joomla\CMS\View\AbstractView  The view object
+	 * @return  \Joomla\CMS\MVC\View\AbstractView  The view object
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 * @throws  \Exception
@@ -88,7 +88,7 @@ final class ApiMvcFactory extends MvcFactory
 
 		if (!$className)
 		{
-			$className = 'Joomla\\CMS\\View\\' . ucfirst($name);
+			$className = 'Joomla\\CMS\\MVC\\View\\' . ucfirst($name);
 		}
 
 		return new $className($config);

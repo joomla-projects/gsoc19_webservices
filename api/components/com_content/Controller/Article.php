@@ -11,7 +11,7 @@ namespace Joomla\Component\Content\Api\Controller;
 
 defined('_JEXEC') or die;
 
-use Joomla\CMS\Controller\Api;
+use Joomla\CMS\MVC\Controller\Api;
 
 /**
  * The article controller
