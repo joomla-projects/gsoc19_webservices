@@ -609,13 +609,13 @@ class Session implements SessionInterface, DispatcherAwareInterface
 	 */
 	public function fork($destroy = false)
 	{
+        $this->store->regenerate($destroy);
+
 		if ($this->getState() !== 'active')
 		{
 			// @TODO :: generated error here
 			return false;
 		}
-
-		$this->store->regenerate($destroy);
 
 		if ($destroy)
 		{
