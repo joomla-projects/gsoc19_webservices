@@ -1,20 +1,25 @@
 // Layout
 
-body {
-  > div,
-  header > nav,
-  .container-banner,
-  footer {
-    display: flex;
-    width: 100%;
-    max-width: 1080px + ($cassiopeia-grid-gutter * 4);
-    margin-right: auto;
-    margin-left: auto;
-  }
+.grid-child {
+  display: flex;
+  width: 100%;
+  max-width: 1080px + ($cassiopeia-grid-gutter * 4);
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.site {
+  background-color: #fafafa;
 
   > .full-width {
     max-width: none;
   }
+
+  .container-footer,
+  .system-debug {
+    display: block;
+  }
+
 }
 
 header {
@@ -61,7 +66,7 @@ header {
 .container-component {
   flex: 1;
 
-  > div {
+  > div:not(#system-message-container) {
     margin-bottom: $cassiopeia-grid-gutter;
 
     &:last-of-type {
@@ -87,10 +92,6 @@ header {
     width: calc(100% - #{$cassiopeia-grid-gutter});
     order: 1;
   }
-}
-
-.container-footer {
-  display: block;
 }
 
 .system-debug {

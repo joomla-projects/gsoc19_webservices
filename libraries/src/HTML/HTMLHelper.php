@@ -63,7 +63,7 @@ abstract class HTMLHelper
 	 * The service registry for custom and overridden JHtml helpers
 	 *
 	 * @var    Registry
-	 * @since  __DEPLOY_VERSION__
+	 * @since  4.0.0
 	 */
 	protected static $serviceRegistry;
 
@@ -283,7 +283,7 @@ abstract class HTMLHelper
 	 *
 	 * @return  Registry
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   4.0.0
 	 */
 	public static function getServiceRegistry(): Registry
 	{
@@ -833,7 +833,7 @@ abstract class HTMLHelper
 	 *                             or web component. Files need to have a -es5(.min).js (or -es5(.min).html) for the non ES6
 	 *                             Browsers.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   4.0.0
 	 *
 	 * @return  void
 	 */
@@ -849,11 +849,6 @@ abstract class HTMLHelper
 
 		foreach ($component as $key => $value)
 		{
-			if ($key === 'fullPolyfill' && $value === true)
-			{
-				Factory::getDocument()->addScriptOptions('webcomponents', ['fullPolyfill' => true]);
-				continue;
-			}
 			$version      = '';
 			$mediaVersion = Factory::getDocument()->getMediaVersion();
 

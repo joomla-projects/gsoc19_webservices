@@ -3,7 +3,7 @@
  * @package     Joomla.Libraries
  * @subpackage  Service
  *
- * @copyright   Copyright (C) 2005 - 2016 Open Source Matters, Inc. All rights reserved.
+ * @copyright   Copyright (C) 2005 - 2017 Open Source Matters, Inc. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -11,13 +11,21 @@ namespace Joomla\CMS\Service\Provider;
 
 defined('JPATH_PLATFORM') or die;
 
-use JFactory;
+use Joomla\CMS\Console\SessionGcCommand;
+use Joomla\Console\Application as BaseConsoleApplication;
 use Joomla\CMS\Application\AdministratorApplication;
 use Joomla\CMS\Application\ApiApplication;
+use Joomla\CMS\Application\ConsoleApplication;
 use Joomla\CMS\Application\SiteApplication;
+use Joomla\CMS\Factory;
 use Joomla\CMS\Log\Log;
+use Joomla\CMS\Session\Session;
+use Joomla\Console\Loader\ContainerLoader;
+use Joomla\Console\Loader\LoaderInterface;
 use Joomla\DI\Container;
 use Joomla\DI\ServiceProviderInterface;
+use Joomla\Session\Storage\RuntimeStorage;
+use Psr\Log\LoggerInterface;
 
 /**
  * Application service provider
@@ -36,68 +44,99 @@ class Application implements ServiceProviderInterface
 	 * @since   4.0
 	 */
 	public function register(Container $container)
-	{
-		$container->share(
-			'JApplicationAdministrator',
-			function (Container $container)
-			{
-				$app = new AdministratorApplication(null, null, null, $container);
+        {
+                $container->alias(AdministratorApplication::class, 'JApplicationAdministrator')
+                        ->share(
+                                'JApplicationAdministrator',
+                                function (Container $container) {
+                                        $app = new AdministratorApplication(null, $container->get('config'), null, $container);
 
-				// The session service provider needs JFactory::$application, set it if still null
-				if (JFactory::$application === null)
-				{
-					JFactory::$application = $app;
-				}
+                                        // The session service provider needs Factory::$application, set it if still null
+                                        if (Factory::$application === null) {
+                                                Factory::$application = $app;
+                                        }
 
-				$app->setDispatcher($container->get('Joomla\Event\DispatcherInterface'));
-				$app->setLogger(Log::createDelegatedLogger());
-				$app->setSession($container->get('Joomla\Session\SessionInterface'));
+                                        $app->setDispatcher($container->get('Joomla\Event\DispatcherInterface'));
+                                        $app->setLogger($container->get(LoggerInterface::class));
+                                        $app->setSession($container->get('Joomla\Session\SessionInterface'));
 
-				return $app;
-			},
-			true
-		);
+                                        return $app;
+                                },
+                                true
+                        );
 
-		$container->share(
-			'JApplicationSite',
-			function (Container $container)
-			{
-				$app = new SiteApplication(null, null, null, $container);
+                $container->alias(SiteApplication::class, 'JApplicationSite')
+                        ->share(
+                                'JApplicationSite',
+                                function (Container $container) {
+                                        $app = new SiteApplication(null, $container->get('config'), null, $container);
 
-				// The session service provider needs JFactory::$application, set it if still null
-				if (JFactory::$application === null)
-				{
-					JFactory::$application = $app;
-				}
+                                        // The session service provider needs Factory::$application, set it if still null
+                                        if (Factory::$application === null) {
+                                                Factory::$application = $app;
+                                        }
 
-				$app->setDispatcher($container->get('Joomla\Event\DispatcherInterface'));
-				$app->setLogger(Log::createDelegatedLogger());
-				$app->setSession($container->get('Joomla\Session\SessionInterface'));
+                                        $app->setDispatcher($container->get('Joomla\Event\DispatcherInterface'));
+                                        $app->setLogger($container->get(LoggerInterface::class));
+                                        $app->setSession($container->get('Joomla\Session\SessionInterface'));
 
-				return $app;
-			},
-			true
-		);
+                                        return $app;
+                                },
+                                true
+                        );
 
-		$container->share(
-			'JApplicationApi',
-			function (Container $container)
-			{
-				$app = new ApiApplication(null, null, null, $container);
+                $container->alias(ConsoleApplication::class, BaseConsoleApplication::class)
+                        ->share(
+                                BaseConsoleApplication::class,
+                                function (Container $container) {
+                                        $app = new ConsoleApplication(null, $container->get('config'));
 
-				// The session service provider needs JFactory::$application, set it if still null
-				if (JFactory::$application === null)
-				{
-					JFactory::$application = $app;
-				}
+                                        $dispatcher = $container->get('Joomla\Event\DispatcherInterface');
 
-				$app->setDispatcher($container->get('Joomla\Event\DispatcherInterface'));
-				$app->setLogger(Log::createDelegatedLogger());
-				$app->setSession($container->get('Joomla\Session\SessionInterface'));
+                                        $session = new Session(new RuntimeStorage);
+                                        $session->setDispatcher($dispatcher);
 
-				return $app;
-			},
-			true
-		);
-	}
+                                        $app->setCommandLoader($container->get(LoaderInterface::class));
+                                        $app->setContainer($container);
+                                        $app->setDispatcher($dispatcher);
+                                        $app->setLogger($container->get(LoggerInterface::class));
+                                        $app->setSession($session);
+
+                                        return $app;
+                                },
+                                true
+                        );
+
+                $container->alias(ContainerLoader::class, LoaderInterface::class)
+                        ->share(
+                                LoaderInterface::class,
+                                function (Container $container) {
+                                        $mapping = [
+                                                'session:gc' => SessionGcCommand::class,
+                                        ];
+                                        return new ContainerLoader($container, $mapping);
+                                },
+                                true
+                        );
+
+                $container->alias(ApiApplication::class, "JApplicationApi")
+                        ->share(
+                        'JApplicationApi',
+                        function (Container $container) {
+                                $app = new ApiApplication(null, null, null, $container);
+
+                                // The session service provider needs JFactory::$application, set it if still null
+                                if (JFactory::$application === null) {
+                                        JFactory::$application = $app;
+                                }
+
+                                $app->setDispatcher($container->get('Joomla\Event\DispatcherInterface'));
+                                $app->setLogger(Log::createDelegatedLogger());
+                                $app->setSession($container->get('Joomla\Session\SessionInterface'));
+
+                                return $app;
+                        },
+                        true
+                );
+        }
 }
