@@ -12,9 +12,13 @@ defined('_JEXEC') or die;
 
 use Joomla\CMS\Access\Exception\NotAllowed;
 use Joomla\CMS\Application\CMSApplication;
+use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Form\FormFactoryAwareInterface;
 use Joomla\CMS\MVC\Controller\BaseController;
+use Joomla\CMS\MVC\Factory\MVCFactoryFactoryInterface;
 use Joomla\Input\Input;
-use Joomla\CMS\MVC\Factory\MVCFactory;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Form\FormFactoryInterface;
 
 /**
  * Base class for a Joomla Dispatcher
@@ -22,7 +26,7 @@ use Joomla\CMS\MVC\Factory\MVCFactory;
  * Dispatchers are responsible for checking ACL of a component if appropriate and
  * choosing an appropriate controller (and if necessary, a task) and executing it.
  *
- * @since  __DEPLOY_VERSION__
+ * @since  4.0.0
  */
 abstract class Dispatcher implements DispatcherInterface
 {
@@ -30,7 +34,7 @@ abstract class Dispatcher implements DispatcherInterface
 	 * The URL option for the component.
 	 *
 	 * @var    string
-	 * @since  __DEPLOY_VERSION__
+	 * @since  4.0.0
 	 */
 	protected $option;
 
@@ -38,7 +42,7 @@ abstract class Dispatcher implements DispatcherInterface
 	 * The extension namespace
 	 *
 	 * @var    string
-	 * @since  __DEPLOY_VERSION__
+	 * @since  4.0.0
 	 */
 	protected $namespace;
 
@@ -46,7 +50,7 @@ abstract class Dispatcher implements DispatcherInterface
 	 * The application instance
 	 *
 	 * @var    CMSApplication
-	 * @since  __DEPLOY_VERSION__
+	 * @since  4.0.0
 	 */
 	protected $app;
 
@@ -54,38 +58,49 @@ abstract class Dispatcher implements DispatcherInterface
 	 * The input instance
 	 *
 	 * @var    Input
-	 * @since  __DEPLOY_VERSION__
+	 * @since  4.0.0
 	 */
 	protected $input;
 
 	/**
-	 * Constructor for Dispatcher
+	 * The MVC factory
 	 *
-	 * @param   CMSApplication  $app    The application instance
-	 * @param   Input           $input  The input instance
+	 * @var  MVCFactoryFactoryInterface
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function __construct(CMSApplication $app, Input $input = null)
+	private $mvcFactoryFactory;
+
+	/**
+	 * Constructor for Dispatcher
+	 *
+	 * @param   CMSApplication              $app                The application instance
+	 * @param   Input                       $input              The input instance
+	 * @param   MVCFactoryFactoryInterface  $mvcFactoryFactory  The MVC factory instance
+	 *
+	 * @since   4.0.0
+	 */
+	public function __construct(CMSApplication $app, Input $input, MVCFactoryFactoryInterface $mvcFactoryFactory)
 	{
 		if (empty($this->namespace))
 		{
-			throw new \RuntimeException('Namespace can not be empty!');
+			$reflect = new \ReflectionClass($this);
+
+			// Extract the first three segments from the namespace
+			$this->namespace = implode('\\', array_slice(explode('\\', $reflect->getNamespaceName()), 0, 3));
 		}
 
-		$this->app   = $app;
-		$this->input = $input ?: $app->input;
+		$this->app               = $app;
+		$this->input             = $input;
+		$this->mvcFactoryFactory = $mvcFactoryFactory;
 
 		// If option is not provided, detect it from dispatcher class name, ie ContentDispatcher
 		if (empty($this->option))
 		{
-			$className = get_class($this);
-			$pos       = strpos($className, 'Dispatcher');
-
-			if ($pos !== false)
-			{
-				$this->option = 'com_' . strtolower(substr($className, 0, $pos));
-			}
+			$this->option = ComponentHelper::getComponentName(
+				$this,
+				strtolower(str_replace('Dispatcher', '', get_class($this)))
+			);
 		}
 
 		$this->loadLanguage();
@@ -94,9 +109,9 @@ abstract class Dispatcher implements DispatcherInterface
 	/**
 	 * Load the language
 	 *
-	 * @since   __DEPLOY_VERSION__
-	 *
 	 * @return  void
+	 *
+	 * @since   4.0.0
 	 */
 	protected function loadLanguage()
 	{
@@ -108,9 +123,9 @@ abstract class Dispatcher implements DispatcherInterface
 	/**
 	 * Method to check component access permission
 	 *
-	 * @since   __DEPLOY_VERSION__
-	 *
 	 * @return  void
+	 *
+	 * @since   4.0.0
 	 */
 	protected function checkAccess()
 	{
@@ -126,7 +141,7 @@ abstract class Dispatcher implements DispatcherInterface
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   4.0.0
 	 */
 	public function dispatch()
 	{
@@ -171,7 +186,7 @@ abstract class Dispatcher implements DispatcherInterface
 	 *
 	 * @return  CMSApplication
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   4.0.0
 	 */
 	protected function getApplication(): CMSApplication
 	{
@@ -187,7 +202,7 @@ abstract class Dispatcher implements DispatcherInterface
 	 *
 	 * @return  BaseController
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   4.0.0
 	 */
 	public function getController(string $name, string $client = '', array $config = array()): BaseController
 	{
@@ -204,6 +219,15 @@ abstract class Dispatcher implements DispatcherInterface
 			throw new \InvalidArgumentException(\JText::sprintf('JLIB_APPLICATION_ERROR_INVALID_CONTROLLER_CLASS', $controllerClass));
 		}
 
-		return new $controllerClass($config, new MVCFactory($namespace, $this->app), $this->app, $this->input);
+		// Create the controller instance
+		$controller = new $controllerClass($config, $this->mvcFactoryFactory->createFactory($this->app), $this->app, $this->input);
+
+		// Set the form factory when possible
+		if ($controller instanceof FormFactoryAwareInterface)
+		{
+			$controller->setFormFactory(Factory::getContainer()->get(FormFactoryInterface::class));
+		}
+
+		return $controller;
 	}
 }

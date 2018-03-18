@@ -13,6 +13,7 @@ defined('_JEXEC') or die;
 
 use Joomla\Application\Web\WebClient;
 use Joomla\CMS\Date\Date;
+use Joomla\CMS\Document\FactoryInterface;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Input\Input;
 use Joomla\CMS\Language\LanguageHelper;
@@ -274,7 +275,7 @@ final class InstallationApplication extends CMSApplication
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   4.0.0
 	 */
 	private function executeController()
 	{
@@ -454,7 +455,7 @@ final class InstallationApplication extends CMSApplication
 		// Check for custom helpurl.
 		if (empty($forced['helpurl']))
 		{
-			$options['helpurl'] = 'https://help.joomla.org/proxy/index.php?keyref=Help{major}{minor}:{keyref}';
+			$options['helpurl'] = 'https://help.joomla.org/proxy?keyref=Help{major}{minor}:{keyref}&lang={langcode}';
 		}
 		else
 		{
@@ -501,7 +502,7 @@ final class InstallationApplication extends CMSApplication
 				'mediaversion' => md5($date->format('YmdHi')),
 			);
 
-			$document = Document::getInstance($type, $attributes);
+			$document = $this->getContainer()->get(FactoryInterface::class)->createDocument($type, $attributes);
 
 			// Register the instance to Factory.
 			Factory::$document = $document;

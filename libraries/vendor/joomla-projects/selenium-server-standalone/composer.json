@@ -1,0 +1,33 @@
+{
+    "name": "joomla-projects/selenium-server-standalone",
+    "description": "Composer distribution of Selenium Server Standalone, the browser automation framework. Adds a executable to your composer bin directory.",
+    "type": "library",
+    "keywords": [
+        "selenium",
+        "testing"
+    ],
+    "homepage": "https://github.com/joomla-projects/selenium-server-standalone",
+    "license": "Apache 2.0", 
+    "authors": [
+        {
+            "name": "Sven Eisenschmidt",
+            "email": "sven.eisenschmidt@gmail.com"
+        },
+        {
+            "name": "Javier Gómez",
+            "email": "javier.gomez@community.joomla.org"
+        }
+    ],
+    "autoload": {
+        "files": ["Selenium.php"]
+    },
+    "require-dev": {
+    },
+    "config": {
+        "bin-dir": "bin"
+    },
+    "bin": [
+        "bin/selenium-server-standalone"
+    ]
+}
+
