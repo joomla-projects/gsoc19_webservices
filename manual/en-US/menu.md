@@ -2,8 +2,10 @@
     - [Introduction](specification/introduction.md)
 - **About Joomla**
     - [Introduction](about-joomla/introduction.md)
-    - [GSOC 2017 Submission Information](about-joomla/GSoC-2017-submission.md)
-    - [External References](specification/chapters/external-references.md)    
+    - [External References](specification/chapters/external-references.md)
+- **GSOC 2017**
+    - [Introduction](gsoc-2017/introduction.md)
+    - [Student Submissions](gsoc-2017/GSoC-2017-submission.md)
 - **Joomla's Proposed Webservices**
     - [Architecture](specification/chapters/architecture.md)
     - [URLs and Routing](specification/chapters/urls-and-routing.md)
