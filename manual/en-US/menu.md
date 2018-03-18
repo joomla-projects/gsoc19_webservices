@@ -1,7 +1,8 @@
-- **About GSoC17 WS in J4 Spec**
+- **About GSoC18 WS in J4 Spec**
     - [Introduction](specification/introduction.md)
 - **About Joomla**
     - [Introduction](about-joomla/introduction.md)
+    - [GSOC 2017 Submission Information](about-joomla/GSoC-2017-submission.md)
     - [External References](specification/chapters/external-references.md)    
 - **Joomla's Proposed Webservices**
     - [Architecture](specification/chapters/architecture.md)
