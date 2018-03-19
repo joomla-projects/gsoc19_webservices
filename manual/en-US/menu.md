@@ -6,6 +6,8 @@
 - **GSOC 2017**
     - [Introduction](gsoc-2017/introduction.md)
     - [Student Submissions](gsoc-2017/GSoC-2017-submission.md)
+- **GSOC 2018**
+    - [Specification](gsoc-2018/specification.md)
 - **Joomla's Proposed Webservices**
     - [Architecture](specification/chapters/architecture.md)
     - [URLs and Routing](specification/chapters/urls-and-routing.md)

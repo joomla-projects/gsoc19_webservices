@@ -1,13 +1,9 @@
-## GSoC18 Webservices in Joomla 4! - Introduction
+## Webservices in Joomla 4! - Introduction
 
 *Welcome to the Joomla! Google Summer of Code (GSoC) 2018 project: Webservices in Joomla 4!*
 
 * Project Description: Integrating a rest API endpoint (like API/) into the Joomla Core.
 * Expected Results: Working REST API for the core. Including com_content as the reference implementation.
-* Knowledge Prerequisite: PHP, RESTful Webservices. 
-* Nice to have: Joomla MVC, Open API, Knowledge of APIs, experience with Laravels Eloquent Framework.
-* Difficulty: Medium to Hard
-* Mentors: Matias Aguirre [@fastslack](https://github.com/fastslack), Anibal Sanchez [@anibalsanchez](https://github.com/anibalsanchez), George Wilson [@wilsonge](https://github.com/wilsonge)
 * Official repository: [joomla-projects/gsoc18_webservices](https://github.com/joomla-projects/gsoc18_webservices)
 
 * **Status: Draft**
