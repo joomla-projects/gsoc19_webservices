@@ -8,7 +8,7 @@
     - [Student Submissions](gsoc-2017/GSoC-2017-submission.md)
 - **GSOC 2018**
     - [Specification](gsoc-2018/specification.md)
-- **Joomla's Proposed Webservices**
+- **Joomla's Proposed Webservices Specification**
     - [Architecture](specification/chapters/architecture.md)
     - [URLs and Routing](specification/chapters/urls-and-routing.md)
     - [API Authentication](specification/chapters/api-authentication.md)    
