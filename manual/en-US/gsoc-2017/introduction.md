@@ -8,11 +8,18 @@ basic requirements for the API application in Joomla. The students report on the
 page [here](gsoc-2017/GSoC-2017-submission.md).
 
 #### Testing a sample Request
-Install the `lib_api` branch in this repo. You can curl the list of articles with the following:
+Install the `lib_api` branch in this repo. Install Joomla as normal. You then need to discover install the 'Webservices - Content'
+plugin (and publish it).
 
-GET /api/article
+You can curl a list of articles with the following:
 
-TODO: Write up some more information on this
+GET /api/index.php/article
+
+you can also get a single article with:
+
+GET /api/index.php/article/{article_id}
+
+You may also POST, DELETE and PUT to the article ID endpoint, however these should end up with permission failures (see below).
 
 ### What is left to do
 #### Authentication
