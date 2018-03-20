@@ -20,6 +20,6 @@ use Joomla\CMS\MVC\View\ListJsonView;
  *
  * @since  __DEPLOY_VERSION__
  */
-class Jsonapi extends ListJsonView
+class JsonapiView extends ListJsonView
 {
 }

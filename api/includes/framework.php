@@ -11,11 +11,6 @@ defined('_JEXEC') or die;
 // System includes
 require_once JPATH_LIBRARIES . '/bootstrap.php';
 
-// Set system error handling
-JError::setErrorHandling(E_NOTICE, 'callback', array('JApiError', 'handleNotice'));
-JError::setErrorHandling(E_WARNING, 'callback', array('JApiError', 'handleWarning'));
-JError::setErrorHandling(E_ERROR, 'callback', array('JApiError', 'handleError'));
-
 // Installation check, and check on removal of the install directory.
 if (!file_exists(JPATH_CONFIGURATION . '/configuration.php')
 	|| (filesize(JPATH_CONFIGURATION . '/configuration.php') < 10)
@@ -31,7 +26,6 @@ if (!file_exists(JPATH_CONFIGURATION . '/configuration.php')
 ob_start();
 require_once JPATH_CONFIGURATION . '/configuration.php';
 ob_end_clean();
-
 
 // System configuration.
 $config = new JConfig;

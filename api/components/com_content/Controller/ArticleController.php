@@ -19,7 +19,7 @@ use Joomla\CMS\MVC\Controller\Api;
  * @since  __DEPLOY_VERSION__
  */
 
-class Article extends Api
+class ArticleController extends Api
 {
 	/**
 	 * Typical view method for MVC based architecture

@@ -198,7 +198,7 @@ class Api extends BaseController
 	{
 		$id = $this->input->get('id', 0, 'int');
 
-		/** @var \Joomla\CMS\Model\Admin $model */
+		/** @var \Joomla\CMS\MVC\Model\AdminModel $model */
 		$model = $this->getModel();
 
 		// Remove the item.
@@ -259,7 +259,7 @@ class Api extends BaseController
 	 */
 	public function edit($key = null, $urlVar = null)
 	{
-		/** @var \Joomla\CMS\Model\Admin $model */
+		/** @var \Joomla\CMS\MVC\Model\AdminModel $model */
 		$model = $this->getModel();
 		$table = $model->getTable();
 		$id   = $this->input->post->get('id', array(), 'array');
@@ -318,7 +318,7 @@ class Api extends BaseController
 	{
 		$app   = \JFactory::getApplication();
 
-		/** @var \Joomla\CMS\Model\Admin $model */
+		/** @var \Joomla\CMS\MVC\Model\AdminModel $model */
 		$model = $this->getModel();
 		$table = $model->getTable();
 		$data  = $this->input->post->get('data', array(), 'array');

@@ -8,8 +8,6 @@
 
 namespace Joomla\CMS\Mvc\Factory;
 
-use Joomla\CMS\View\Jsonapi;
-
 defined('JPATH_PLATFORM') or die;
 
 /**
@@ -27,7 +25,7 @@ final class ApiMvcFactory extends MvcFactory
 	 * @param   string  $prefix  Optional model prefix.
 	 * @param   array   $config  Optional configuration array for the model.
 	 *
-	 * @return  \Joomla\CMS\MVC\Model\BaseModel  The model object
+	 * @return  \Joomla\CMS\MVC\Model\BaseDatabaseModel  The model object
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 * @throws  \Exception
@@ -84,7 +82,7 @@ final class ApiMvcFactory extends MvcFactory
 		$prefix = preg_replace('/[^A-Z0-9_]/i', '', $prefix);
 		$type   = preg_replace('/[^A-Z0-9_]/i', '', $type);
 
-		$className = $this->getClassName('View\\' . ucfirst($name) . '\\' . ucfirst($type), $prefix);
+		$className = $this->getClassName('View\\' . ucfirst($name) . '\\' . ucfirst($type) . 'View', $prefix);
 
 		if (!$className)
 		{

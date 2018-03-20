@@ -44,7 +44,7 @@ class JsonapiRenderer extends JsonRenderer
 		$errors->registerHandler(new InvalidRouteExceptionHandler);
 		$errors->registerHandler(new NotAllowedExceptionHandler);
 		$errors->registerHandler(new InvalidParameterExceptionHandler);
-		$errors->registerHandler(new FallbackExceptionHandler(false));
+		$errors->registerHandler(new FallbackExceptionHandler(JDEBUG));
 
 		$response = $errors->handle($error);
 

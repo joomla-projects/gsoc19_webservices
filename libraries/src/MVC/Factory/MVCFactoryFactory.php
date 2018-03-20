@@ -56,6 +56,11 @@ class MVCFactoryFactory implements MVCFactoryFactoryInterface
 			return new LegacyFactory;
 		}
 
+		if ($application->isClient('api'))
+		{
+			return new ApiMvcFactory($this->namespace, $application);
+		}
+
 		return new MVCFactory($this->namespace, $application);
 	}
 }

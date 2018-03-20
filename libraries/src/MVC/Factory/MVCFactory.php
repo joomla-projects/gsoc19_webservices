@@ -169,7 +169,7 @@ class MVCFactory implements MVCFactoryInterface
 	 *
 	 * @since   4.0.0
 	 */
-	private function getClassName(string $suffix, string $prefix)
+	protected function getClassName(string $suffix, string $prefix)
 	{
 		if (!$prefix)
 		{

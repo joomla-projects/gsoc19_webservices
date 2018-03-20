@@ -126,8 +126,8 @@ class Application implements ServiceProviderInterface
                                 $app = new ApiApplication(null, null, null, $container);
 
                                 // The session service provider needs JFactory::$application, set it if still null
-                                if (JFactory::$application === null) {
-                                        JFactory::$application = $app;
+                                if (Factory::$application === null) {
+                                        Factory::$application = $app;
                                 }
 
                                 $app->setDispatcher($container->get('Joomla\Event\DispatcherInterface'));
