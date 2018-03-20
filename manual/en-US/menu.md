@@ -2,6 +2,7 @@
     - [Introduction](specification/introduction.md)
 - **About Joomla**
     - [Introduction](about-joomla/introduction.md)
+    - [Installing the latest codebase](about-joomla/installing-the-repo.md)
     - [External References](specification/chapters/external-references.md)
 - **GSOC 2017**
     - [Introduction](gsoc-2017/introduction.md)

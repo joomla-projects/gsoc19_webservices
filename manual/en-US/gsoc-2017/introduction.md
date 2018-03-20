@@ -7,20 +7,6 @@ The students worked in this repository in the `lib_api` branch to create a new a
 basic requirements for the API application in Joomla. The students report on their work can be found on the student submission
 page [here](gsoc-2017/GSoC-2017-submission.md).
 
-#### Testing a sample Request
-Install the `lib_api` branch in this repo. Install Joomla as normal. You then need to discover install the 'Webservices - Content'
-plugin (and publish it).
-
-You can curl a list of articles with the following:
-
-GET /api/index.php/article
-
-you can also get a single article with:
-
-GET /api/index.php/article/{article_id}
-
-You may also POST, DELETE and PUT to the article ID endpoint, however these should end up with permission failures (see below).
-
 ### What is left to do
 #### Authentication
 The [API Authentication Page](specification/chapters/api-authentication.md) required Basic Authentication as a mechanism
