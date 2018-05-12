@@ -8,9 +8,9 @@
 
 namespace Joomla\Console\Event;
 
+use Joomla\Application\ApplicationEvents;
 use Joomla\Console\Application;
 use Joomla\Console\CommandInterface;
-use Joomla\Console\ConsoleEvents;
 
 /**
  * Event triggered when an uncaught Throwable is received by the application.
@@ -46,7 +46,7 @@ class ConsoleErrorEvent extends ConsoleEvent
 	 */
 	public function __construct(\Throwable $error, Application $application, CommandInterface $command = null)
 	{
-		parent::__construct(ConsoleEvents::ERROR, $application, $command);
+		parent::__construct(ApplicationEvents::ERROR, $application, $command);
 
 		$this->error = $error;
 	}
@@ -72,7 +72,7 @@ class ConsoleErrorEvent extends ConsoleEvent
 	 */
 	public function getExitCode(): int
 	{
-		return $this->exitCode ?: ($this->error->getCode() ?: 1);
+		return $this->exitCode ?: (is_int($this->error->getCode()) && $this->error->getCode() !== 0 ? $this->error->getCode() : 1);
 	}
 
 	/**

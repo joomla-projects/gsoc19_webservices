@@ -209,17 +209,24 @@ abstract class AbstractWebApplication extends AbstractApplication
 	 */
 	public function execute()
 	{
-		$this->dispatchEvent(ApplicationEvents::BEFORE_EXECUTE);
-
-		// Perform application routines.
-		$this->doExecute();
-
-		$this->dispatchEvent(ApplicationEvents::AFTER_EXECUTE);
-
-		// If gzip compression is enabled in configuration and the server is compliant, compress the output.
-		if ($this->get('gzip') && !ini_get('zlib.output_compression') && (ini_get('output_handler') != 'ob_gzhandler'))
+		try
 		{
-			$this->compress();
+			$this->dispatchEvent(ApplicationEvents::BEFORE_EXECUTE);
+
+			// Perform application routines.
+			$this->doExecute();
+
+			$this->dispatchEvent(ApplicationEvents::AFTER_EXECUTE);
+
+			// If gzip compression is enabled in configuration and the server is compliant, compress the output.
+			if ($this->get('gzip') && !ini_get('zlib.output_compression') && (ini_get('output_handler') != 'ob_gzhandler'))
+			{
+				$this->compress();
+			}
+		}
+		catch (\Throwable $throwable)
+		{
+			$this->dispatchEvent(ApplicationEvents::ERROR, new Event\ApplicationErrorEvent($throwable, $this));
 		}
 
 		$this->dispatchEvent(ApplicationEvents::BEFORE_RESPOND);
@@ -290,6 +297,7 @@ abstract class AbstractWebApplication extends AbstractApplication
 
 				// Set the encoding headers.
 				$this->setHeader('Content-Encoding', $encoding);
+				$this->setHeader('Vary', 'Accept-Encoding');
 				$this->setHeader('X-Content-Encoded-By', 'Joomla');
 
 				// Replace the output with the encoded data.
@@ -416,7 +424,7 @@ abstract class AbstractWebApplication extends AbstractApplication
 			echo "<script>document.location.href='$url';</script>\n";
 		}
 		// We have to use a JavaScript redirect here because MSIE doesn't play nice with UTF-8 URLs.
-		elseif (($this->client->engine == Web\WebClient::TRIDENT) && !$this->isAscii($url))
+		elseif (($this->client->engine == Web\WebClient::TRIDENT) && !static::isAscii($url))
 		{
 			$html = '<html><head>';
 			$html .= '<meta http-equiv="content-type" content="text/html; charset=' . $this->charSet . '" />';

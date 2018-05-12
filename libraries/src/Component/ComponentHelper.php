@@ -12,10 +12,8 @@ defined('JPATH_PLATFORM') or die;
 
 use Joomla\CMS\Access\Access;
 use Joomla\CMS\Component\Exception\MissingComponentException;
-use Joomla\CMS\Dispatcher\ApiDispatcher;
-use Joomla\CMS\MVC\Factory\MVCFactoryFactory;
 use Joomla\Registry\Registry;
-use Joomla\CMS\Dispatcher\DispatcherInterface;
+use Joomla\CMS\Dispatcher\Dispatcher;
 
 /**
  * Component helper class
@@ -260,6 +258,7 @@ class ComponentHelper
 				{
 					$filter->tagBlacklist = array_diff($filter->tagBlacklist, $whiteListTags);
 				}
+
 				// Remove whitelisted attributes from filter's default blacklist
 				if ($whiteListAttributes)
 				{
@@ -350,52 +349,9 @@ class ComponentHelper
 			throw new MissingComponentException(\JText::_('JLIB_APPLICATION_ERROR_COMPONENT_NOT_FOUND'), 404);
 		}
 
-		// Handle template preview outlining.
-		$contents = null;
-
-		$dispatcher = $app->bootComponent($option)->getDispatcher($app);
-
-		// Check if we have a dispatcher
-		if ($dispatcher)
-		{
-			$contents = static::dispatchComponent($dispatcher);
-		}
-		// Will be removed once transition of all components is done
-		elseif (file_exists(JPATH_COMPONENT . '/dispatcher.php'))
-		{
-			require_once JPATH_COMPONENT . '/dispatcher.php';
-			$class = ucwords($file) . 'Dispatcher';
-
-			// Check the class exists and implements the dispatcher interface
-			if (!class_exists($class) || !in_array(DispatcherInterface::class, class_implements($class)))
-			{
-				throw new \LogicException(\JText::sprintf('JLIB_APPLICATION_ERROR_APPLICATION_LOAD', $option), 500);
-			}
-
-			// Dispatch the component.
-			$contents = static::dispatchComponent(new $class($app, $app->input, new MVCFactoryFactory('Joomla\\Component\\' . ucwords($file))));
-		}
-		elseif (file_exists(JPATH_COMPONENT . '/' . $file . '.php'))
-		{
-			// Load common and local language files.
-			$lang->load($option, JPATH_BASE, null, false, true) || $lang->load($option, JPATH_COMPONENT, null, false, true);
-
-			// Execute the component.
-			$contents = static::executeComponent(JPATH_COMPONENT . '/' . $file . '.php');
-		}
-		elseif ($app->isClient('api'))
-		{
-			/*
-			 * We're in the API App and the component doesn't have a API integration yet. So we are going to use our
-			 * 'special' dispatcher that is going to pipe all it's traffic through, and do it's own rendering. We just
-			 *  need some mappings we'll grab from the existing (and previously unused) $params array
-			 */
-			$contents = static::dispatchComponent(new ApiDispatcher($app, $app->input));
-		}
-		else
-		{
-			throw new \Exception(\JText::_('JLIB_APPLICATION_ERROR_COMPONENT_NOT_FOUND'), 404);
-		}
+		ob_start();
+		$app->bootComponent($option)->getDispatcher($app)->dispatch();
+		$contents = ob_get_clean();
 
 		// Revert the scope
 		$app->scope = $scope;
@@ -404,41 +360,6 @@ class ComponentHelper
 		{
 			\JProfiler::getInstance('Application')->mark('afterRenderComponent ' . $option);
 		}
-
-		return $contents;
-	}
-
-	/**
-	 * Execute the component.
-	 *
-	 * @param   string  $path  The component path.
-	 *
-	 * @return  string  The component output
-	 *
-	 * @since   1.7
-	 */
-	protected static function executeComponent($path)
-	{
-		ob_start();
-		require_once $path;
-
-		return ob_get_clean();
-	}
-
-	/**
-	 * Dispatch the component.
-	 *
-	 * @param   DispatcherInterface  $dispatcher  The dispatcher class.
-	 *
-	 * @return  string  The component output
-	 *
-	 * @since   4.0.0
-	 */
-	protected static function dispatchComponent(DispatcherInterface $dispatcher): string
-	{
-		ob_start();
-		$dispatcher->dispatch();
-		$contents = ob_get_clean();
 
 		return $contents;
 	}
@@ -559,7 +480,7 @@ class ComponentHelper
 	{
 		$reflect = new \ReflectionClass($object);
 
-		if (!$reflect->getNamespaceName())
+		if (!$reflect->getNamespaceName() || get_class($object) == Dispatcher::class)
 		{
 			return 'com_' . strtolower($alternativeName);
 		}

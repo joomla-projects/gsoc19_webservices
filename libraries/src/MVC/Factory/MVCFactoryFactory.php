@@ -11,14 +11,18 @@ namespace Joomla\CMS\MVC\Factory;
 defined('JPATH_PLATFORM') or die;
 
 use Joomla\CMS\Application\CMSApplicationInterface;
+use Joomla\CMS\Form\FormFactoryAwareInterface;
+use Joomla\CMS\Form\FormFactoryAwareTrait;
 
 /**
  * Factory to create MVC factories.
  *
  * @since  __DEPLOY_VERSION__
  */
-class MVCFactoryFactory implements MVCFactoryFactoryInterface
+class MVCFactoryFactory implements MVCFactoryFactoryInterface, FormFactoryAwareInterface
 {
+	use FormFactoryAwareTrait;
+
 	/**
 	 * The namespace.
 	 *
@@ -60,7 +64,19 @@ class MVCFactoryFactory implements MVCFactoryFactoryInterface
 		{
 			return new ApiMvcFactory($this->namespace, $application);
 		}
+		else
+		{
+			$factory = new MVCFactory($this->namespace, $application);
+		}
 
-		return new MVCFactory($this->namespace, $application);
+		try
+		{
+			$factory->setFormFactory($this->getFormFactory());
+		}
+		catch (\UnexpectedValueException $e)
+		{
+		}
+
+		return $factory;
 	}
 }
