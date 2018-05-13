@@ -19,29 +19,36 @@ defined('_JEXEC') or die;
  */
 class ItemSerializer extends AbstractSerializer
 {
+	/**
+	 * The resource type
+	 *
+	 * @var    string
+	 * @since  __DEPLOY_VERSION__
+	 */
 	protected $type = 'items';
 
 	/**
 	 * Get the attributes array.
 	 *
-   * @param   mixed  $post    The model
+	 * @param   mixed  $post    The model
 	 * @param   array  $fields  The fields can be array or null
 	 *
-	 * @since  __DEPLOY_VERSION__
-	 * @return array
+	 * @return  array
+	 *
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function getAttributes($post, array $fields = null)
 	{
 		return array(
-		'typeAlias' => $post->typeAlias,
-		'id'  => $post->id,
-		'asset_id'  => $post->asset_id,
-		'title' => $post->title,
-		'introtext'  => $post->introtext,
-		'fulltext' => $post->fulltext,
-		'state'  => $post->state,
-		'catid' => $post->catid,
-		'created'  => $post->created,
+			'typeAlias' => $post->typeAlias,
+			'id'  => $post->id,
+			'asset_id'  => $post->asset_id,
+			'title' => $post->title,
+			'introtext'  => $post->introtext,
+			'fulltext' => $post->fulltext,
+			'state'  => $post->state,
+			'catid' => $post->catid,
+			'created'  => $post->created,
 		);
 	}
 }
