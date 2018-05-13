@@ -26,6 +26,14 @@ use Joomla\CMS\Language\Text;
 class Api extends BaseController
 {
 	/**
+	 * The content type of the item.
+	 *
+	 * @var    string
+	 * @since  __DEPLOY_VERSION__
+	 */
+	protected $contentType;
+
+	/**
 	 * The URL option for the component.
 	 *
 	 * @var    string
@@ -116,7 +124,7 @@ class Api extends BaseController
 
 		try
 		{
-			$view = $this->getView($viewName, $viewType, '', array('base_path' => $this->basePath, 'layout' => $viewLayout));
+			$view = $this->getView($viewName, $viewType, '', array('base_path' => $this->basePath, 'layout' => $viewLayout, 'contentType' => $this->contentType));
 		}
 		catch (\Exception $e)
 		{
@@ -190,7 +198,7 @@ class Api extends BaseController
 
 		try
 		{
-			$view = $this->getView($viewName, $viewType, '', array('base_path' => $this->basePath, 'layout' => $viewLayout));
+			$view = $this->getView($viewName, $viewType, '', array('base_path' => $this->basePath, 'layout' => $viewLayout, 'contentType' => $this->contentType));
 		}
 		catch (\Exception $e)
 		{
@@ -198,7 +206,7 @@ class Api extends BaseController
 		}
 
 		// Get/Create the model
-		if ($model = $this->getModel($viewName))
+		if ($model = $this->getModel($this->contentType))
 		{
 			// Push the model into the view (as default)
 			$view->setModel($model, true);

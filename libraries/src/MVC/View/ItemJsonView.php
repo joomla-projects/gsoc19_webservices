@@ -9,8 +9,8 @@
 namespace Joomla\CMS\MVC\View;
 
 use Joomla\CMS\Router\Exception\RouteNotFoundException;
+use Joomla\CMS\Serializer\YmlSerializer;
 use Tobscure\JsonApi\Resource;
-use Tobscure\JsonApi\SerializerInterface;
 
 defined('_JEXEC') or die;
 
@@ -24,11 +24,11 @@ defined('_JEXEC') or die;
 class ItemJsonView extends JsonView
 {
 	/**
-	 * The items object
+	 * The content type
 	 *
-	 * @var  SerializerInterface
+	 * @var  string
 	 */
-	protected $serializer;
+	protected $type;
 
 	/**
 	 * The item object
@@ -43,6 +43,23 @@ class ItemJsonView extends JsonView
 	 * @var  \JObject
 	 */
 	protected $state;
+
+	/**
+	 * Constructor.
+	 *
+	 * @param   array  $config
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function __construct($config = array())
+	{
+		if (array_key_exists('contentType', $config))
+		{
+			$this->type = $config['contentType'];
+		}
+
+		parent::__construct($config);
+	}
 
 	/**
 	 * Execute and display a template script.
@@ -69,12 +86,13 @@ class ItemJsonView extends JsonView
 			throw new \JViewGenericdataexception(implode("\n", $errors), 500);
 		}
 
-		if ($this->serializer === null)
+		if ($this->type === null)
 		{
-			throw new \RuntimeException('Serializer missing');
+			throw new \RuntimeException('Content type missing');
 		}
 
-		$element = new Resource($this->item, $this->serializer);
+		$serializer = new YmlSerializer($this->type, JPATH_COMPONENT . '/Serializer/' . $this->type . '.yml');
+		$element = new Resource($this->item, $serializer);
 
 		$this->document->setData($element);
 		$this->document->addLink('self', \JUri::current());
