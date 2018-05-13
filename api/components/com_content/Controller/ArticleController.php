@@ -27,8 +27,8 @@ class ArticleController extends Api
 	 * This function is provide as a default implementation, in most cases
 	 * you will need to override it in your own controllers.
 	 *
-	 * @param   boolean  $cachable   If true, the view output will be cached
-	 * @param   array    $urlparams  An array of safe url parameters and their variable types, for valid values see {@link \JFilterInput::clean()}.
+	 * @param   boolean  $cachable  If true, the view output will be cached
+	 * @param   array    $urlparams An array of safe url parameters and their variable types, for valid values see {@link \JFilterInput::clean()}.
 	 *
 	 * @return  static  A \JControllerLegacy object to support chaining.
 	 *
@@ -39,6 +39,14 @@ class ArticleController extends Api
 		$vName = $this->input->getCmd('view', 'articles');
 		$this->input->set('view', $vName);
 
-		parent::displayList($cachable, $urlparams);
+		return parent::displayList($cachable, $urlparams);
+	}
+
+	public function displayItem($cachable = false, $urlparams = array())
+	{
+		$vName = $this->input->getCmd('view', 'article');
+		$this->input->set('view', $vName);
+
+		return parent::displayItem($cachable, $urlparams);
 	}
 }

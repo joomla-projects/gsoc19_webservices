@@ -9,10 +9,8 @@
 namespace Joomla\CMS\MVC\View;
 
 use Joomla\CMS\Router\Exception\RouteNotFoundException;
-use Joomla\Utilities\ArrayHelper;
-use Joomla\Component\Content\Api\Serializer\ItemSerializer;
 use Tobscure\JsonApi\Resource;
-use Tobscure\JsonApi\AbstractSerializer;
+use Tobscure\JsonApi\SerializerInterface;
 
 defined('_JEXEC') or die;
 
@@ -25,6 +23,13 @@ defined('_JEXEC') or die;
  */
 class ItemJsonView extends JsonView
 {
+	/**
+	 * The items object
+	 *
+	 * @var  SerializerInterface
+	 */
+	protected $serializer;
+
 	/**
 	 * The item object
 	 *
@@ -64,7 +69,12 @@ class ItemJsonView extends JsonView
 			throw new \JViewGenericdataexception(implode("\n", $errors), 500);
 		}
 
-		$element = new Resource($this->item, new ItemSerializer);
+		if ($this->serializer === null)
+		{
+			throw new \RuntimeException('Serializer missing');
+		}
+
+		$element = new Resource($this->item, $this->serializer);
 
 		$this->document->setData($element);
 		$this->document->addLink('self', \JUri::current());

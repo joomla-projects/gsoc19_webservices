@@ -8,9 +8,9 @@
 
 namespace Joomla\Component\Content\Api\Serializer;
 
-use Tobscure\JsonApi\AbstractSerializer;
-
 defined('_JEXEC') or die;
+
+use Tobscure\JsonApi\AbstractSerializer;
 
 /**
  * Temporary serializer

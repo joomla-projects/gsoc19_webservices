@@ -10,10 +10,8 @@ namespace Joomla\CMS\MVC\View;
 
 defined('_JEXEC') or die;
 
-use Joomla\Utilities\ArrayHelper;
-use Joomla\Component\Content\Api\Serializer\ItemSerializer;
 use Tobscure\JsonApi\Collection;
-use Tobscure\JsonApi\AbstractSerializer;
+use Tobscure\JsonApi\SerializerInterface;
 
 /**
  * Base class for a Joomla Json List View
@@ -22,8 +20,15 @@ use Tobscure\JsonApi\AbstractSerializer;
  *
  * @since  __DEPLOY_VERSION__
  */
-class ListJsonView extends JsonView
+abstract class ListJsonView extends JsonView
 {
+	/**
+	 * The items object
+	 *
+	 * @var  SerializerInterface
+	 */
+	protected $serializer;
+
 	/**
 	 * The items object
 	 *
@@ -60,7 +65,12 @@ class ListJsonView extends JsonView
 			throw new \JViewGenericdataexception(implode("\n", $errors), 500);
 		}
 
-		$element = new Collection($this->items, new ItemSerializer);
+		if ($this->serializer === null)
+		{
+			throw new \RuntimeException('Serializer missing');
+		}
+
+		$element = new Collection($this->items, $this->serializer);
 
 		$this->document->setData($element);
 		$this->document->addLink('self', \JUri::current());
