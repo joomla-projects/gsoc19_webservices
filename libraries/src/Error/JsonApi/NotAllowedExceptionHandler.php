@@ -13,10 +13,21 @@ use Joomla\CMS\Access\Exception\NotAllowed;
 use Tobscure\JsonApi\Exception\Handler\ExceptionHandlerInterface;
 use Tobscure\JsonApi\Exception\Handler\ResponseBag;
 
+/**
+ * Handler for permission errors that should give a 403
+ *
+ * @since  4.0
+ */
 class NotAllowedExceptionHandler implements ExceptionHandlerInterface
 {
 	/**
-	 * {@inheritdoc}
+	 * If the exception handler is able to format a response for the provided exception,
+	 * then the implementation should return true.
+	 *
+	 * @param \Exception $e
+	 *
+	 * @return bool
+	 * @since  __DEPLOY_VERSION__
 	 */
 	public function manages(Exception $e)
 	{
@@ -38,7 +49,9 @@ class NotAllowedExceptionHandler implements ExceptionHandlerInterface
 		$error = ['title' => 'Access Denied'];
 
 		$code = $e->getCode();
-		if ($code) {
+
+		if ($code)
+		{
 			$error['code'] = $code;
 		}
 

@@ -46,7 +46,8 @@ class ListJsonView extends JsonView
 	/**
 	 * Constructor.
 	 *
-	 * @param   array  $config
+	 * @param   array  $config  A named configuration array for object construction.
+	 *                          contentType: the name (optional) of the content type to use for the serialization
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */

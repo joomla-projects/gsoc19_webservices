@@ -20,9 +20,22 @@ use Tobscure\JsonApi\AbstractSerializer;
  */
 class YmlSerializer extends AbstractSerializer
 {
-	protected $type = '';
+	/**
+	 * The path to the yml file to be loaded
+	 *
+	 * @var   string
+	 * @since __DEPLOY_VERSION__
+	 */
 	protected $filePath = '';
 
+	/**
+	 * Constructor.
+	 *
+	 * @param   string  $type      The content type to be loaded
+	 * @param   string  $filePath  The path to the yml file to be loaded
+	 *
+	 * @since __DEPLOY_VERSION__
+	 */
 	public function __construct(string $type, string $filePath)
 	{
 		$this->type = $type;
