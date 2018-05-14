@@ -25,7 +25,6 @@ class ComposerStaticInit35f435f6fead9eeceb9feb42e8ce1c2d
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
         '5255c38a0faeba867671b61dfda6d864' => __DIR__ . '/..' . '/paragonie/random_compat/lib/random.php',
         '3109cb1a231dcd04bee1f9f620d46975' => __DIR__ . '/..' . '/paragonie/sodium_compat/autoload.php',
-        'bd9634f2d41831496de0d3dfe4c94881' => __DIR__ . '/..' . '/symfony/polyfill-php56/bootstrap.php',
     );
 
     public static $prefixLengthsPsr4 = array (
@@ -39,8 +38,6 @@ class ComposerStaticInit35f435f6fead9eeceb9feb42e8ce1c2d
         ),
         'S' => 
         array (
-            'Symfony\\Polyfill\\Util\\' => 22,
-            'Symfony\\Polyfill\\Php56\\' => 23,
             'Symfony\\Polyfill\\Mbstring\\' => 26,
             'Symfony\\Component\\Yaml\\' => 23,
             'Symfony\\Component\\WebLink\\' => 26,
@@ -118,14 +115,6 @@ class ComposerStaticInit35f435f6fead9eeceb9feb42e8ce1c2d
         'Tobscure\\JsonApi\\' => 
         array (
             0 => __DIR__ . '/..' . '/tobscure/json-api/src',
-        ),
-        'Symfony\\Polyfill\\Util\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/symfony/polyfill-util',
-        ),
-        'Symfony\\Polyfill\\Php56\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/symfony/polyfill-php56',
         ),
         'Symfony\\Polyfill\\Mbstring\\' => 
         array (
@@ -347,6 +336,7 @@ class ComposerStaticInit35f435f6fead9eeceb9feb42e8ce1c2d
         'Joomla\\Authentication\\Strategies\\DatabaseStrategy' => __DIR__ . '/..' . '/joomla/authentication/src/Strategies/DatabaseStrategy.php',
         'Joomla\\Authentication\\Strategies\\LocalStrategy' => __DIR__ . '/..' . '/joomla/authentication/src/Strategies/LocalStrategy.php',
         'Joomla\\CMS\\Access\\Access' => __DIR__ . '/../../..' . '/libraries/src/Access/Access.php',
+        'Joomla\\CMS\\Access\\Exception\\AuthenticationFailed' => __DIR__ . '/../../..' . '/libraries/src/Access/Exception/AuthenticationFailed.php',
         'Joomla\\CMS\\Access\\Exception\\NotAllowed' => __DIR__ . '/../../..' . '/libraries/src/Access/Exception/NotAllowed.php',
         'Joomla\\CMS\\Access\\Rule' => __DIR__ . '/../../..' . '/libraries/src/Access/Rule.php',
         'Joomla\\CMS\\Access\\Rules' => __DIR__ . '/../../..' . '/libraries/src/Access/Rules.php',
@@ -427,7 +417,6 @@ class ComposerStaticInit35f435f6fead9eeceb9feb42e8ce1c2d
         'Joomla\\CMS\\Component\\Router\\Rules\\NomenuRules' => __DIR__ . '/../../..' . '/libraries/src/Component/Router/Rules/NomenuRules.php',
         'Joomla\\CMS\\Component\\Router\\Rules\\RulesInterface' => __DIR__ . '/../../..' . '/libraries/src/Component/Router/Rules/RulesInterface.php',
         'Joomla\\CMS\\Component\\Router\\Rules\\StandardRules' => __DIR__ . '/../../..' . '/libraries/src/Component/Router/Rules/StandardRules.php',
-        'Joomla\\CMS\\Component\\name' => __DIR__ . '/../../..' . '/libraries/src/Component/ComponentHelper.php',
         'Joomla\\CMS\\Console\\CheckUpdatesCommand' => __DIR__ . '/../../..' . '/libraries/src/Console/CheckUpdatesCommand.php',
         'Joomla\\CMS\\Console\\CleanCacheCommand' => __DIR__ . '/../../..' . '/libraries/src/Console/CleanCacheCommand.php',
         'Joomla\\CMS\\Console\\RemoveOldFilesCommand' => __DIR__ . '/../../..' . '/libraries/src/Console/RemoveOldFilesCommand.php',
@@ -485,6 +474,7 @@ class ComposerStaticInit35f435f6fead9eeceb9feb42e8ce1c2d
         'Joomla\\CMS\\Encrypt\\Totp' => __DIR__ . '/../../..' . '/libraries/src/Encrypt/Totp.php',
         'Joomla\\CMS\\Environment\\Browser' => __DIR__ . '/../../..' . '/libraries/src/Environment/Browser.php',
         'Joomla\\CMS\\Error\\AbstractRenderer' => __DIR__ . '/../../..' . '/libraries/src/Error/AbstractRenderer.php',
+        'Joomla\\CMS\\Error\\JsonApi\\AuthenticationFailedExceptionHandler' => __DIR__ . '/../../..' . '/libraries/src/Error/JsonApi/AuthenticationFailedExceptionHandler.php',
         'Joomla\\CMS\\Error\\JsonApi\\InvalidRouteExceptionHandler' => __DIR__ . '/../../..' . '/libraries/src/Error/JsonApi/InvalidRouteExceptionHandler.php',
         'Joomla\\CMS\\Error\\JsonApi\\NotAllowedExceptionHandler' => __DIR__ . '/../../..' . '/libraries/src/Error/JsonApi/NotAllowedExceptionHandler.php',
         'Joomla\\CMS\\Error\\RendererInterface' => __DIR__ . '/../../..' . '/libraries/src/Error/RendererInterface.php',
@@ -804,6 +794,7 @@ class ComposerStaticInit35f435f6fead9eeceb9feb42e8ce1c2d
         'Joomla\\CMS\\Schema\\ChangeItem\\PostgresqlChangeItem' => __DIR__ . '/../../..' . '/libraries/src/Schema/ChangeItem/PostgresqlChangeItem.php',
         'Joomla\\CMS\\Schema\\ChangeItem\\SqlsrvChangeItem' => __DIR__ . '/../../..' . '/libraries/src/Schema/ChangeItem/SqlsrvChangeItem.php',
         'Joomla\\CMS\\Schema\\ChangeSet' => __DIR__ . '/../../..' . '/libraries/src/Schema/ChangeSet.php',
+        'Joomla\\CMS\\Serializer\\YmlSerializer' => __DIR__ . '/../../..' . '/libraries/src/Serializer/YmlSerializer.php',
         'Joomla\\CMS\\Service\\Provider\\ApiRouter' => __DIR__ . '/../../..' . '/libraries/src/Service/Provider/ApiRouter.php',
         'Joomla\\CMS\\Service\\Provider\\Application' => __DIR__ . '/../../..' . '/libraries/src/Service/Provider/Application.php',
         'Joomla\\CMS\\Service\\Provider\\Authentication' => __DIR__ . '/../../..' . '/libraries/src/Service/Provider/Authentication.php',
@@ -1238,13 +1229,6 @@ class ComposerStaticInit35f435f6fead9eeceb9feb42e8ce1c2d
         'Symfony\\Component\\Yaml\\Unescaper' => __DIR__ . '/..' . '/symfony/yaml/Unescaper.php',
         'Symfony\\Component\\Yaml\\Yaml' => __DIR__ . '/..' . '/symfony/yaml/Yaml.php',
         'Symfony\\Polyfill\\Mbstring\\Mbstring' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/Mbstring.php',
-        'Symfony\\Polyfill\\Php56\\Php56' => __DIR__ . '/..' . '/symfony/polyfill-php56/Php56.php',
-        'Symfony\\Polyfill\\Util\\Binary' => __DIR__ . '/..' . '/symfony/polyfill-util/Binary.php',
-        'Symfony\\Polyfill\\Util\\BinaryNoFuncOverload' => __DIR__ . '/..' . '/symfony/polyfill-util/BinaryNoFuncOverload.php',
-        'Symfony\\Polyfill\\Util\\BinaryOnFuncOverload' => __DIR__ . '/..' . '/symfony/polyfill-util/BinaryOnFuncOverload.php',
-        'Symfony\\Polyfill\\Util\\LegacyTestListener' => __DIR__ . '/..' . '/symfony/polyfill-util/LegacyTestListener.php',
-        'Symfony\\Polyfill\\Util\\TestListener' => __DIR__ . '/..' . '/symfony/polyfill-util/TestListener.php',
-        'Symfony\\Polyfill\\Util\\TestListenerTrait' => __DIR__ . '/..' . '/symfony/polyfill-util/TestListenerTrait.php',
         'Tobscure\\JsonApi\\AbstractSerializer' => __DIR__ . '/..' . '/tobscure/json-api/src/AbstractSerializer.php',
         'Tobscure\\JsonApi\\Collection' => __DIR__ . '/..' . '/tobscure/json-api/src/Collection.php',
         'Tobscure\\JsonApi\\Document' => __DIR__ . '/..' . '/tobscure/json-api/src/Document.php',
