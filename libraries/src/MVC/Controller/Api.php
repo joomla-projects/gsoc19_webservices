@@ -124,7 +124,7 @@ class Api extends BaseController
 
 		try
 		{
-			$view = $this->getView($viewName, $viewType, '', array('base_path' => $this->basePath, 'layout' => $viewLayout, 'contentType' => $this->contentType));
+			$view = $this->getView($viewName, $viewType, '', ['base_path' => $this->basePath, 'layout' => $viewLayout, 'contentType' => $this->contentType]);
 		}
 		catch (\Exception $e)
 		{
@@ -198,7 +198,7 @@ class Api extends BaseController
 
 		try
 		{
-			$view = $this->getView($viewName, $viewType, '', array('base_path' => $this->basePath, 'layout' => $viewLayout, 'contentType' => $this->contentType));
+			$view = $this->getView($viewName, $viewType, '', ['base_path' => $this->basePath, 'layout' => $viewLayout, 'contentType' => $this->contentType]);
 		}
 		catch (\Exception $e)
 		{

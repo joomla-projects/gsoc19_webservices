@@ -24,9 +24,10 @@ class InvalidRouteExceptionHandler implements ExceptionHandlerInterface
 	 * If the exception handler is able to format a response for the provided exception,
 	 * then the implementation should return true.
 	 *
-	 * @param \Exception $e
+	 * @param   \Exception  $e  The exception to be handled
 	 *
 	 * @return bool
+	 *
 	 * @since  __DEPLOY_VERSION__
 	 */
 	public function manages(Exception $e)
