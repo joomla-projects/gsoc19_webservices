@@ -109,6 +109,8 @@ final class ApiApplication extends CMSApplication
 	 * @param   string  $format         The content type format
 	 *
 	 * @return  void
+	 *
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function addFormatMap($contentHeader, $format)
 	{
