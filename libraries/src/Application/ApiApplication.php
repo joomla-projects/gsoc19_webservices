@@ -38,6 +38,14 @@ final class ApiApplication extends CMSApplication
 	protected $formatMapper = array();
 
 	/**
+	 * The authentication plugin type
+	 *
+	 * @type   string
+	 * @since  __DEPLOY_VERSION__
+	 */
+	protected $authenticationPluginType = 'api-authentication';
+
+	/**
 	 * Class constructor.
 	 *
 	 * @param   \JInput    $input      An optional argument to provide dependency injection for the application's input
@@ -196,7 +204,7 @@ final class ApiApplication extends CMSApplication
 
 		// Trigger the onBeforeApiRoute event.
 		PluginHelper::importPlugin('webservices');
-		$this->triggerEvent('onBeforeApiRoute', array(&$router));
+		$this->triggerEvent('onBeforeApiRoute', array(&$router, $this));
 		$caught404 = false;
 
 		try
@@ -269,6 +277,10 @@ final class ApiApplication extends CMSApplication
 				}
 			}
 		}
+
+		$this->triggerEvent('onAfterApiRoute', array($this));
+
+		$this->login(array('username' => ''), array('silent' => true, 'action' => 'core.login.api'));
 	}
 
 	/**

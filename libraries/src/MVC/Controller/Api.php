@@ -228,20 +228,23 @@ class Api extends BaseController
 	 */
 	public function delete()
 	{
+		if (!\JFactory::getUser()->authorise('core.delete', $this->option))
+		{
+			throw new NotAllowed('JLIB_APPLICATION_ERROR_DELETE_NOT_PERMITTED', 403);
+		}
+
 		$id = $this->input->get('id', 0, 'int');
 
 		/** @var \Joomla\CMS\MVC\Model\AdminModel $model */
 		$model = $this->getModel();
 
 		// Remove the item.
-		if ($model->delete($id))
-		{
-			$this->setMessage(Text::plural($this->text_prefix . '_N_ITEMS_DELETED', count($id)));
-		}
-		else
+		if (!$model->delete($id))
 		{
 			throw new \RuntimeException($model->getError(), 500);
 		}
+
+		$this->app->setHeader('status', 204);
 	}
 
 	/**
