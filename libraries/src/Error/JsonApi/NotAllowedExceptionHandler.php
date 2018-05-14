@@ -15,13 +15,13 @@ use Tobscure\JsonApi\Exception\Handler\ResponseBag;
 
 class NotAllowedExceptionHandler implements ExceptionHandlerInterface
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function manages(Exception $e)
-    {
-        return $e instanceof NotAllowed;
-    }
+	/**
+	 * {@inheritdoc}
+	 */
+	public function manages(Exception $e)
+	{
+		return $e instanceof NotAllowed;
+	}
 
 	/**
 	 * Handle the provided exception.
@@ -32,16 +32,16 @@ class NotAllowedExceptionHandler implements ExceptionHandlerInterface
 	 *
 	 * @since  __DEPLOY_VERSION__
 	 */
-    public function handle(Exception $e)
-    {
-        $status = 403;
-        $error = ['title' => 'Access Denied'];
+	public function handle(Exception $e)
+	{
+		$status = 403;
+		$error = ['title' => 'Access Denied'];
 
-        $code = $e->getCode();
-        if ($code) {
-            $error['code'] = $code;
-        }
+		$code = $e->getCode();
+		if ($code) {
+			$error['code'] = $code;
+		}
 
-        return new ResponseBag($status, [$error]);
-    }
+		return new ResponseBag($status, [$error]);
+	}
 }

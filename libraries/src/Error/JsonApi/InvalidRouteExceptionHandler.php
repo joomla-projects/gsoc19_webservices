@@ -15,13 +15,13 @@ use Tobscure\JsonApi\Exception\Handler\ResponseBag;
 
 class InvalidRouteExceptionHandler implements ExceptionHandlerInterface
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function manages(Exception $e)
-    {
-        return $e instanceof RouteNotFoundException;
-    }
+	/**
+	 * {@inheritdoc}
+	 */
+	public function manages(Exception $e)
+	{
+		return $e instanceof RouteNotFoundException;
+	}
 
 	/**
 	 * Handle the provided exception.
@@ -32,16 +32,16 @@ class InvalidRouteExceptionHandler implements ExceptionHandlerInterface
 	 *
 	 * @since  __DEPLOY_VERSION__
 	 */
-    public function handle(Exception $e)
-    {
-        $status = 404;
-        $error = ['title' => 'Resource not found'];
+	public function handle(Exception $e)
+	{
+		$status = 404;
+		$error = ['title' => 'Resource not found'];
 
-        $code = $e->getCode();
-        if ($code) {
-            $error['code'] = $code;
-        }
+		$code = $e->getCode();
+		if ($code) {
+			$error['code'] = $code;
+		}
 
-        return new ResponseBag($status, [$error]);
-    }
+		return new ResponseBag($status, [$error]);
+	}
 }
