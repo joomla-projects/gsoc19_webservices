@@ -688,12 +688,12 @@
         "source": {
             "type": "git",
             "url": "https://github.com/joomla-framework/database.git",
-            "reference": "1ac096f50fd52d1d1e8c3fae0fa4a9fc5f7416e8"
+            "reference": "7e7b179c2cf96288eaf5ab275222db31989edb65"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/joomla-framework/database/zipball/1ac096f50fd52d1d1e8c3fae0fa4a9fc5f7416e8",
-            "reference": "1ac096f50fd52d1d1e8c3fae0fa4a9fc5f7416e8",
+            "url": "https://api.github.com/repos/joomla-framework/database/zipball/7e7b179c2cf96288eaf5ab275222db31989edb65",
+            "reference": "7e7b179c2cf96288eaf5ab275222db31989edb65",
             "shasum": ""
         },
         "require": {
@@ -717,7 +717,7 @@
             "joomla/di": "To use the Database ServiceProviderInterface objects, install joomla/di.",
             "joomla/registry": "To use the Database ServiceProviderInterface objects, install joomla/registry."
         },
-        "time": "2018-05-11T12:11:11+00:00",
+        "time": "2018-05-13T23:43:31+00:00",
         "type": "joomla-package",
         "extra": {
             "branch-alias": {
@@ -1365,12 +1365,12 @@
         "source": {
             "type": "git",
             "url": "https://github.com/joomla-framework/session.git",
-            "reference": "7b1df36071c53e28fceb75ff8a6c5c346a120851"
+            "reference": "f7cca05d546fb12da488e42a753b703bf51c63a7"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/joomla-framework/session/zipball/7b1df36071c53e28fceb75ff8a6c5c346a120851",
-            "reference": "7b1df36071c53e28fceb75ff8a6c5c346a120851",
+            "url": "https://api.github.com/repos/joomla-framework/session/zipball/f7cca05d546fb12da488e42a753b703bf51c63a7",
+            "reference": "f7cca05d546fb12da488e42a753b703bf51c63a7",
             "shasum": ""
         },
         "require": {
@@ -1394,7 +1394,7 @@
             "joomla/event": "The joomla/event package is required to use Joomla\\Session\\Session.",
             "joomla/input": "The joomla/input package is required to use Address and Forwarded session validators."
         },
-        "time": "2018-04-29T16:43:29+00:00",
+        "time": "2018-05-13T22:56:54+00:00",
         "type": "joomla-package",
         "extra": {
             "branch-alias": {

@@ -80,6 +80,7 @@
         "tobscure/json-api": "^0.4.1",
         "willdurand/negotiation": "^2.3",
         "symfony/console": "3.4.*",
+        "symfony/debug": "3.4.*",
         "symfony/web-link": "3.4.*",
         "symfony/yaml": "3.4.*"
     },
