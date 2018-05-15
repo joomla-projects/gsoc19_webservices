@@ -103,13 +103,18 @@ class ApiController extends BaseController
 	/**
 	 * Basic display of an item view
 	 *
+	 * @param  integer  $id  The primary key to display. Leave empty if you want to retrieve data from the request
+	 *
 	 * @return  static  A \JControllerLegacy object to support chaining.
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function displayItem()
+	public function displayItem($id = null)
 	{
-		$id = $this->input->get('id', 0, 'int');
+		if ($id === null)
+		{
+			$id = $this->input->get('id', 0, 'int');
+		}
 
 		$document = \JFactory::getDocument();
 		$viewType = $document->getType();
@@ -125,11 +130,13 @@ class ApiController extends BaseController
 			return $this;
 		}
 
-		// Get/Create the model
-		if ($model = $this->getModel())
+		// Create the model, ignoring request data so we can safely set the state in the request, without it being
+		// reinitialised on the first getState call
+		$model = $this->getModel('', '', ['ignore_request' => true]);
+
+		if (!$model)
 		{
-			// Push the model into the view (as default)
-			$view->setModel($model, true);
+			throw new \RuntimeException('Unable to create the model');
 		}
 
 		try
@@ -141,13 +148,12 @@ class ApiController extends BaseController
 			return $this;
 		}
 
+		$model->setState($modelName . '.id', $id);
+
+		// Push the model into the view (as default)
+		$view->setModel($model, true);
+
 		$view->document = $document;
-
-		if (empty($model->getState($modelName . 'id')))
-		{
-			$model->setState($modelName . 'id', $id);
-		}
-
 		$view->display();
 
 		return $this;
@@ -238,14 +244,13 @@ class ApiController extends BaseController
 	/**
 	 * Method to add a new record.
 	 *
-	 * @param   string  $key     The name of the primary key of the URL variable.
-	 * @param   string  $urlVar  The name of the URL variable if different from the primary key (sometimes required to avoid router collisions).
-	 *
 	 * @return  void
 	 *
 	 * @since   __DEPLOY_VERSION__
+	 * @throws  NotAllowed
+	 * @throws  \RuntimeException
 	 */
-	public function add($key = null, $urlVar = null)
+	public function add()
 	{
 		// Access check.
 		if (!$this->allowAdd())
@@ -254,33 +259,25 @@ class ApiController extends BaseController
 		}
 		else
 		{
-			if (empty($urlVar))
+			$success = $this->save();
+
+			if (!$success)
 			{
-				$urlVar = 'id';
+				throw new \RuntimeException($this->message);
 			}
 
-			// TODO: Error handling. We have error messages set into the controller
-			$success = $this->save($key, $urlVar);
-
-			if ($success)
-			{
-				$this->displayItem();
-			}
+			$this->displayItem($success);
 		}
 	}
 
 	/**
 	 * Method to edit an existing record.
 	 *
-	 * @param   string  $key     The name of the primary key of the URL variable.
-	 * @param   string  $urlVar  The name of the URL variable if different from the primary key
-	 *                           (sometimes required to avoid router collisions).
-	 *
 	 * @return  boolean  True if save succeeded after access level check and checkout passes, false otherwise.
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function edit($key = null, $urlVar = null)
+	public function edit()
 	{
 		/** @var \Joomla\CMS\MVC\Model\AdminModel $model */
 		$model = $this->getModel();
@@ -296,23 +293,16 @@ class ApiController extends BaseController
 			return false;
 		}
 
-		$id   = $this->input->post->get('id', array(), 'array');
+		$recordId = $this->input->getInt('id');
 
-		// Determine the name of the primary key for the data.
-		if (empty($key))
+		if (!$recordId)
 		{
-			$key = $table->getKeyName();
+			// TODO: Nice exception with lang string
+			throw new \RuntimeException('Record does not exist', 404);
 		}
 
-		// To avoid data collisions the urlVar may be different from the primary key.
-		if (empty($urlVar))
-		{
-			$urlVar = $key;
-		}
-
-		// Get the previous record id (if any) and the current record id.
-		$recordId = (int) (count($id) ? $id[0] : $this->input->getInt($urlVar));
-		$checkin = property_exists($table, $table->getColumnAlias('checked_out'));
+		$key      = $table->getKeyName();
+		$checkin  = property_exists($table, $table->getColumnAlias('checked_out'));
 
 		// Access check.
 		if (!$this->allowEdit(array($key => $recordId), $key))
@@ -328,27 +318,25 @@ class ApiController extends BaseController
 
 			return false;
 		}
-		else
-		{
-			// Check-out succeeded, push the new record id into the session.
-			$this->holdEditId($this->context, $recordId);
-			$this->app->setUserState($this->context . '.data', null);
 
-			return $this->save($key, $urlVar);
+		if (!$this->save($recordId))
+		{
+			throw new \RuntimeException($this->message);
 		}
+
+		return true;
 	}
 
 	/**
 	 * Method to save a record.
 	 *
-	 * @param   string  $key     The name of the primary key of the URL variable.
-	 * @param   string  $urlVar  The name of the URL variable if different from the primary key (sometimes required to avoid router collisions).
+	 * @param   int  $recordKey  The primary key of the item (if exists)
 	 *
-	 * @return  boolean  True if successful, false otherwise.
+	 * @return  int|boolean  The record ID on success, false on failure
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function save($key = null, $urlVar = null)
+	protected function save($recordKey = null)
 	{
 		/** @var \Joomla\CMS\MVC\Model\AdminModel $model */
 		$model = $this->getModel();
@@ -364,27 +352,15 @@ class ApiController extends BaseController
 			return false;
 		}
 
-		$data  = $this->input->post->get('data', array(), 'array');
-		$checkin = property_exists($table, $table->getColumnAlias('checked_out'));
-		$context = "$this->option.edit.$this->context";
-
-		// Determine the name of the primary key for the data.
-		if (empty($key))
-		{
-			$key = $table->getKeyName();
-		}
-
-		// To avoid data collisions the urlVar may be different from the primary key.
-		if (empty($urlVar))
-		{
-			$urlVar = $key;
-		}
-
-		$recordKey = $this->input->get($urlVar);
+		$key        = $table->getKeyName();
+		$data       = json_decode($this->input->json->getRaw(), true);
+		$checkin    = property_exists($table, $table->getColumnAlias('checked_out'));
 		$data[$key] = $recordKey;
 
+		// TODO: Not the cleanest thing ever but it works...
+		\JForm::addFormPath(JPATH_COMPONENT_ADMINISTRATOR . '/forms');
+
 		// Validate the posted data.
-		// Sometimes the form needs some posted data, such as for plugins and modules.
 		$form = $model->getForm($data, false);
 
 		if (!$form)
@@ -416,9 +392,6 @@ class ApiController extends BaseController
 				}
 			}
 
-			// Save the data in the session.
-			$this->app->setUserState($context . '.data', $data);
-
 			return false;
 		}
 
@@ -430,30 +403,42 @@ class ApiController extends BaseController
 		// Attempt to save the data.
 		if (!$model->save($validData))
 		{
-			// Save the data in the session.
-			$this->app->setUserState($context . '.data', $data);
-
 			$this->setMessage(Text::sprintf('JLIB_APPLICATION_ERROR_SAVE_FAILED', $model->getError()), 'error');
 
 			return false;
 		}
-		// Save succeeded, so check-in the record.
-		if ($checkin && $model->checkin($validData[$key]) === false)
-		{
-			// Save the data in the session.
-			$this->app->setUserState($context . '.data', $validData);
 
+		try
+		{
+			$modelName = $model->getName();
+		}
+		catch (\Exception $e)
+		{
+			$this->setMessage($e->getMessage());
+
+			return false;
+		}
+
+		// Ensure we have the record ID in case we created a new article
+		$recordId = $model->getState($modelName . '.id');
+
+		if ($recordId === null)
+		{
+			$this->setMessage(Text::sprintf('JLIB_APPLICATION_ERROR_CHECKIN_FAILED', $model->getError()), 'error');
+
+			return false;
+		}
+
+		// Save succeeded, so check-in the record.
+		if ($checkin && $model->checkin($recordId) === false)
+		{
 			// Check-in failed, so go back to the record and display a notice.
 			$this->setMessage(Text::sprintf('JLIB_APPLICATION_ERROR_CHECKIN_FAILED', $model->getError()), 'error');
 
 			return false;
 		}
 
-		// Clear the record id and data from the session.
-		$this->releaseEditId($context, $validData[$key]);
-		$this->app->setUserState($context . '.data', null);
-
-		return true;
+		return $recordId;
 	}
 
 	/**
