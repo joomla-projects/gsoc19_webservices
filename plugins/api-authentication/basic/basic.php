@@ -9,20 +9,16 @@
 
 defined('_JEXEC') or die;
 
-use Joomla\CMS\Factory;
 use Joomla\CMS\User\User;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\User\UserHelper;
 use Joomla\CMS\Plugin\CMSPlugin;
-use Joomla\CMS\Plugin\PluginHelper;
-use Joomla\CMS\Helper\AuthenticationHelper;
 use Joomla\CMS\Authentication\Authentication;
-use Joomla\Component\Users\Administrator\Model\UserModel;
 
 /**
  * Joomla Authentication plugin
  *
- * @since  1.5
+ * @since  __DEPLOY_VERSION__
  */
 class PlgApiAuthenticationBasic extends CMSPlugin
 {
@@ -51,7 +47,7 @@ class PlgApiAuthenticationBasic extends CMSPlugin
 	 *
 	 * @return  void
 	 *
-	 * @since   1.5
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function onUserAuthenticate($credentials, $options, &$response)
 	{
