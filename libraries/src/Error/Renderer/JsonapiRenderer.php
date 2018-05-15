@@ -8,7 +8,7 @@
 
 namespace Joomla\CMS\Error\Renderer;
 use Joomla\CMS\Error\JsonApi\AuthenticationFailedExceptionHandler;
-use Joomla\CMS\Error\JsonApi\InvalidRouteExceptionhandler;
+use Joomla\CMS\Error\JsonApi\InvalidRouteExceptionHandler;
 use Joomla\CMS\Error\JsonApi\NotAllowedExceptionHandler;
 use Tobscure\JsonApi\ErrorHandler;
 use Tobscure\JsonApi\Exception\Handler\FallbackExceptionHandler;
