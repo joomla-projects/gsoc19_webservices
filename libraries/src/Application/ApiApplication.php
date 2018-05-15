@@ -242,7 +242,7 @@ final class ApiApplication extends CMSApplication
 		// If we can't find a match bail with a 406 - Not Acceptable
 		if ($mediaType === null)
 		{
-			throw new \RuntimeException('Could not match accept header', 406);
+			throw new Exception\NotAcceptable('Could not match accept header', 406);
 		}
 
 		/** @var $mediaType Accept */
