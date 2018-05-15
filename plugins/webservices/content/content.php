@@ -20,6 +20,15 @@ use Joomla\CMS\Router\ApiRouter;
 class PlgWebservicesContent extends CMSPlugin
 {
 	/**
+	 * curl -H 'Authorization: Basic YWRtaW46MTIz' -H "Content-Type: application/json" -X POST http://localhost/~george/joomla-cms/api/index.php/article -d '{"title": "Just for you", "catid": 64, "articletext": "My text", "metakey": "", "metadesc": "", "language": "*", "alias": "tobias"}'
+	 * curl -H 'Authorization: Basic YWRtaW46MTIz' -H "Content-Type: application/json" -X PUT http://localhost/~george/joomla-cms/api/index.php/article -d '{"title": "Just for you part 2", "catid": 64}'
+	 * curl -H 'Authorization: Basic YWRtaW46MTIz' -H "Content-Type: application/json" -X PUT http://localhost/~george/joomla-cms/api/index.php/article/111 -d '{"title": "Just for you part 2", "catid": 64}'
+	 * curl -H 'Authorization: Basic YWRtaW46MTIz' -X GET http://localhost/~george/joomla-cms/api/index.php/article/111
+	 * curl -H 'Authorization: Basic YWRtaW46MTIz' -X DELETE http://localhost/~george/joomla-cms/api/index.php/article/111
+	 * curl -H 'Authorization: Basic YWRtaW46MTIz' -X GET http://localhost/~george/joomla-cms/api/index.php/article/111
+	 */
+
+	/**
 	 * Load the language file on instantiation.
 	 *
 	 * @var    boolean
