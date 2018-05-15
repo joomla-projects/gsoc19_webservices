@@ -16,7 +16,7 @@ defined('JPATH_PLATFORM') or die;
  *
  * @since  __DEPLOY_VERSION__
  */
-final class ApiMVCFactory extends MvcFactory
+final class ApiMVCFactory extends MVCFactory
 {
 	/**
 	 * Method to load and return a model object.
