@@ -35,6 +35,14 @@ class PlgApiAuthenticationBasic extends CMSPlugin
 	protected $app;
 
 	/**
+	 * The application object
+	 *
+	 * @type   \Joomla\Database\DatabaseInterface
+	 * @since  __DEPLOY_VERSION__
+	 */
+	protected $db;
+
+	/**
 	 * This method should handle any authentication and report back to the subject
 	 *
 	 * @param   array   $credentials  Array holding the user credentials
@@ -61,14 +69,13 @@ class PlgApiAuthenticationBasic extends CMSPlugin
 		}
 
 		// Get a database object
-		$db    = Factory::getDbo();
-		$query = $db->getQuery(true)
-			->select('id, password')
-			->from('#__users')
-			->where('username=' . $db->quote($username));
+		$query = $this->db->getQuery(true)
+			->select($this->db->quoteName(array('id', 'password')))
+			->from($this->db->quoteName('#__users'))
+			->where($this->db->quoteName('username') . '=' . $this->db->quote($username));
 
-		$db->setQuery($query);
-		$result = $db->loadObject();
+		$this->db->setQuery($query);
+		$result = $this->db->loadObject();
 
 		if ($result)
 		{
