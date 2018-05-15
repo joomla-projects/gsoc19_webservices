@@ -12,7 +12,7 @@ defined('JPATH_PLATFORM') or die;
 
 use Joomla\CMS\Access\Exception\NotAllowed;
 use Joomla\CMS\Application\CMSApplication;
-use Joomla\CMS\Mvc\Factory\MvcFactoryInterface;
+use Joomla\CMS\MVC\Factory\MvcFactoryInterface;
 use Joomla\CMS\Language\Text;
 
 /**
@@ -23,7 +23,7 @@ use Joomla\CMS\Language\Text;
  *
  * @since  __DEPLOY_VERSION__
  */
-class Api extends BaseController
+class ApiController extends BaseController
 {
 	/**
 	 * The content type of the item.

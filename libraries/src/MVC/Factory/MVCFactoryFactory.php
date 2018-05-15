@@ -62,7 +62,7 @@ class MVCFactoryFactory implements MVCFactoryFactoryInterface, FormFactoryAwareI
 
 		if ($application->isClient('api'))
 		{
-			return new ApiMvcFactory($this->namespace, $application);
+			return new ApiMVCFactory($this->namespace, $application);
 		}
 		else
 		{
