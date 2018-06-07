@@ -94,6 +94,7 @@ Desktop.ini
 /libraries/vendor/ircmaxell/password-compat/phpunit.xml.dist
 /libraries/vendor/ircmaxell/password-compat/README.md
 /libraries/vendor/ircmaxell/password-compat/version-test.php
+/libraries/vendor/nesbot/carbon/.php_cs.dist
 /libraries/vendor/composer/ca-bundle/composer.json
 /libraries/vendor/composer/ca-bundle/README.md
 /libraries/vendor/defuse/php-encryption/dist

@@ -902,6 +902,15 @@ abstract class AdminModel extends FormModel
 			// Attempt to load the row.
 			$return = $table->load($pk);
 
+			/**
+			 * TODO: Dirty hack to work around JTable returns a bool (as per interface) but current
+			 * entity code returns a new Entity object
+			 */
+			if (!is_bool($return))
+			{
+				$table = $return;
+			}
+
 			// Check for a table object error.
 			if ($return === false && $table->getError())
 			{
@@ -1151,7 +1160,17 @@ abstract class AdminModel extends FormModel
 			// Load the row if saving an existing record.
 			if ($pk > 0)
 			{
-				$table->load($pk);
+				$return = $table->load($pk);
+
+				/**
+				 * TODO: Dirty hack to work around JTable returns a bool (as per interface) but current
+				 * entity code returns a new Entity object
+				 */
+				if (!is_bool($return))
+				{
+					$table = $return;
+				}
+
 				$isNew = false;
 			}
 
