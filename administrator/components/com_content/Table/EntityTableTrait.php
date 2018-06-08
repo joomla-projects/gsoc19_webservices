@@ -31,7 +31,7 @@ trait EntityTableTrait
 			$this->reset();
 		}
 
-		return $this->newQuery()->find($keys);
+		return $this->find($keys);
 	}
 
 	public function getProperties()

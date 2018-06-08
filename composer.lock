@@ -1127,12 +1127,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/joomla-projects/entities.git",
-                "reference": "2aa43f0181a57cc51f478c984c93b2b2eaba0202"
+                "reference": "0573a7d4cabff5e86f9991c16736f9c6958a96c4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/joomla-projects/entities/zipball/2aa43f0181a57cc51f478c984c93b2b2eaba0202",
-                "reference": "2aa43f0181a57cc51f478c984c93b2b2eaba0202",
+                "url": "https://api.github.com/repos/joomla-projects/entities/zipball/0573a7d4cabff5e86f9991c16736f9c6958a96c4",
+                "reference": "0573a7d4cabff5e86f9991c16736f9c6958a96c4",
                 "shasum": ""
             },
             "require": {
@@ -1164,7 +1164,7 @@
                 "entity",
                 "joomla"
             ],
-            "time": "2018-06-07T15:07:53+00:00"
+            "time": "2018-06-08T09:20:15+00:00"
         },
         {
             "name": "joomla/event",

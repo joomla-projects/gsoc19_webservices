@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitb3f90d0e0764a1ad25163726533579c0
+class ComposerStaticInit18ede78670bacedfc7749c947d43e930
 {
     public static $files = array (
         '2fb9d6f23c8e8faefc193a4cde0cab4f' => __DIR__ . '/..' . '/joomla/string/src/phputf8/utf8.php',
@@ -1190,6 +1190,12 @@ class ComposerStaticInitb3f90d0e0764a1ad25163726533579c0
         'Joomla\\Database\\Sqlsrv\\SqlsrvStatement' => __DIR__ . '/..' . '/joomla/database/src/Sqlsrv/SqlsrvStatement.php',
         'Joomla\\Database\\StatementInterface' => __DIR__ . '/..' . '/joomla/database/src/StatementInterface.php',
         'Joomla\\Database\\UTF8MB4SupportInterface' => __DIR__ . '/..' . '/joomla/database/src/UTF8MB4SupportInterface.php',
+        'Joomla\\Entity\\Exeptions\\JsonEncodingException' => __DIR__ . '/..' . '/joomla/entities/src/Exeptions/JsonEncodingException.php',
+        'Joomla\\Entity\\Helpers\\ArrayHelper' => __DIR__ . '/..' . '/joomla/entities/src/Helpers/ArrayHelper.php',
+        'Joomla\\Entity\\Model' => __DIR__ . '/..' . '/joomla/entities/src/Model.php',
+        'Joomla\\Entity\\ModelHelpers\\Attributes' => __DIR__ . '/..' . '/joomla/entities/src/ModelHelpers/Attributes.php',
+        'Joomla\\Entity\\ModelHelpers\\Timestamps' => __DIR__ . '/..' . '/joomla/entities/src/ModelHelpers/Timestamps.php',
+        'Joomla\\Entity\\Query' => __DIR__ . '/..' . '/joomla/entities/src/Query.php',
         'Joomla\\Event\\AbstractEvent' => __DIR__ . '/..' . '/joomla/event/src/AbstractEvent.php',
         'Joomla\\Event\\DelegatingDispatcher' => __DIR__ . '/..' . '/joomla/event/src/DelegatingDispatcher.php',
         'Joomla\\Event\\Dispatcher' => __DIR__ . '/..' . '/joomla/event/src/Dispatcher.php',
@@ -1625,11 +1631,11 @@ class ComposerStaticInitb3f90d0e0764a1ad25163726533579c0
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitb3f90d0e0764a1ad25163726533579c0::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitb3f90d0e0764a1ad25163726533579c0::$prefixDirsPsr4;
-            $loader->fallbackDirsPsr4 = ComposerStaticInitb3f90d0e0764a1ad25163726533579c0::$fallbackDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInitb3f90d0e0764a1ad25163726533579c0::$prefixesPsr0;
-            $loader->classMap = ComposerStaticInitb3f90d0e0764a1ad25163726533579c0::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit18ede78670bacedfc7749c947d43e930::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit18ede78670bacedfc7749c947d43e930::$prefixDirsPsr4;
+            $loader->fallbackDirsPsr4 = ComposerStaticInit18ede78670bacedfc7749c947d43e930::$fallbackDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInit18ede78670bacedfc7749c947d43e930::$prefixesPsr0;
+            $loader->classMap = ComposerStaticInit18ede78670bacedfc7749c947d43e930::$classMap;
 
         }, null, ClassLoader::class);
     }
