@@ -3,7 +3,7 @@
  * @package     Joomla.Site
  * @subpackage  com_content
  *
- * @copyright   Copyright (C) 2005 - 2017 Open Source Matters, Inc. All rights reserved.
+ * @copyright   Copyright (C) 2005 - 2018 Open Source Matters, Inc. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -18,15 +18,6 @@ defined('JPATH_PLATFORM') or die;
  */
 class Dispatcher extends \Joomla\CMS\Dispatcher\Dispatcher
 {
-	/**
-	 * The extension namespace
-	 *
-	 * @var    string
-	 *
-	 * @since  4.0.0
-	 */
-	protected $namespace = 'Joomla\\Component\\Content';
-
 	/**
 	 * Dispatch a controller task. Redirecting the user if appropriate.
 	 *
@@ -59,8 +50,6 @@ class Dispatcher extends \Joomla\CMS\Dispatcher\Dispatcher
 		}
 
 		\JLoader::register('ContentHelperRoute', JPATH_SITE . '/components/com_content/helpers/route.php');
-		\JLoader::register('ContentHelperQuery', JPATH_SITE . '/components/com_content/helpers/query.php');
-		\JLoader::register('ContentHelperAssociation', JPATH_SITE . '/components/com_content/helpers/association.php');
 
 		parent::dispatch();
 	}

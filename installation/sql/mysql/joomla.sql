@@ -495,7 +495,7 @@ INSERT INTO `#__extensions` (`extension_id`, `package_id`, `name`, `type`, `elem
 (7, 0, 'com_checkin', 'component', 'com_checkin', '', 1, 1, 1, 1, '', '', 0, '0000-00-00 00:00:00', 0, 0, 'Joomla\\Component\\Checkin'),
 (8, 0, 'com_contact', 'component', 'com_contact', '', 1, 1, 1, 0, '', '{"contact_layout":"_:default","show_contact_category":"hide","save_history":"1","history_limit":10,"show_contact_list":"0","presentation_style":"sliders","show_tags":"1","show_info":"1","show_name":"1","show_position":"1","show_email":"0","show_street_address":"1","show_suburb":"1","show_state":"1","show_postcode":"1","show_country":"1","show_telephone":"1","show_mobile":"1","show_fax":"1","show_webpage":"1","show_image":"1","show_misc":"1","image":"","allow_vcard":"0","show_articles":"0","articles_display_num":"10","show_profile":"0","show_user_custom_fields":["-1"],"show_links":"0","linka_name":"","linkb_name":"","linkc_name":"","linkd_name":"","linke_name":"","contact_icons":"0","icon_address":"","icon_email":"","icon_telephone":"","icon_mobile":"","icon_fax":"","icon_misc":"","category_layout":"_:default","show_category_title":"1","show_description":"1","show_description_image":"0","maxLevel":"-1","show_subcat_desc":"1","show_empty_categories":"0","show_cat_items":"1","show_cat_tags":"1","show_base_description":"1","maxLevelcat":"-1","show_subcat_desc_cat":"1","show_empty_categories_cat":"0","show_cat_items_cat":"1","filter_field":"0","show_pagination_limit":"0","show_headings":"1","show_image_heading":"0","show_position_headings":"1","show_email_headings":"0","show_telephone_headings":"1","show_mobile_headings":"0","show_fax_headings":"0","show_suburb_headings":"1","show_state_headings":"1","show_country_headings":"1","show_pagination":"2","show_pagination_results":"1","initial_sort":"ordering","captcha":"","show_email_form":"1","show_email_copy":"0","banned_email":"","banned_subject":"","banned_text":"","validate_session":"1","custom_reply":"0","redirect":"","show_feed_link":"1","sef_advanced":0,"sef_ids":0,"custom_fields_enable":"1"}', 0, '0000-00-00 00:00:00', 0, 0, 'Joomla\\Component\\Contact'),
 (9, 0, 'com_cpanel', 'component', 'com_cpanel', '', 1, 1, 1, 1, '', '', 0, '0000-00-00 00:00:00', 0, 0, 'Joomla\\Component\\Cpanel'),
-(10, 0, 'com_installer', 'component', 'com_installer', '', 1, 1, 1, 1, '', '{"show_jed_info":"1","cachetimeout":"6","minimum_stability":"4"}', 0, '0000-00-00 00:00:00', 0, 0, 'Joomla\\Component\\Installer'),
+(10, 0, 'com_installer', 'component', 'com_installer', '', 1, 1, 1, 1, '', '{"cachetimeout":"6","minimum_stability":"4"}', 0, '0000-00-00 00:00:00', 0, 0, 'Joomla\\Component\\Installer'),
 (11, 0, 'com_languages', 'component', 'com_languages', '', 1, 1, 1, 1, '', '{"administrator":"en-GB","site":"en-GB"}', 0, '0000-00-00 00:00:00', 0, 0, 'Joomla\\Component\\Languages'),
 (12, 0, 'com_login', 'component', 'com_login', '', 1, 1, 1, 1, '', '', 0, '0000-00-00 00:00:00', 0, 0, 'Joomla\\Component\\Login'),
 (13, 0, 'com_media', 'component', 'com_media', '', 1, 1, 0, 1, '', '{"upload_extensions":"bmp,csv,doc,gif,ico,jpg,jpeg,odg,odp,ods,odt,pdf,png,ppt,txt,xcf,xls,BMP,CSV,DOC,GIF,ICO,JPG,JPEG,ODG,ODP,ODS,ODT,PDF,PNG,PPT,TXT,XCF,XLS","upload_maxsize":"10","file_path":"images","image_path":"images","restrict_uploads":"1","allowed_media_usergroup":"3","check_mime":"1","image_extensions":"bmp,gif,jpg,png","ignore_extensions":"","upload_mime":"image\\/jpeg,image\\/gif,image\\/png,image\\/bmp,application\\/msword,application\\/excel,application\\/pdf,application\\/powerpoint,text\\/plain,application\\/x-zip","upload_mime_illegal":"text\\/html"}', 0, '0000-00-00 00:00:00', 0, 0, 'Joomla\\Component\\Media'),
@@ -559,7 +559,6 @@ INSERT INTO `#__extensions` (`extension_id`, `package_id`, `name`, `type`, `elem
 (316, 0, 'mod_tags_popular', 'module', 'mod_tags_popular', '', 0, 1, 1, 0, '', '{"maximum":"5","timeframe":"alltime","owncache":"1"}', 0, '0000-00-00 00:00:00', 0, 0, ''),
 (317, 0, 'mod_tags_similar', 'module', 'mod_tags_similar', '', 0, 1, 1, 0, '', '{"maximum":"5","matchtype":"any","owncache":"1"}', 0, '0000-00-00 00:00:00', 0, 0, ''),
 (318, 0, 'mod_sampledata', 'module', 'mod_sampledata', '', 1, 1, 1, 0, '', '{}', 0, '0000-00-00 00:00:00', 0, 0, ''),
-(400, 0, 'plg_authentication_gmail', 'plugin', 'gmail', 'authentication', 0, 0, 1, 0, '', '{"applysuffix":"0","suffix":"","verifypeer":"1","user_blacklist":""}', 0, '0000-00-00 00:00:00', 1, 0, ''),
 (401, 0, 'plg_authentication_joomla', 'plugin', 'joomla', 'authentication', 0, 1, 1, 1, '', '', 0, '0000-00-00 00:00:00', 0, 0, ''),
 (402, 0, 'plg_authentication_ldap', 'plugin', 'ldap', 'authentication', 0, 0, 1, 0, '', '{"host":"","port":"389","use_ldapV3":"0","negotiate_tls":"0","no_referrals":"0","auth_method":"bind","base_dn":"","search_string":"","users_dn":"","username":"admin","password":"bobby7","ldap_fullname":"fullName","ldap_email":"mail","ldap_uid":"uid"}', 0, '0000-00-00 00:00:00', 3, 0, ''),
 (403, 0, 'plg_content_contact', 'plugin', 'contact', 'content', 0, 1, 1, 0, '', '', 0, '0000-00-00 00:00:00', 1, 0, ''),
@@ -642,7 +641,8 @@ INSERT INTO `#__extensions` (`extension_id`, `package_id`, `name`, `type`, `elem
 (484, 0, 'plg_media-action_resize', 'plugin', 'resize', 'media-action', 0, 1, 1, 0, '', '{}', 0, '0000-00-00 00:00:00', 0, 0, ''),
 (485, 0, 'plg_media-action_rotate', 'plugin', 'rotate', 'media-action', 0, 1, 1, 0, '', '{}', 0, '0000-00-00 00:00:00', 0, 0, ''),
 (486, 0, 'plg_installer_webinstaller', 'plugin', 'webinstaller', 'installer', 0, 1, 1, 0, '', '{"tab_position":"1"}', 0, '0000-00-00 00:00:00', 0, 0, ''),
-(487, 0, 'plg_system_httpheader', 'plugin', 'httpheader', 'system', 0, 1, 1, 0, '', '{}', 0, '0000-00-00 00:00:00', 0, 0, ''),
+(487, 0, 'plg_system_httpheaders', 'plugin', 'httpheaders', 'system', 0, 1, 1, 0, '', '{}', 0, '0000-00-00 00:00:00', 0, 0, ''),
+(488, 0, 'plg_sampledata_multilang', 'plugin', 'multilang', 'sampledata', 0, 1, 1, 0, '', '', 0, '0000-00-00 00:00:00', 0, 0, ''),
 (509, 0, 'atum', 'template', 'atum', '', 1, 1, 1, 0, '', '', 0, '0000-00-00 00:00:00', 0, 0, ''),
 (510, 0, 'cassiopeia', 'template', 'cassiopeia', '', 0, 1, 1, 0, '', '{"logoFile":"","fluidContainer":"0","sidebarLeftWidth":"3","sidebarRightWidth":"3"}', 0, '0000-00-00 00:00:00', 0, 0, ''),
 (600, 802, 'English (en-GB)', 'language', 'en-GB', '', 0, 1, 1, 1, '', '', 0, '0000-00-00 00:00:00', 0, 0, ''),
@@ -790,7 +790,7 @@ CREATE TABLE IF NOT EXISTS `#__finder_links` (
   `published` tinyint(1) NOT NULL DEFAULT 1,
   `state` int(5) DEFAULT 1,
   `access` int(5) DEFAULT 0,
-  `language` varchar(8) NOT NULL,
+  `language` char(7) NOT NULL DEFAULT '',
   `publish_start_date` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `publish_end_date` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `start_date` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
@@ -811,235 +811,10 @@ CREATE TABLE IF NOT EXISTS `#__finder_links` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `#__finder_links_terms0`
+-- Table structure for table `#__finder_links_terms`
 --
 
-CREATE TABLE IF NOT EXISTS `#__finder_links_terms0` (
-  `link_id` int(10) unsigned NOT NULL,
-  `term_id` int(10) unsigned NOT NULL,
-  `weight` float unsigned NOT NULL,
-  PRIMARY KEY (`link_id`,`term_id`),
-  KEY `idx_term_weight` (`term_id`,`weight`),
-  KEY `idx_link_term_weight` (`link_id`,`term_id`,`weight`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 DEFAULT COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `#__finder_links_terms1`
---
-
-CREATE TABLE IF NOT EXISTS `#__finder_links_terms1` (
-  `link_id` int(10) unsigned NOT NULL,
-  `term_id` int(10) unsigned NOT NULL,
-  `weight` float unsigned NOT NULL,
-  PRIMARY KEY (`link_id`,`term_id`),
-  KEY `idx_term_weight` (`term_id`,`weight`),
-  KEY `idx_link_term_weight` (`link_id`,`term_id`,`weight`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 DEFAULT COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `#__finder_links_terms2`
---
-
-CREATE TABLE IF NOT EXISTS `#__finder_links_terms2` (
-  `link_id` int(10) unsigned NOT NULL,
-  `term_id` int(10) unsigned NOT NULL,
-  `weight` float unsigned NOT NULL,
-  PRIMARY KEY (`link_id`,`term_id`),
-  KEY `idx_term_weight` (`term_id`,`weight`),
-  KEY `idx_link_term_weight` (`link_id`,`term_id`,`weight`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 DEFAULT COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `#__finder_links_terms3`
---
-
-CREATE TABLE IF NOT EXISTS `#__finder_links_terms3` (
-  `link_id` int(10) unsigned NOT NULL,
-  `term_id` int(10) unsigned NOT NULL,
-  `weight` float unsigned NOT NULL,
-  PRIMARY KEY (`link_id`,`term_id`),
-  KEY `idx_term_weight` (`term_id`,`weight`),
-  KEY `idx_link_term_weight` (`link_id`,`term_id`,`weight`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 DEFAULT COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `#__finder_links_terms4`
---
-
-CREATE TABLE IF NOT EXISTS `#__finder_links_terms4` (
-  `link_id` int(10) unsigned NOT NULL,
-  `term_id` int(10) unsigned NOT NULL,
-  `weight` float unsigned NOT NULL,
-  PRIMARY KEY (`link_id`,`term_id`),
-  KEY `idx_term_weight` (`term_id`,`weight`),
-  KEY `idx_link_term_weight` (`link_id`,`term_id`,`weight`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 DEFAULT COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `#__finder_links_terms5`
---
-
-CREATE TABLE IF NOT EXISTS `#__finder_links_terms5` (
-  `link_id` int(10) unsigned NOT NULL,
-  `term_id` int(10) unsigned NOT NULL,
-  `weight` float unsigned NOT NULL,
-  PRIMARY KEY (`link_id`,`term_id`),
-  KEY `idx_term_weight` (`term_id`,`weight`),
-  KEY `idx_link_term_weight` (`link_id`,`term_id`,`weight`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 DEFAULT COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `#__finder_links_terms6`
---
-
-CREATE TABLE IF NOT EXISTS `#__finder_links_terms6` (
-  `link_id` int(10) unsigned NOT NULL,
-  `term_id` int(10) unsigned NOT NULL,
-  `weight` float unsigned NOT NULL,
-  PRIMARY KEY (`link_id`,`term_id`),
-  KEY `idx_term_weight` (`term_id`,`weight`),
-  KEY `idx_link_term_weight` (`link_id`,`term_id`,`weight`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 DEFAULT COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `#__finder_links_terms7`
---
-
-CREATE TABLE IF NOT EXISTS `#__finder_links_terms7` (
-  `link_id` int(10) unsigned NOT NULL,
-  `term_id` int(10) unsigned NOT NULL,
-  `weight` float unsigned NOT NULL,
-  PRIMARY KEY (`link_id`,`term_id`),
-  KEY `idx_term_weight` (`term_id`,`weight`),
-  KEY `idx_link_term_weight` (`link_id`,`term_id`,`weight`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 DEFAULT COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `#__finder_links_terms8`
---
-
-CREATE TABLE IF NOT EXISTS `#__finder_links_terms8` (
-  `link_id` int(10) unsigned NOT NULL,
-  `term_id` int(10) unsigned NOT NULL,
-  `weight` float unsigned NOT NULL,
-  PRIMARY KEY (`link_id`,`term_id`),
-  KEY `idx_term_weight` (`term_id`,`weight`),
-  KEY `idx_link_term_weight` (`link_id`,`term_id`,`weight`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 DEFAULT COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `#__finder_links_terms9`
---
-
-CREATE TABLE IF NOT EXISTS `#__finder_links_terms9` (
-  `link_id` int(10) unsigned NOT NULL,
-  `term_id` int(10) unsigned NOT NULL,
-  `weight` float unsigned NOT NULL,
-  PRIMARY KEY (`link_id`,`term_id`),
-  KEY `idx_term_weight` (`term_id`,`weight`),
-  KEY `idx_link_term_weight` (`link_id`,`term_id`,`weight`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 DEFAULT COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `#__finder_links_termsa`
---
-
-CREATE TABLE IF NOT EXISTS `#__finder_links_termsa` (
-  `link_id` int(10) unsigned NOT NULL,
-  `term_id` int(10) unsigned NOT NULL,
-  `weight` float unsigned NOT NULL,
-  PRIMARY KEY (`link_id`,`term_id`),
-  KEY `idx_term_weight` (`term_id`,`weight`),
-  KEY `idx_link_term_weight` (`link_id`,`term_id`,`weight`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 DEFAULT COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `#__finder_links_termsb`
---
-
-CREATE TABLE IF NOT EXISTS `#__finder_links_termsb` (
-  `link_id` int(10) unsigned NOT NULL,
-  `term_id` int(10) unsigned NOT NULL,
-  `weight` float unsigned NOT NULL,
-  PRIMARY KEY (`link_id`,`term_id`),
-  KEY `idx_term_weight` (`term_id`,`weight`),
-  KEY `idx_link_term_weight` (`link_id`,`term_id`,`weight`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 DEFAULT COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `#__finder_links_termsc`
---
-
-CREATE TABLE IF NOT EXISTS `#__finder_links_termsc` (
-  `link_id` int(10) unsigned NOT NULL,
-  `term_id` int(10) unsigned NOT NULL,
-  `weight` float unsigned NOT NULL,
-  PRIMARY KEY (`link_id`,`term_id`),
-  KEY `idx_term_weight` (`term_id`,`weight`),
-  KEY `idx_link_term_weight` (`link_id`,`term_id`,`weight`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 DEFAULT COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `#__finder_links_termsd`
---
-
-CREATE TABLE IF NOT EXISTS `#__finder_links_termsd` (
-  `link_id` int(10) unsigned NOT NULL,
-  `term_id` int(10) unsigned NOT NULL,
-  `weight` float unsigned NOT NULL,
-  PRIMARY KEY (`link_id`,`term_id`),
-  KEY `idx_term_weight` (`term_id`,`weight`),
-  KEY `idx_link_term_weight` (`link_id`,`term_id`,`weight`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 DEFAULT COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `#__finder_links_termse`
---
-
-CREATE TABLE IF NOT EXISTS `#__finder_links_termse` (
-  `link_id` int(10) unsigned NOT NULL,
-  `term_id` int(10) unsigned NOT NULL,
-  `weight` float unsigned NOT NULL,
-  PRIMARY KEY (`link_id`,`term_id`),
-  KEY `idx_term_weight` (`term_id`,`weight`),
-  KEY `idx_link_term_weight` (`link_id`,`term_id`,`weight`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 DEFAULT COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `#__finder_links_termsf`
---
-
-CREATE TABLE IF NOT EXISTS `#__finder_links_termsf` (
+CREATE TABLE IF NOT EXISTS `#__finder_links_terms` (
   `link_id` int(10) unsigned NOT NULL,
   `term_id` int(10) unsigned NOT NULL,
   `weight` float unsigned NOT NULL,
@@ -1105,7 +880,7 @@ CREATE TABLE IF NOT EXISTS `#__finder_terms` (
   `weight` float unsigned NOT NULL DEFAULT 0,
   `soundex` varchar(75) NOT NULL,
   `links` int(10) NOT NULL DEFAULT 0,
-  `language` char(3) NOT NULL DEFAULT '',
+  `language` char(7) NOT NULL DEFAULT '',
   PRIMARY KEY (`term_id`),
   UNIQUE KEY `idx_term` (`term`),
   KEY `idx_term_phrase` (`term`,`phrase`),
@@ -1121,7 +896,7 @@ CREATE TABLE IF NOT EXISTS `#__finder_terms` (
 
 CREATE TABLE IF NOT EXISTS `#__finder_terms_common` (
   `term` varchar(75) NOT NULL,
-  `language` varchar(3) NOT NULL,
+  `language` char(7) NOT NULL DEFAULT '',
   KEY `idx_word_lang` (`term`,`language`),
   KEY `idx_lang` (`language`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 DEFAULT COLLATE=utf8mb4_general_ci;
@@ -1131,116 +906,116 @@ CREATE TABLE IF NOT EXISTS `#__finder_terms_common` (
 --
 
 INSERT INTO `#__finder_terms_common` (`term`, `language`) VALUES
-('a', 'en'),
-('about', 'en'),
-('after', 'en'),
-('ago', 'en'),
-('all', 'en'),
-('am', 'en'),
-('an', 'en'),
-('and', 'en'),
-('any', 'en'),
-('are', 'en'),
-('aren''t', 'en'),
-('as', 'en'),
-('at', 'en'),
-('be', 'en'),
-('but', 'en'),
-('by', 'en'),
-('for', 'en'),
-('from', 'en'),
-('get', 'en'),
-('go', 'en'),
-('how', 'en'),
-('if', 'en'),
-('in', 'en'),
-('into', 'en'),
-('is', 'en'),
-('isn''t', 'en'),
-('it', 'en'),
-('its', 'en'),
-('me', 'en'),
-('more', 'en'),
-('most', 'en'),
-('must', 'en'),
-('my', 'en'),
-('new', 'en'),
-('no', 'en'),
-('none', 'en'),
-('not', 'en'),
-('nothing', 'en'),
-('of', 'en'),
-('off', 'en'),
-('often', 'en'),
-('old', 'en'),
-('on', 'en'),
-('onc', 'en'),
-('once', 'en'),
-('only', 'en'),
-('or', 'en'),
-('other', 'en'),
-('our', 'en'),
-('ours', 'en'),
-('out', 'en'),
-('over', 'en'),
-('page', 'en'),
-('she', 'en'),
-('should', 'en'),
-('small', 'en'),
-('so', 'en'),
-('some', 'en'),
-('than', 'en'),
-('thank', 'en'),
-('that', 'en'),
-('the', 'en'),
-('their', 'en'),
-('theirs', 'en'),
-('them', 'en'),
-('then', 'en'),
-('there', 'en'),
-('these', 'en'),
-('they', 'en'),
-('this', 'en'),
-('those', 'en'),
-('thus', 'en'),
-('time', 'en'),
-('times', 'en'),
-('to', 'en'),
-('too', 'en'),
-('true', 'en'),
-('under', 'en'),
-('until', 'en'),
-('up', 'en'),
-('upon', 'en'),
-('use', 'en'),
-('user', 'en'),
-('users', 'en'),
-('version', 'en'),
-('very', 'en'),
-('via', 'en'),
-('want', 'en'),
-('was', 'en'),
-('way', 'en'),
-('were', 'en'),
-('what', 'en'),
-('when', 'en'),
-('where', 'en'),
-('which', 'en'),
-('who', 'en'),
-('whom', 'en'),
-('whose', 'en'),
-('why', 'en'),
-('wide', 'en'),
-('will', 'en'),
-('with', 'en'),
-('within', 'en'),
-('without', 'en'),
-('would', 'en'),
-('yes', 'en'),
-('yet', 'en'),
-('you', 'en'),
-('your', 'en'),
-('yours', 'en');
+('a', 'en-GB'),
+('about', 'en-GB'),
+('after', 'en-GB'),
+('ago', 'en-GB'),
+('all', 'en-GB'),
+('am', 'en-GB'),
+('an', 'en-GB'),
+('and', 'en-GB'),
+('any', 'en-GB'),
+('are', 'en-GB'),
+('aren''t', 'en-GB'),
+('as', 'en-GB'),
+('at', 'en-GB'),
+('be', 'en-GB'),
+('but', 'en-GB'),
+('by', 'en-GB'),
+('for', 'en-GB'),
+('from', 'en-GB'),
+('get', 'en-GB'),
+('go', 'en-GB'),
+('how', 'en-GB'),
+('if', 'en-GB'),
+('in', 'en-GB'),
+('into', 'en-GB'),
+('is', 'en-GB'),
+('isn''t', 'en-GB'),
+('it', 'en-GB'),
+('its', 'en-GB'),
+('me', 'en-GB'),
+('more', 'en-GB'),
+('most', 'en-GB'),
+('must', 'en-GB'),
+('my', 'en-GB'),
+('new', 'en-GB'),
+('no', 'en-GB'),
+('none', 'en-GB'),
+('not', 'en-GB'),
+('nothing', 'en-GB'),
+('of', 'en-GB'),
+('off', 'en-GB'),
+('often', 'en-GB'),
+('old', 'en-GB'),
+('on', 'en-GB'),
+('onc', 'en-GB'),
+('once', 'en-GB'),
+('only', 'en-GB'),
+('or', 'en-GB'),
+('other', 'en-GB'),
+('our', 'en-GB'),
+('ours', 'en-GB'),
+('out', 'en-GB'),
+('over', 'en-GB'),
+('page', 'en-GB'),
+('she', 'en-GB'),
+('should', 'en-GB'),
+('small', 'en-GB'),
+('so', 'en-GB'),
+('some', 'en-GB'),
+('than', 'en-GB'),
+('thank', 'en-GB'),
+('that', 'en-GB'),
+('the', 'en-GB'),
+('their', 'en-GB'),
+('theirs', 'en-GB'),
+('them', 'en-GB'),
+('then', 'en-GB'),
+('there', 'en-GB'),
+('these', 'en-GB'),
+('they', 'en-GB'),
+('this', 'en-GB'),
+('those', 'en-GB'),
+('thus', 'en-GB'),
+('time', 'en-GB'),
+('times', 'en-GB'),
+('to', 'en-GB'),
+('too', 'en-GB'),
+('true', 'en-GB'),
+('under', 'en-GB'),
+('until', 'en-GB'),
+('up', 'en-GB'),
+('upon', 'en-GB'),
+('use', 'en-GB'),
+('user', 'en-GB'),
+('users', 'en-GB'),
+('version', 'en-GB'),
+('very', 'en-GB'),
+('via', 'en-GB'),
+('want', 'en-GB'),
+('was', 'en-GB'),
+('way', 'en-GB'),
+('were', 'en-GB'),
+('what', 'en-GB'),
+('when', 'en-GB'),
+('where', 'en-GB'),
+('which', 'en-GB'),
+('who', 'en-GB'),
+('whom', 'en-GB'),
+('whose', 'en-GB'),
+('why', 'en-GB'),
+('wide', 'en-GB'),
+('will', 'en-GB'),
+('with', 'en-GB'),
+('within', 'en-GB'),
+('without', 'en-GB'),
+('would', 'en-GB'),
+('yes', 'en-GB'),
+('yet', 'en-GB'),
+('you', 'en-GB'),
+('your', 'en-GB'),
+('yours', 'en-GB');
 
 -- --------------------------------------------------------
 
@@ -1255,7 +1030,7 @@ CREATE TABLE IF NOT EXISTS `#__finder_tokens` (
   `phrase` tinyint(1) unsigned NOT NULL DEFAULT 0,
   `weight` float unsigned NOT NULL DEFAULT 1,
   `context` tinyint(1) unsigned NOT NULL DEFAULT 2,
-  `language` char(3) NOT NULL DEFAULT '',
+  `language` char(7) NOT NULL DEFAULT '',
   KEY `idx_word` (`term`),
   KEY `idx_context` (`context`)
 ) ENGINE=MEMORY DEFAULT CHARSET=utf8mb4 DEFAULT COLLATE=utf8mb4_general_ci;
@@ -1268,7 +1043,6 @@ CREATE TABLE IF NOT EXISTS `#__finder_tokens` (
 
 CREATE TABLE IF NOT EXISTS `#__finder_tokens_aggregate` (
   `term_id` int(10) unsigned NOT NULL,
-  `map_suffix` char(1) NOT NULL,
   `term` varchar(75) NOT NULL,
   `stem` varchar(75) NOT NULL,
   `common` tinyint(1) unsigned NOT NULL DEFAULT 0,
@@ -1277,7 +1051,7 @@ CREATE TABLE IF NOT EXISTS `#__finder_tokens_aggregate` (
   `context` tinyint(1) unsigned NOT NULL DEFAULT 2,
   `context_weight` float unsigned NOT NULL,
   `total_weight` float unsigned NOT NULL,
-  `language` char(3) NOT NULL DEFAULT '',
+  `language` char(7) NOT NULL DEFAULT '',
   KEY `token` (`term`),
   KEY `keyword_id` (`term_id`)
 ) ENGINE=MEMORY DEFAULT CHARSET=utf8mb4 DEFAULT COLLATE=utf8mb4_general_ci;
@@ -1468,7 +1242,7 @@ CREATE TABLE IF NOT EXISTS `#__modules` (
   `asset_id` int(10) unsigned NOT NULL DEFAULT 0 COMMENT 'FK to the #__assets table.',
   `title` varchar(100) NOT NULL DEFAULT '',
   `note` varchar(255) NOT NULL DEFAULT '',
-  `content` text NOT NULL DEFAULT '',
+  `content` text NULL,
   `ordering` int(11) NOT NULL DEFAULT 0,
   `position` varchar(50) NOT NULL DEFAULT '',
   `checked_out` int(10) unsigned NOT NULL DEFAULT 0,
@@ -1639,7 +1413,8 @@ INSERT INTO `#__postinstall_messages` (`extension_id`, `title_key`, `description
 (700, 'PLG_TWOFACTORAUTH_TOTP_POSTINSTALL_TITLE', 'PLG_TWOFACTORAUTH_TOTP_POSTINSTALL_BODY', 'PLG_TWOFACTORAUTH_TOTP_POSTINSTALL_ACTION', 'plg_twofactorauth_totp', 1, 'action', 'site://plugins/twofactorauth/totp/postinstall/actions.php', 'twofactorauth_postinstall_action', 'site://plugins/twofactorauth/totp/postinstall/actions.php', 'twofactorauth_postinstall_condition', '3.2.0', 1),
 (700, 'COM_CPANEL_WELCOME_BEGINNERS_TITLE', 'COM_CPANEL_WELCOME_BEGINNERS_MESSAGE', '', 'com_cpanel', 1, 'message', '', '', '', '', '3.2.0', 1),
 (700, 'COM_CPANEL_MSG_STATS_COLLECTION_TITLE', 'COM_CPANEL_MSG_STATS_COLLECTION_BODY', '', 'com_cpanel', 1, 'message', '', '', 'admin://components/com_admin/postinstall/statscollection.php', 'admin_postinstall_statscollection_condition', '3.5.0', 1),
-(700, 'PLG_SYSTEM_UPDATENOTIFICATION_POSTINSTALL_UPDATECACHETIME', 'PLG_SYSTEM_UPDATENOTIFICATION_POSTINSTALL_UPDATECACHETIME_BODY', 'PLG_SYSTEM_UPDATENOTIFICATION_POSTINSTALL_UPDATECACHETIME_ACTION', 'plg_system_updatenotification', 1, 'action', 'site://plugins/system/updatenotification/postinstall/updatecachetime.php', 'updatecachetime_postinstall_action', 'site://plugins/system/updatenotification/postinstall/updatecachetime.php', 'updatecachetime_postinstall_condition', '3.6.3', 1);
+(700, 'PLG_SYSTEM_UPDATENOTIFICATION_POSTINSTALL_UPDATECACHETIME', 'PLG_SYSTEM_UPDATENOTIFICATION_POSTINSTALL_UPDATECACHETIME_BODY', 'PLG_SYSTEM_UPDATENOTIFICATION_POSTINSTALL_UPDATECACHETIME_ACTION', 'plg_system_updatenotification', 1, 'action', 'site://plugins/system/updatenotification/postinstall/updatecachetime.php', 'updatecachetime_postinstall_action', 'site://plugins/system/updatenotification/postinstall/updatecachetime.php', 'updatecachetime_postinstall_condition', '3.6.3', 1),
+(700, 'PLG_SYSTEM_HTTPHEADERS_POSTINSTALL_INTRODUCTION_TITLE', 'PLG_SYSTEM_HTTPHEADERS_POSTINSTALL_INTRODUCTION_BODY', 'PLG_SYSTEM_HTTPHEADERS_POSTINSTALL_INTRODUCTION_ACTION', 'plg_system_httpheaders', 1, 'action', 'site://plugins/system/httpheaders/postinstall/introduction.php', 'httpheaders_postinstall_action', 'site://plugins/system/httpheaders/postinstall/introduction.php', 'httpheaders_postinstall_condition', '4.0.0', 1);
 -- --------------------------------------------------------
 
 --
@@ -2016,8 +1791,6 @@ CREATE TABLE IF NOT EXISTS `#__user_keys` (
   `uastring` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `series` (`series`),
-  UNIQUE KEY `series_2` (`series`),
-  UNIQUE KEY `series_3` (`series`),
   KEY `user_id` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 DEFAULT COLLATE=utf8mb4_unicode_ci;
 
