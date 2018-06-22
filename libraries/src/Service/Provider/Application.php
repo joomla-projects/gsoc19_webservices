@@ -14,9 +14,11 @@ defined('JPATH_PLATFORM') or die;
 use Joomla\CMS\Console\SessionGcCommand;
 use Joomla\Console\Application as BaseConsoleApplication;
 use Joomla\CMS\Application\AdministratorApplication;
+use Joomla\CMS\Application\ApiApplication;
 use Joomla\CMS\Application\ConsoleApplication;
 use Joomla\CMS\Application\SiteApplication;
 use Joomla\CMS\Factory;
+use Joomla\CMS\Log\Log;
 use Joomla\CMS\Session\Session;
 use Joomla\Console\Loader\ContainerLoader;
 use Joomla\Console\Loader\LoaderInterface;
@@ -46,8 +48,7 @@ class Application implements ServiceProviderInterface
 		$container->alias(AdministratorApplication::class, 'JApplicationAdministrator')
 			->share(
 				'JApplicationAdministrator',
-				function (Container $container)
-				{
+				function (Container $container) {
 					$app = new AdministratorApplication(null, $container->get('config'), null, $container);
 
 					// The session service provider needs Factory::$application, set it if still null
@@ -68,8 +69,7 @@ class Application implements ServiceProviderInterface
 		$container->alias(SiteApplication::class, 'JApplicationSite')
 			->share(
 				'JApplicationSite',
-				function (Container $container)
-				{
+				function (Container $container) {
 					$app = new SiteApplication(null, $container->get('config'), null, $container);
 
 					// The session service provider needs Factory::$application, set it if still null
@@ -90,8 +90,7 @@ class Application implements ServiceProviderInterface
 		$container->alias(ConsoleApplication::class, BaseConsoleApplication::class)
 			->share(
 				BaseConsoleApplication::class,
-				function (Container $container)
-				{
+				function (Container $container) {
 					$app = new ConsoleApplication(null, $container->get('config'));
 
 					$dispatcher = $container->get('Joomla\Event\DispatcherInterface');
@@ -113,15 +112,34 @@ class Application implements ServiceProviderInterface
 		$container->alias(ContainerLoader::class, LoaderInterface::class)
 			->share(
 				LoaderInterface::class,
-				function (Container $container)
-				{
+				function (Container $container) {
 					$mapping = [
 						'session:gc' => SessionGcCommand::class,
 					];
-
 					return new ContainerLoader($container, $mapping);
 				},
 				true
 			);
+
+		$container->alias(ApiApplication::class, "JApplicationApi")
+			->share(
+			'JApplicationApi',
+			function (Container $container) {
+				$app = new ApiApplication(null, null, null, $container);
+
+				// The session service provider needs JFactory::$application, set it if still null
+				if (Factory::$application === null)
+				{
+					Factory::$application = $app;
+				}
+
+				$app->setDispatcher($container->get('Joomla\Event\DispatcherInterface'));
+				$app->setLogger(Log::createDelegatedLogger());
+				$app->setSession($container->get('Joomla\Session\SessionInterface'));
+
+				return $app;
+			},
+			true
+		);
 	}
 }

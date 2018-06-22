@@ -14,6 +14,7 @@ use Joomla\CMS\Application\CMSApplicationInterface;
 use Joomla\CMS\Categories\Categories;
 use Joomla\CMS\Categories\CategoriesServiceInterface;
 use Joomla\CMS\Categories\SectionNotFoundException;
+use Joomla\CMS\Dispatcher\ApiDispatcher;
 use Joomla\CMS\Dispatcher\DispatcherInterface;
 use Joomla\CMS\Dispatcher\LegacyDispatcher;
 use Joomla\CMS\Fields\FieldsServiceInterface;
@@ -59,6 +60,16 @@ class LegacyComponent implements ComponentInterface, MVCFactoryServiceInterface,
 	 */
 	public function getDispatcher(CMSApplicationInterface $application): DispatcherInterface
 	{
+		if ($application->isClient('api'))
+		{
+			/*
+			 * We're in the API App and the component doesn't have a API integration yet. So we are going to use our
+			 * 'special' dispatcher that is going to pipe all it's traffic through, and do it's own rendering. We just
+			 *  need some mappings we'll grab from the existing (and previously unused) $params array
+			 */
+			return new ApiDispatcher($application, $application->input);
+		}
+
 		return new LegacyDispatcher($application);
 	}
 
