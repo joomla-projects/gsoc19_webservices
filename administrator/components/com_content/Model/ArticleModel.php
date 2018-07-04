@@ -11,16 +11,16 @@ namespace Joomla\Component\Content\Administrator\Model;
 
 defined('_JEXEC') or die;
 
+use Joomla\CMS\MVC\EntityModel\AdminEntityModel;
+use Joomla\Entity\Model;
 use Joomla\Registry\Registry;
-use Joomla\Utilities\ArrayHelper;
-use Joomla\CMS\MVC\Model\AdminModel;
 
 /**
  * Item Model for an Article.
  *
  * @since  1.6
  */
-class ArticleModel extends AdminModel
+class ArticleModel extends Model
 {
 	/**
 	 * The prefix to use with controller messages.
@@ -45,117 +45,6 @@ class ArticleModel extends AdminModel
 	 * @since  3.4.4
 	 */
 	protected $associationsContext = 'com_content.item';
-
-	/**
-	 * Batch copy items to a new category or current.
-	 *
-	 * @param   integer  $value     The new category.
-	 * @param   array    $pks       An array of row IDs.
-	 * @param   array    $contexts  An array of item contexts.
-	 *
-	 * @return  mixed  An array of new IDs on success, boolean false on failure.
-	 *
-	 * @since   11.1
-	 */
-	protected function batchCopy($value, $pks, $contexts)
-	{
-		$categoryId = (int) $value;
-
-		$newIds = array();
-
-		if (!$this->checkCategoryId($categoryId))
-		{
-			return false;
-		}
-
-		// Parent exists so we let's proceed
-		while (!empty($pks))
-		{
-			// Pop the first ID off the stack
-			$pk = array_shift($pks);
-
-			$this->table->reset();
-
-			// Check that the row actually exists
-			if (!$this->table->load($pk))
-			{
-				if ($error = $this->table->getError())
-				{
-					// Fatal error
-					$this->setError($error);
-
-					return false;
-				}
-				else
-				{
-					// Not fatal error
-					$this->setError(\JText::sprintf('JLIB_APPLICATION_ERROR_BATCH_MOVE_ROW_NOT_FOUND', $pk));
-					continue;
-				}
-			}
-
-			// Alter the title & alias
-			$data = $this->generateNewTitle($categoryId, $this->table->alias, $this->table->title);
-			$this->table->title = $data['0'];
-			$this->table->alias = $data['1'];
-
-			// Reset the ID because we are making a copy
-			$this->table->id = 0;
-
-			// Reset hits because we are making a copy
-			$this->table->hits = 0;
-
-			// Unpublish because we are making a copy
-			$this->table->state = 0;
-
-			// New category ID
-			$this->table->catid = $categoryId;
-
-			// TODO: Deal with ordering?
-			// $table->ordering	= 1;
-
-			// Get the featured state
-			$featured = $this->table->featured;
-
-			// Check the row.
-			if (!$this->table->check())
-			{
-				$this->setError($this->table->getError());
-
-				return false;
-			}
-
-			// Store the row.
-			if (!$this->table->store())
-			{
-				$this->setError($this->table->getError());
-
-				return false;
-			}
-
-			// Get the new item ID
-			$newId = $this->table->get('id');
-
-			// Add the new ID to the array
-			$newIds[$pk] = $newId;
-
-			// Check if the article was featured and update the #__content_frontpage table
-			if ($featured == 1)
-			{
-				$db = $this->getDbo();
-				$query = $db->getQuery(true)
-					->insert($db->quoteName('#__content_frontpage'))
-					->values($newId . ', 0');
-				$db->setQuery($query);
-				$db->execute();
-			}
-		}
-
-		// Clean the cache
-		$this->cleanCache();
-
-		return $newIds;
-	}
 
 	/**
 	 * Method to test whether a record can be deleted.
@@ -209,95 +98,6 @@ class ArticleModel extends AdminModel
 
 		// Default to component settings if neither article nor category known.
 		return parent::canEditState($record);
-	}
-
-	/**
-	 * Prepare and sanitise the table data prior to saving.
-	 *
-	 * @param   \Joomla\CMS\Table\Table  $table  A Table object.
-	 *
-	 * @return  void
-	 *
-	 * @since   1.6
-	 */
-	protected function prepareTable($table)
-	{
-		// Set the publish date to now
-		if ($table->state == 1 && (int) $table->publish_up == 0)
-		{
-			$table->publish_up = \JFactory::getDate()->toSql();
-		}
-
-		if ($table->state == 1 && intval($table->publish_down) == 0)
-		{
-			$table->publish_down = $this->getDbo()->getNullDate();
-		}
-
-		// Increment the content version number.
-		$table->version++;
-
-		// Reorder the articles within the category so the new article is first
-		if (empty($table->id))
-		{
-			$table->reorder('catid = ' . (int) $table->catid . ' AND state >= 0');
-		}
-	}
-
-	/**
-	 * Method to get a single record.
-	 *
-	 * @param   integer  $pk  The id of the primary key.
-	 *
-	 * @return  mixed  Object on success, false on failure.
-	 */
-	public function getItem($pk = null)
-	{
-		if ($item = parent::getItem($pk))
-		{
-			// Convert the params field to an array.
-			$registry = new Registry($item->attribs);
-			$item->attribs = $registry->toArray();
-
-			// Convert the metadata field to an array.
-			$registry = new Registry($item->metadata);
-			$item->metadata = $registry->toArray();
-
-			// Convert the images field to an array.
-			$registry = new Registry($item->images);
-			$item->images = $registry->toArray();
-
-			// Convert the urls field to an array.
-			$registry = new Registry($item->urls);
-			$item->urls = $registry->toArray();
-
-			$item->articletext = trim($item->fulltext) != '' ? $item->introtext . "<hr id=\"system-readmore\">" . $item->fulltext : $item->introtext;
-
-			if (!empty($item->id))
-			{
-				$item->tags = new \JHelperTags;
-				$item->tags->getTagIds($item->id, 'com_content.article');
-			}
-		}
-
-		// Load associated content items
-		$assoc = \JLanguageAssociations::isEnabled();
-
-		if ($assoc)
-		{
-			$item->associations = array();
-
-			if ($item->id != null)
-			{
-				$associations = \JLanguageAssociations::getAssociations('com_content', '#__content', 'com_content.item', $item->id);
-
-				foreach ($associations as $tag => $association)
-				{
-					$item->associations[$tag] = $association->id;
-				}
-			}
-		}
-
-		return $item;
 	}
 
 	/**
@@ -478,142 +278,9 @@ class ArticleModel extends AdminModel
 	 *
 	 * @since   1.6
 	 */
-	public function save($data)
+	public function saveFormData($data)
 	{
-		$input  = \JFactory::getApplication()->input;
-		$filter = \JFilterInput::getInstance();
-
-		if (isset($data['metadata']) && isset($data['metadata']['author']))
-		{
-			$data['metadata']['author'] = $filter->clean($data['metadata']['author'], 'TRIM');
-		}
-
-		if (isset($data['created_by_alias']))
-		{
-			$data['created_by_alias'] = $filter->clean($data['created_by_alias'], 'TRIM');
-		}
-
-		if (isset($data['images']) && is_array($data['images']))
-		{
-			$registry = new Registry($data['images']);
-
-			$data['images'] = (string) $registry;
-		}
-
-		\JLoader::register('CategoriesHelper', JPATH_ADMINISTRATOR . '/components/com_categories/helpers/categories.php');
-
-		// Cast catid to integer for comparison
-		$catid = (int) $data['catid'];
-
-		// Check if New Category exists
-		if ($catid > 0)
-		{
-			$catid = \CategoriesHelper::validateCategoryId($data['catid'], 'com_content');
-		}
-
-		// Save New Category
-		if ($catid == 0 && $this->canCreateCategory())
-		{
-			$table = array();
-			$table['title'] = $data['catid'];
-			$table['parent_id'] = 1;
-			$table['extension'] = 'com_content';
-			$table['language'] = $data['language'];
-			$table['published'] = 1;
-
-			// Create new category and get catid back
-			$data['catid'] = \CategoriesHelper::createCategory($table);
-		}
-
-		if (isset($data['urls']) && is_array($data['urls']))
-		{
-			$check = $input->post->get('jform', array(), 'array');
-
-			foreach ($data['urls'] as $i => $url)
-			{
-				if ($url != false && ($i == 'urla' || $i == 'urlb' || $i == 'urlc'))
-				{
-					if (preg_match('~^#[a-zA-Z]{1}[a-zA-Z0-9-_:.]*$~', $check['urls'][$i]) == 1)
-					{
-						$data['urls'][$i] = $check['urls'][$i];
-					}
-					else
-					{
-						$data['urls'][$i] = \JStringPunycode::urlToPunycode($url);
-					}
-				}
-			}
-
-			unset($check);
-
-			$registry = new Registry($data['urls']);
-
-			$data['urls'] = (string) $registry;
-		}
-
-		// Alter the title for save as copy
-		if ($input->get('task') == 'save2copy')
-		{
-			$origTable = clone $this->getTable();
-			$origTable->load($input->getInt('id'));
-
-			if ($data['title'] == $origTable->title)
-			{
-				list($title, $alias) = $this->generateNewTitle($data['catid'], $data['alias'], $data['title']);
-				$data['title'] = $title;
-				$data['alias'] = $alias;
-			}
-			else
-			{
-				if ($data['alias'] == $origTable->alias)
-				{
-					$data['alias'] = '';
-				}
-			}
-
-			$data['state'] = 0;
-		}
-
-		// Automatic handling of alias for empty fields
-		if (in_array($input->get('task'), array('apply', 'save', 'save2new')) && (!isset($data['id']) || (int) $data['id'] == 0))
-		{
-			if ($data['alias'] == null)
-			{
-				if (\JFactory::getConfig()->get('unicodeslugs') == 1)
-				{
-					$data['alias'] = \JFilterOutput::stringURLUnicodeSlug($data['title']);
-				}
-				else
-				{
-					$data['alias'] = \JFilterOutput::stringURLSafe($data['title']);
-				}
-
-				$table = \JTable::getInstance('Content', 'JTable');
-
-				if ($table->load(array('alias' => $data['alias'], 'catid' => $data['catid'])))
-				{
-					$msg = \JText::_('COM_CONTENT_SAVE_WARNING');
-				}
-
-				list($title, $alias) = $this->generateNewTitle($data['catid'], $data['alias'], $data['title']);
-				$data['alias'] = $alias;
-
-				if (isset($msg))
-				{
-					\JFactory::getApplication()->enqueueMessage($msg, 'warning');
-				}
-			}
-		}
-
-		if (parent::save($data))
-		{
-			if (isset($data['featured']))
-			{
-				$this->featured($this->getState($this->getName() . '.id'), $data['featured']);
-			}
-
-			return true;
-		}
+		// TODO
 
 		return false;
 	}
@@ -628,83 +295,7 @@ class ArticleModel extends AdminModel
 	 */
 	public function featured($pks, $value = 0)
 	{
-		// Sanitize the ids.
-		$pks = (array) $pks;
-		$pks = ArrayHelper::toInteger($pks);
-
-		if (empty($pks))
-		{
-			$this->setError(\JText::_('COM_CONTENT_NO_ITEM_SELECTED'));
-
-			return false;
-		}
-
-		$table = $this->getTable('Featured', 'Administrator');
-
-		try
-		{
-			$db = $this->getDbo();
-			$query = $db->getQuery(true)
-				->update($db->quoteName('#__content'))
-				->set('featured = ' . (int) $value)
-				->where('id IN (' . implode(',', $pks) . ')');
-			$db->setQuery($query);
-			$db->execute();
-
-			if ((int) $value == 0)
-			{
-				// Adjust the mapping table.
-				// Clear the existing features settings.
-				$query = $db->getQuery(true)
-					->delete($db->quoteName('#__content_frontpage'))
-					->where('content_id IN (' . implode(',', $pks) . ')');
-				$db->setQuery($query);
-				$db->execute();
-			}
-			else
-			{
-				// First, we find out which of our new featured articles are already featured.
-				$query = $db->getQuery(true)
-					->select('f.content_id')
-					->from('#__content_frontpage AS f')
-					->where('content_id IN (' . implode(',', $pks) . ')');
-				$db->setQuery($query);
-
-				$oldFeatured = $db->loadColumn();
-
-				// We diff the arrays to get a list of the articles that are newly featured
-				$newFeatured = array_diff($pks, $oldFeatured);
-
-				// Featuring.
-				$tuples = array();
-
-				foreach ($newFeatured as $pk)
-				{
-					$tuples[] = $pk . ', 0';
-				}
-
-				if (count($tuples))
-				{
-					$columns = array('content_id', 'ordering');
-					$query = $db->getQuery(true)
-						->insert($db->quoteName('#__content_frontpage'))
-						->columns($db->quoteName($columns))
-						->values($tuples);
-					$db->setQuery($query);
-					$db->execute();
-				}
-			}
-		}
-		catch (Exception $e)
-		{
-			$this->setError($e->getMessage());
-
-			return false;
-		}
-
-		$table->reorder();
-
-		$this->cleanCache();
+		// TODO
 
 		return true;
 	}
@@ -726,13 +317,14 @@ class ArticleModel extends AdminModel
 	/**
 	 * Allows preprocessing of the \JForm object.
 	 *
-	 * @param   \JForm  $form   The form object
-	 * @param   array   $data   The data to be merged into the form object
-	 * @param   string  $group  The plugin group to be executed
+	 * @param   \JForm $form  The form object
+	 * @param   array  $data  The data to be merged into the form object
+	 * @param   string $group The plugin group to be executed
 	 *
 	 * @return  void
 	 *
 	 * @since   3.0
+	 * @throws \Exception
 	 */
 	protected function preprocessForm(\JForm $form, $data, $group = 'content')
 	{
@@ -833,6 +425,7 @@ class ArticleModel extends AdminModel
 	{
 		$return = parent::delete($pks);
 
+		// TODO how do we handle this?
 		if ($return)
 		{
 			// Now check to see if this articles was featured if so delete it from the #__content_frontpage table

@@ -163,6 +163,10 @@ class Form
 				// Handle a CMSObject.
 				$data = $data->getProperties();
 			}
+			elseif ($data instanceof Model)
+			{
+				$data = $data->toArray();
+			}
 			else
 			{
 				// Handle other types of objects.
