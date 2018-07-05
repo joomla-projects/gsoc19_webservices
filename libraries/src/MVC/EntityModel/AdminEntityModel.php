@@ -14,6 +14,7 @@ use Joomla\CMS\MVC\EntityModel\FormEntityModel;
 use Joomla\CMS\MVC\Factory\MVCFactoryInterface;
 use Joomla\CMS\Table\Table;
 use Joomla\CMS\Form\FormFactoryInterface;
+use Joomla\Entity\Model;
 
 /**
  * Prototype admin model.
@@ -280,7 +281,7 @@ abstract class AdminEntityModel extends FormEntityModel
 	 *
 	 * @param   integer $pk The id of the primary key.
 	 *
-	 * @return  \JObject|boolean  Object on success, false on failure.
+	 * @return  Model|boolean  Object on success, false on failure.
 	 *
 	 * @since   1.6
 	 * @throws \Exception
@@ -292,15 +293,12 @@ abstract class AdminEntityModel extends FormEntityModel
 		if ($pk > 0)
 		{
 			// Attempt to load the row.
-			$return = $this->load($pk);
-
-			// Check for a table object error.
-			if ($return === false)
+			if ($this->load($pk) === false)
 			{
 				throw new \Exception("error");
 			}
 
-			return $return;
+			return $this;
 		}
 
 		return false;

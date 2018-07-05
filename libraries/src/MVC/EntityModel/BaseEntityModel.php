@@ -10,12 +10,14 @@ namespace Joomla\CMS\MVC\EntityModel;
 
 defined('JPATH_PLATFORM') or die;
 
+use Joomla\CMS\Entity\EntityTableTrait;
 use Joomla\CMS\Extension\ComponentInterface;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Factory;
 use Joomla\CMS\MVC\Factory\MVCFactoryInterface;
 use Joomla\CMS\MVC\Factory\MVCFactoryServiceInterface;
 use Joomla\CMS\Table\Table;
+use Joomla\CMS\Table\TableInterface;
 use Joomla\Database\DatabaseDriver;
 use Joomla\Entity\Model as EntityModel;
 use Joomla\Utilities\ArrayHelper;
@@ -27,8 +29,18 @@ use Joomla\Utilities\ArrayHelper;
  *
  * @since  2.5.5
  */
-abstract class BaseEntityModel extends EntityModel
+abstract class BaseEntityModel extends EntityModel implements TableInterface
 {
+	use EntityTableTrait;
+
+	/**
+	 * Indicates if the internal state has been set
+	 *
+	 * @var    boolean
+	 * @since  3.0
+	 */
+	protected $__state_set = null;
+
 	/**
 	 * The model (base) name
 	 *
@@ -286,6 +298,18 @@ abstract class BaseEntityModel extends EntityModel
 			$this->event_clean_cache = 'onContentCleanCache';
 		}
 
+		// Set the model dbo
+		if (array_key_exists('dbo', $config))
+		{
+			$db = $config['dbo'];
+		}
+		else
+		{
+			$db = \JFactory::getDbo();
+		}
+
+		parent::__construct($db);
+
 		if ($factory)
 		{
 			$this->factory = $factory;
@@ -299,18 +323,6 @@ abstract class BaseEntityModel extends EntityModel
 		{
 			$this->factory = $component->createMVCFactory(Factory::getApplication());
 		}
-
-		// Set the model dbo
-		if (array_key_exists('dbo', $config))
-		{
-			$db = $config['dbo'];
-		}
-		else
-		{
-			$db = \JFactory::getDbo();
-		}
-
-		parent::__construct($db);
 	}
 
 	/**
@@ -530,26 +542,13 @@ abstract class BaseEntityModel extends EntityModel
 	}
 
 	/**
-	 * Load a row in the current insance
+	 * Method for backwards compatibility
 	 *
-	 * @param   mixed    $key    primary key, if there is no key, then this is used for a new item, therefore select last
-	 * @param   boolean  $reset  reset flag
-	 *
-	 * @return boolean
+	 * @return $this
+	 * @todo this overrides the getTable from the Model itself
 	 */
-	public function load($key, $reset = true)
+	public function getTable()
 	{
-		$query = $this->newQuery();
-
-		if ($reset)
-		{
-			$this->reset();
-		}
-
-		$this->setAttributes($query->selectRaw($key));
-
-		$this->exists = true;
-
-		return true;
+		return $this;
 	}
 }

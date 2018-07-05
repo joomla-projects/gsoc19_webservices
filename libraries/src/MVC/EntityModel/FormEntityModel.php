@@ -132,8 +132,8 @@ abstract class FormEntityModel extends BaseEntityModel implements FormFactoryAwa
 			);
 			$this->getDispatcher()->dispatch('onTableBeforeCheckin', $event);
 
-			$this->$checkedOutField = 0;
-			$this->$checkedOutTimeField = $this->getDb()->quote($this->getDb()->getNullDate());
+			$this->$checkedOutField = '0';
+			$this->$checkedOutTimeField = $this->getDb()->getNullDate();
 
 			$this->save();
 
@@ -212,7 +212,7 @@ abstract class FormEntityModel extends BaseEntityModel implements FormFactoryAwa
 			$time = \JFactory::getDate()->toSql();
 
 			$this->$checkedOutField = (int) $user->get('id');
-			$this->$checkedOutTimeField = $this->getDb()->quote($time);
+			$this->$checkedOutTimeField = $time;
 
 			$this->save();
 
@@ -249,16 +249,17 @@ abstract class FormEntityModel extends BaseEntityModel implements FormFactoryAwa
 	/**
 	 * Method to get a form object.
 	 *
-	 * @param   string   $name     The name of the form.
-	 * @param   string   $source   The form source. Can be XML string if file flag is set to false.
-	 * @param   array    $options  Optional array of options for the form creation.
-	 * @param   boolean  $clear    Optional argument to force load a new form.
-	 * @param   string   $xpath    An optional xpath to search for the fields.
+	 * @param   string  $name    The name of the form.
+	 * @param   string  $source  The form source. Can be XML string if file flag is set to false.
+	 * @param   array   $options Optional array of options for the form creation.
+	 * @param   boolean $clear   Optional argument to force load a new form.
+	 * @param   string  $xpath   An optional xpath to search for the fields.
 	 *
 	 * @return  \JForm|boolean  \JForm object on success, false on error.
 	 *
 	 * @see     \JForm
 	 * @since   1.6
+	 * @throws \Exception
 	 */
 	protected function loadForm($name, $source = null, $options = array(), $clear = false, $xpath = false)
 	{
@@ -298,49 +299,42 @@ abstract class FormEntityModel extends BaseEntityModel implements FormFactoryAwa
 			$formFactory = Factory::getContainer()->get(FormFactoryInterface::class);
 		}
 
-		try
+
+		$form = $formFactory->createForm($name, $options);
+
+		// Load the data.
+		if (substr($source, 0, 1) == '<')
 		{
-			$form = $formFactory->createForm($name, $options);
-
-			// Load the data.
-			if (substr($source, 0, 1) == '<')
+			if ($form->load($source, false, $xpath) == false)
 			{
-				if ($form->load($source, false, $xpath) == false)
-				{
-					throw new \RuntimeException('Form::loadForm could not load form');
-				}
+				throw new \RuntimeException('Form::loadForm could not load form');
 			}
-			else
-			{
-				if ($form->loadFile($source, false, $xpath) == false)
-				{
-					throw new \RuntimeException('Form::loadForm could not load file');
-				}
-			}
-
-			if (isset($options['load_data']) && $options['load_data'])
-			{
-				// Get the data for the form.
-				$data = $this->loadFormData();
-			}
-			else
-			{
-				$data = array();
-			}
-
-			// Allow for additional modification of the form, and events to be triggered.
-			// We pass the data because plugins may require it.
-			$this->preprocessForm($form, $data);
-
-			// Load the data into the form after the plugins have operated.
-			$form->bind($data);
 		}
-		catch (\Exception $e)
+		else
 		{
-			$this->setError($e->getMessage());
-
-			return false;
+			if ($form->loadFile($source, false, $xpath) == false)
+			{
+				throw new \RuntimeException('Form::loadForm could not load file');
+			}
 		}
+
+		if (isset($options['load_data']) && $options['load_data'])
+		{
+			// Get the data for the form.
+			$data = $this->loadFormData();
+		}
+		else
+		{
+			$data = array();
+		}
+
+		// Allow for additional modification of the form, and events to be triggered.
+		// We pass the data because plugins may require it.
+		$this->preprocessForm($form, $data);
+
+		// Load the data into the form after the plugins have operated.
+		$form->bind($data);
+
 
 		// Store the form for later.
 		$this->_forms[$hash] = $form;

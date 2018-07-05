@@ -12,7 +12,6 @@ namespace Joomla\Component\Content\Administrator\Model;
 defined('_JEXEC') or die;
 
 use Joomla\CMS\MVC\EntityModel\AdminEntityModel;
-use Joomla\Entity\Model;
 use Joomla\Registry\Registry;
 
 /**
@@ -20,7 +19,7 @@ use Joomla\Registry\Registry;
  *
  * @since  1.6
  */
-class ArticleModel extends Model
+class ArticleModel extends AdminEntityModel
 {
 	/**
 	 * The prefix to use with controller messages.
@@ -45,6 +44,58 @@ class ArticleModel extends Model
 	 * @since  3.4.4
 	 */
 	protected $associationsContext = 'com_content.item';
+
+	/**
+	 * The table associated with the model.
+	 *
+	 * @var string
+	 */
+	protected $table = '#__content';
+
+	/**
+	 * The attributes that should be cast to native types.
+	 *
+	 * @var array
+	 */
+	protected $casts = [
+		'attribs' => 'array',
+		'metadata' => 'array',
+		'images' => 'array',
+		'urls' => 'array'
+	];
+
+	/**
+	 * The attributes that should be mutated to dates. Already aliased!
+	 *
+	 * @var array
+	 */
+	protected $dates = [
+		'created',
+		'modified',
+		'checked_out_time',
+		'publish_up',
+		'publish_down'
+	];
+
+	/**
+	 * Array with alias for "special" columns such as ordering, hits etc etc
+	 *
+	 * @var    array
+	 */
+	protected $columnAlias = [
+		'createdAt' => 'created',
+		'updatedAt' => 'modified'
+	];
+
+
+	/**
+	 * Mutation for articletext
+	 * @return mixed|string
+	 */
+	public function getArticletextAttribute()
+	{
+		return trim($this->fulltext) != '' ? $this->introtext . "<hr id=\"system-readmore\">" . $this->fulltext : $this->introtext;
+	}
 
 	/**
 	 * Method to test whether a record can be deleted.
@@ -196,6 +247,7 @@ class ArticleModel extends Model
 	 * @return  mixed  The data for the form.
 	 *
 	 * @since   1.6
+	 * @throws \Exception
 	 */
 	protected function loadFormData()
 	{
@@ -205,31 +257,22 @@ class ArticleModel extends Model
 
 		if (empty($data))
 		{
-			$data = $this->getItem();
+			$data = $this->getItem()->toArray();
 
 			// Pre-select some filters (Status, Category, Language, Access) in edit form if those have been selected in Article Manager: Articles
 			if ($this->getState('article.id') == 0)
 			{
 				$filters = (array) $app->getUserState('com_content.articles.filter');
-				$data->set(
+				$data->state = $app->input->getInt(
 					'state',
-					$app->input->getInt(
-						'state',
-						((isset($filters['published']) && $filters['published'] !== '') ? $filters['published'] : null)
-					)
+					((isset($filters['published']) && $filters['published'] !== '') ? $filters['published'] : null)
 				);
-				$data->set('catid', $app->input->getInt('catid', (!empty($filters['category_id']) ? $filters['category_id'] : null)));
-				$data->set('language', $app->input->getString('language', (!empty($filters['language']) ? $filters['language'] : null)));
-				$data->set('access',
-					$app->input->getInt('access', (!empty($filters['access']) ? $filters['access'] : \JFactory::getConfig()->get('access')))
+				$data->catid = $app->input->getInt('catid', (!empty($filters['category_id']) ? $filters['category_id'] : null));
+				$data->language = $app->input->getString('language', (!empty($filters['language']) ? $filters['language'] : null));
+				$data->access = $app->input->getInt(
+					'access', (!empty($filters['access']) ? $filters['access'] : \JFactory::getConfig()->get('access'))
 				);
 			}
-		}
-
-		// If there are params fieldsets in the form it will fail with a registry object
-		if (isset($data->params) && $data->params instanceof Registry)
-		{
-			$data->params = $data->params->toArray();
 		}
 
 		$this->preprocessData('com_content.article', $data);
@@ -421,7 +464,7 @@ class ArticleModel extends Model
 	 *
 	 * @since   3.7.0
 	 */
-	public function delete(&$pks)
+	public function deleteWithFeatured(&$pks)
 	{
 		$return = parent::delete($pks);
 
