@@ -12,7 +12,6 @@ namespace Joomla\Component\Content\Administrator\Model;
 defined('_JEXEC') or die;
 
 use Joomla\CMS\MVC\EntityModel\AdminEntityModel;
-use Joomla\Registry\Registry;
 
 /**
  * Item Model for an Article.
@@ -95,6 +94,20 @@ class ArticleModel extends AdminEntityModel
 	public function getArticletextAttribute()
 	{
 		return trim($this->fulltext) != '' ? $this->introtext . "<hr id=\"system-readmore\">" . $this->fulltext : $this->introtext;
+	}
+
+	/**
+	 * Mutation for articletext
+	 *
+	 * @param   string  $value  intotext + fulltext
+	 * @return void
+	 */
+	public function setArticletextAttribute($value)
+	{
+		$value = explode("<hr id=\"system-readmore\">", $value, 2);
+
+		$this->introtext = $value[0];
+		$this->fulltext = $value[1];
 	}
 
 	/**
