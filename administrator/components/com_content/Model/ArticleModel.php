@@ -12,9 +12,10 @@ namespace Joomla\Component\Content\Administrator\Model;
 defined('_JEXEC') or die;
 
 use Joomla\CMS\MVC\EntityModel\AdminEntityModel;
+use Joomla\Entity\Relations\Relation;
 
 /**
- * Item Model for an Article.
+ * Entity Model for an Article.
  *
  * @since  1.6
  */
@@ -85,6 +86,15 @@ class ArticleModel extends AdminEntityModel
 		'createdAt' => 'created',
 		'updatedAt' => 'modified'
 	];
+
+	/**
+	 * Get the category for the current article.
+	 * @return Relation
+	 */
+	public function category()
+	{
+		return $this->hasOne('Joomla\Component\Content\Administrator\Model\CategoryModel');
+	}
 
 
 	/**
@@ -328,15 +338,127 @@ class ArticleModel extends AdminEntityModel
 	/**
 	 * Method to save the form data.
 	 *
-	 * @param   array  $data  The form data.
+	 * @param   array $data The form data.
 	 *
 	 * @return  boolean  True on success.
 	 *
 	 * @since   1.6
+	 * @throws \Exception
 	 */
-	public function saveFormData($data)
+	public function save($data)
 	{
-		// TODO
+		$input  = \JFactory::getApplication()->input;
+		$filter = \JFilterInput::getInstance();
+
+		if (isset($data['metadata']) && isset($data['metadata']['author']))
+		{
+			$data['metadata']['author'] = $filter->clean($data['metadata']['author'], 'TRIM');
+		}
+
+		if (isset($data['created_by_alias']))
+		{
+			$data['created_by_alias'] = $filter->clean($data['created_by_alias'], 'TRIM');
+		}
+
+		\JLoader::register('CategoriesHelper', JPATH_ADMINISTRATOR . '/components/com_categories/helpers/categories.php');
+
+		// Cast catid to integer for comparison
+		$catid = (int) $data['catid'];
+
+		$category = (new CategoryModel($this->getDb()))->find($catid);
+
+		// Check if New Category exists
+		if ($catid > 0 && !$category)
+		{
+			$catid = 0;
+		}
+
+		// Save New Category
+		if ($catid == 0)
+		{
+			if (!$this->canCreateCategory())
+			{
+				// TODO better exception
+				throw new \Exception("user cannot create category");
+			}
+
+			$category = new CategoryModel($this->getDb());
+
+			$category->title = $data['catid'];
+			$category->parent_id = 1;
+			$category->extension = 'com_content';
+			$category->language = $data['language'];
+			$category->published = 1;
+
+			$category->persist();
+		}
+
+		if (isset($data['urls']) && is_array($data['urls']))
+		{
+			$check = $input->post->get('jform', array(), 'array');
+
+			foreach ($data['urls'] as $i => $url)
+			{
+				if ($url != false && ($i == 'urla' || $i == 'urlb' || $i == 'urlc'))
+				{
+					if (preg_match('~^#[a-zA-Z]{1}[a-zA-Z0-9-_:.]*$~', $check['urls'][$i]) == 1)
+					{
+						$data['urls'][$i] = $check['urls'][$i];
+					}
+					else
+					{
+						$data['urls'][$i] = \JStringPunycode::urlToPunycode($url);
+					}
+				}
+			}
+
+			unset($check);
+		}
+
+		// TODO Alter the title for save as copy
+
+		// Automatic handling of alias for empty fields
+		if (in_array($input->get('task'), array('apply', 'save', 'save2new')) && (!isset($data['id']) || (int) $data['id'] == 0))
+		{
+			if ($data['alias'] == null)
+			{
+				if (\JFactory::getConfig()->get('unicodeslugs') == 1)
+				{
+					$data['alias'] = \JFilterOutput::stringURLUnicodeSlug($data['title']);
+				}
+				else
+				{
+					$data['alias'] = \JFilterOutput::stringURLSafe($data['title']);
+				}
+
+				if ($rows = $this->where(['alias' => $data['alias'], 'catid' => $data['catid']])->get([$category->getPrimaryKey()]))
+				{
+					$msg = \JText::_('COM_CONTENT_SAVE_WARNING');
+				}
+
+				$rows = ($rows) ?: [];
+
+				list($title, $alias) = $this->generateNewTitle($data['catid'], $data['alias'], $data['title'], $rows);
+				$data['alias'] = $alias;
+
+				if (isset($msg))
+				{
+					\JFactory::getApplication()->enqueueMessage($msg, 'warning');
+				}
+			}
+		}
+
+
+		if (parent::save($data))
+		{
+			if (isset($data['featured']))
+			{
+				// TODO
+				$this->featured($this->getState($this->getName() . '.id'), $data['featured']);
+			}
+
+			return true;
+		}
 
 		return false;
 	}
@@ -359,15 +481,15 @@ class ArticleModel extends AdminEntityModel
 	/**
 	 * A protected method to get a set of ordering conditions.
 	 *
-	 * @param   object  $table  A record object.
+	 * @param   object  $model  A model object.
 	 *
 	 * @return  array  An array of conditions to add to add to ordering queries.
 	 *
 	 * @since   1.6
 	 */
-	protected function getReorderConditions($table)
+	protected function getReorderConditions($model)
 	{
-		return array('catid = ' . (int) $table->catid);
+		return array('catid = ' . (int) $model->catid);
 	}
 
 	/**

@@ -15,6 +15,7 @@ use Joomla\CMS\MVC\Factory\MVCFactoryInterface;
 use Joomla\CMS\Table\Table;
 use Joomla\CMS\Form\FormFactoryInterface;
 use Joomla\Entity\Model;
+use Joomla\String\StringHelper;
 
 /**
  * Prototype admin model.
@@ -379,15 +380,75 @@ abstract class AdminEntityModel extends FormEntityModel
 	/**
 	 * Method to save the form data.
 	 *
-	 * @param   array  $data  The form data.
+	 * @param   array $data The form data.
 	 *
 	 * @return  boolean  True on success, False on error.
 	 *
 	 * @since   1.6
+	 * @throws \Exception
 	 */
-	public function saveFormData($data)
+	public function save($data)
 	{
-		// TODO saveFormData
+		$context    = $this->option . '.' . $this->name;
+
+		if (array_key_exists('tags', $data) && is_array($data['tags']))
+		{
+			$this->newTags = $data['tags'];
+		}
+
+		$key = $this->getPrimaryKey();
+		$pk = (!empty($data[$key])) ? $data[$key] : (int) $this->getState($this->getName() . '.id');
+
+		// Include the plugins for the save events.
+		\JPluginHelper::importPlugin($this->events_map['save']);
+
+		// Allow an exception to be thrown.
+
+		// Load the row if saving an existing record.
+		if ($pk > 0)
+		{
+			$this->load($pk);
+		}
+
+		// Bind the data.
+		$this->bind($data);
+
+		// TODO Check the data.
+		if (!$this->check())
+		{
+			throw new \Exception("check failed");
+		}
+
+		// Trigger the before save event.
+		$result = \JFactory::getApplication()->triggerEvent($this->event_before_save, array($context, $this, $isNew, $data));
+
+		if (in_array(false, $result, true))
+		{
+			// TODO better exception
+			throw new \Exception("no idea what exception this may be");
+		}
+
+		// Store the data.
+		if (!$this->persist())
+		{
+			// TODO better exception
+			throw new \Exception("persist failed");
+		}
+
+		// Clean the cache.
+		$this->cleanCache();
+
+		// Trigger the after save event.
+		\JFactory::getApplication()->triggerEvent($this->event_after_save, array($context, $this, $isNew, $data));
+
+		if (isset($this->$key))
+		{
+			$this->setState($this->getName() . '.id', $this->$key);
+		}
+
+		$this->setState($this->getName() . '.new', !$this->exists);
+
+		// TODO associations
 
 		return true;
 	}
@@ -407,5 +468,31 @@ abstract class AdminEntityModel extends FormEntityModel
 		// TODO saveorder
 
 		return true;
+	}
+
+	/**
+	 * Method to change the title & alias.
+	 *
+	 * @param   integer         $category_id  The id of the category.
+	 * @param   string          $alias        The alias.
+	 * @param   string          $title        The title.
+	 * @param   boolean/array   $rows         False if query needs to be done, array of results otherwise.
+	 *
+	 * @return	array  Contains the modified title and alias.
+	 *
+	 * @since	1.7
+	 */
+	protected function generateNewTitle($category_id, $alias, $title, $rows = false)
+	{
+		$rows = (is_array($rows)) ?: $this->where(['alias' => $alias, 'catid' => $category_id])->first();
+
+		// Alter the title & alias
+		foreach ($rows as $row)
+		{
+			$title = StringHelper::increment($title);
+			$alias = StringHelper::increment($alias, 'dash');
+		}
+
+		return array($title, $alias);
 	}
 }

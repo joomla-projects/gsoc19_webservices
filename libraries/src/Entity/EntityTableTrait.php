@@ -9,10 +9,7 @@
 
 namespace Joomla\CMS\Entity;
 
-use Joomla\CMS\Event\AbstractEvent;
 use Joomla\Database\DatabaseDriver;
-use Joomla\Entity\Model;
-use Joomla\Event\DispatcherAwareTrait;
 
 defined('JPATH_PLATFORM') or die;
 
@@ -23,8 +20,6 @@ defined('JPATH_PLATFORM') or die;
  */
 trait EntityTableTrait
 {
-	use DispatcherAwareTrait;
-
 	/**
 	 * @var mixed
 	 */
@@ -77,6 +72,13 @@ trait EntityTableTrait
 	 */
 	public function load($key = null, $reset = true)
 	{
+		$key = ($key !== null) ?: $this->getPrimaryKeyValue();
+
+		if ($key === null)
+		{
+			throw new \UnexpectedValueException('Null primary key not allowed.');
+		}
+
 		$query = $this->newQuery();
 
 		if ($reset)
@@ -85,8 +87,6 @@ trait EntityTableTrait
 		}
 
 		$this->setAttributes($query->selectRaw($key));
-
-		$this->syncOriginal();
 
 		$this->exists = true;
 
@@ -136,7 +136,7 @@ trait EntityTableTrait
 	}
 
 	/**
-	 * Bind function
+	 * Bind function, useful because it only sets existing attributes
 	 *
 	 * @param   array  $src     assoc array of values for binding
 	 * @param   array  $ignore  keys to be ignored
@@ -175,7 +175,7 @@ trait EntityTableTrait
 	 */
 	public function store($nulls = false)
 	{
-		return $this->save($nulls);
+		return $this->persist($nulls);
 	}
 
 	/**
