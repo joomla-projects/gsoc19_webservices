@@ -420,7 +420,7 @@ abstract class AdminEntityModel extends FormEntityModel
 		}
 
 		// Trigger the before save event.
-		$result = \JFactory::getApplication()->triggerEvent($this->event_before_save, array($context, $this, $isNew, $data));
+		$result = \JFactory::getApplication()->triggerEvent($this->event_before_save, array($context, $this, !$this->exists, $data));
 
 		if (in_array(false, $result, true))
 		{

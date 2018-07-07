@@ -93,7 +93,7 @@ class ArticleModel extends AdminEntityModel
 	 */
 	public function category()
 	{
-		return $this->hasOne('Joomla\Component\Content\Administrator\Model\CategoryModel');
+		return $this->belongsTo('Joomla\Component\Content\Administrator\Model\CategoryModel','catid');
 	}
 
 
