@@ -12,6 +12,7 @@ defined('JPATH_PLATFORM') or die;
 
 use BadMethodCallException;
 use Joomla\CMS\Event\AbstractImmutableEvent;
+use Joomla\CMS\MVC\EntityModel\BaseEntityModel;
 use JTableInterface;
 
 /**
@@ -52,7 +53,7 @@ abstract class AbstractEvent extends AbstractImmutableEvent
 	 */
 	protected function setSubject($value)
 	{
-		if (!is_object($value) || !($value instanceof JTableInterface))
+		if (!is_object($value) || !($value instanceof JTableInterface || $value instanceof BaseEntityModel))
 		{
 			throw new BadMethodCallException("Argument 'subject' of event {$this->name} is not of the expected type");
 		}

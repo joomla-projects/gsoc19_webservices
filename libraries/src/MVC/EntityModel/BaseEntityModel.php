@@ -10,16 +10,13 @@ namespace Joomla\CMS\MVC\EntityModel;
 
 defined('JPATH_PLATFORM') or die;
 
-use Joomla\CMS\Entity\EntityTableTrait;
 use Joomla\CMS\Extension\ComponentInterface;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Factory;
 use Joomla\CMS\MVC\Factory\MVCFactoryInterface;
 use Joomla\CMS\MVC\Factory\MVCFactoryServiceInterface;
 use Joomla\CMS\Table\Table;
-use Joomla\CMS\Table\TableInterface;
-use Joomla\Database\DatabaseDriver;
-use Joomla\Entity\Model as EntityModel;
+use Joomla\Entity\Model;
 use Joomla\Utilities\ArrayHelper;
 
 /**
@@ -29,10 +26,8 @@ use Joomla\Utilities\ArrayHelper;
  *
  * @since  2.5.5
  */
-abstract class BaseEntityModel extends EntityModel implements TableInterface
+abstract class BaseEntityModel
 {
-	use EntityTableTrait;
-
 	/**
 	 * Indicates if the internal state has been set
 	 *
@@ -48,6 +43,13 @@ abstract class BaseEntityModel extends EntityModel implements TableInterface
 	 * @since  3.0
 	 */
 	protected $name;
+
+	/**
+	 * The Model associated entity.
+	 *
+	 * @var Model
+	 */
+	protected $entity;
 
 	/**
 	 * The URL option for the component.
@@ -308,7 +310,8 @@ abstract class BaseEntityModel extends EntityModel implements TableInterface
 			$db = \JFactory::getDbo();
 		}
 
-		parent::__construct($db);
+		// Instantiate the new entity class
+		$this->entity = new $this->entityClass($db);
 
 		if ($factory)
 		{
@@ -323,18 +326,6 @@ abstract class BaseEntityModel extends EntityModel implements TableInterface
 		{
 			$this->factory = $component->createMVCFactory(Factory::getApplication());
 		}
-	}
-
-	/**
-	 * Method to get the database driver object
-	 *
-	 * @return  DatabaseDriver
-	 *
-	 * @since   3.0
-	 */
-	public function getDbo()
-	{
-		return $this->getDb();
 	}
 
 	/**
@@ -545,10 +536,31 @@ abstract class BaseEntityModel extends EntityModel implements TableInterface
 	 * Method for backwards compatibility
 	 *
 	 * @return $this
-	 * @todo this overrides the getTable from the Model itself
 	 */
 	public function getTable()
 	{
-		return $this;
+		return $this->entity;
+	}
+
+	/**
+	 * Set function
+	 *
+	 * @param   string  $key    attribute name
+	 * @param   mixed   $value  attribute value
+	 *
+	 * @return boolean
+	 */
+	public function set($key, $value)
+	{
+		if (property_exists($this, $key))
+		{
+			$this->$key = $value;
+
+			return true;
+		}
+
+		$this->entity->$key = $value;
+
+		return true;
 	}
 }

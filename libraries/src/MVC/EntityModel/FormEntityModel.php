@@ -93,20 +93,19 @@ abstract class FormEntityModel extends BaseEntityModel implements FormFactoryAwa
 		// Only attempt to check the row in if it exists.
 		if ($pk)
 		{
-			if (!$this->load($pk))
+			if (!$this->entity->load($pk))
 			{
 				// TODO throw error here
 				// $this->setError($table->getError());
 				// throw new \UnexpectedValueException('Null primary key not allowed.');
-
 				return false;
 			}
 
-			$checkedOutField = $this->getColumnAlias('checked_out');
-			$checkedOutTimeField = $this->getColumnAlias('checked_out_time');
+			$checkedOutField = $this->entity->getColumnAlias('checked_out');
+			$checkedOutTimeField = $this->entity->getColumnAlias('checked_out_time');
 
 			// If there is no checked_out or checked_out_time field, just return true.
-			if (!$this->hasField($checkedOutField) || !$this->hasField($checkedOutTimeField))
+			if (!$this->entity->hasField($checkedOutField) || !$this->entity->hasField($checkedOutTimeField))
 			{
 				return true;
 			}
@@ -114,7 +113,7 @@ abstract class FormEntityModel extends BaseEntityModel implements FormFactoryAwa
 			$user = \JFactory::getUser();
 
 			// Check if this is the user having previously checked out the row.
-			if ($this->{$checkedOutField} > 0 && $this->{$checkedOutField} != $user->get('id') && !$user->authorise('core.admin', 'com_checkin'))
+			if ($this->entity->{$checkedOutField} > 0 && $this->entity->{$checkedOutField} != $user->get('id') && !$user->authorise('core.admin', 'com_checkin'))
 			{
 				// TODO throw error here
 				// $this->setError(\JText::_('JLIB_APPLICATION_ERROR_CHECKIN_USER_MISMATCH'));
@@ -132,10 +131,10 @@ abstract class FormEntityModel extends BaseEntityModel implements FormFactoryAwa
 			);
 			$this->getDispatcher()->dispatch('onTableBeforeCheckin', $event);
 
-			$this->$checkedOutField = '0';
-			$this->$checkedOutTimeField = $this->getDb()->getNullDate();
+			$this->entity->$checkedOutField = '0';
+			$this->entity->$checkedOutTimeField = $this->entity->getDb()->getNullDate();
 
-			$this->save();
+			$this->entity->persist();
 
 			// Post-processing by observers
 			$event = AbstractEvent::create(
@@ -167,7 +166,7 @@ abstract class FormEntityModel extends BaseEntityModel implements FormFactoryAwa
 		// Only attempt to check the row in if it exists.
 		if ($pk)
 		{
-			if (!$this->load($pk))
+			if (!$this->entity->load($pk))
 			{
 				// TODO throw error here
 				// $this->setError($table->getError());
@@ -176,12 +175,12 @@ abstract class FormEntityModel extends BaseEntityModel implements FormFactoryAwa
 				return false;
 			}
 
-			$checkedOutField = $this->getColumnAlias('checked_out');
-			$checkedOutTimeField = $this->getColumnAlias('checked_out_time');
+			$checkedOutField = $this->entity->getColumnAlias('checked_out');
+			$checkedOutTimeField = $this->entity->getColumnAlias('checked_out_time');
 
 
 			// If there is no checked_out or checked_out_time field, just return true.
-			if (!$this->hasField($checkedOutField) || !$this->hasField($checkedOutTimeField))
+			if (!$this->entity->hasField($checkedOutField) || !$this->entity->hasField($checkedOutTimeField))
 			{
 				return true;
 			}
@@ -189,7 +188,7 @@ abstract class FormEntityModel extends BaseEntityModel implements FormFactoryAwa
 			$user = \JFactory::getUser();
 
 			// Check if this is the user having previously checked out the row.
-			if ($this->{$checkedOutField} > 0 && $this->{$checkedOutField} != $user->get('id'))
+			if ($this->entity->{$checkedOutField} > 0 && $this->entity->{$checkedOutField} != $user->get('id'))
 			{
 				// TODO throw error here
 				// $this->setError(\JText::_('JLIB_APPLICATION_ERROR_CHECKOUT_USER_MISMATCH'));
@@ -211,10 +210,10 @@ abstract class FormEntityModel extends BaseEntityModel implements FormFactoryAwa
 			// Get the current time in the database format.
 			$time = \JFactory::getDate()->toSql();
 
-			$this->$checkedOutField = (int) $user->get('id');
-			$this->$checkedOutTimeField = $time;
+			$this->entity->$checkedOutField = (int) $user->get('id');
+			$this->entity->$checkedOutTimeField = $time;
 
-			$this->save();
+			$this->entity->persist();
 
 			// Post-processing by observers
 			$event = AbstractEvent::create(

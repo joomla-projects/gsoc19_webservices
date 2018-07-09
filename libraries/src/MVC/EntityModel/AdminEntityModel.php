@@ -216,14 +216,14 @@ abstract class AdminEntityModel extends FormEntityModel
 			$pks = array((int) $this->getState($this->getName() . '.id'));
 		}
 
-		$checkedOutField = $this->getColumnAlias('checked_out');
+		$checkedOutField = $this->entity->getColumnAlias('checked_out');
 
 		// Check in all items.
 		foreach ($pks as $pk)
 		{
-			if ($this->load($pk))
+			if ($this->entity->load($pk))
 			{
-				if ($this->{$checkedOutField} > 0)
+				if ($this->entity->{$checkedOutField} > 0)
 				{
 					// TODO make checkin not load twice the Model
 					if (!parent::checkin($pk))
@@ -294,12 +294,12 @@ abstract class AdminEntityModel extends FormEntityModel
 		if ($pk > 0)
 		{
 			// Attempt to load the row.
-			if ($this->load($pk) === false)
+			if ($this->entity->load($pk) === false)
 			{
 				throw new \Exception("error");
 			}
 
-			return $this;
+			return $this->entity;
 		}
 
 		return false;
@@ -329,7 +329,7 @@ abstract class AdminEntityModel extends FormEntityModel
 	 */
 	protected function populateState()
 	{
-		$key = $this->getPrimaryKey();
+		$key = $this->entity->getPrimaryKey();
 
 		// Get the pk of the record from the request.
 		$pk = \JFactory::getApplication()->input->getInt($key);
@@ -380,14 +380,15 @@ abstract class AdminEntityModel extends FormEntityModel
 	/**
 	 * Method to save the form data.
 	 *
-	 * @param   array $data The form data.
+	 * @param   array $data      The form data.
+	 * @param   array $relations The relations associated with this entity.
 	 *
 	 * @return  boolean  True on success, False on error.
 	 *
 	 * @since   1.6
 	 * @throws \Exception
 	 */
-	public function save($data)
+	public function save(array $data, array $relations)
 	{
 		$context    = $this->option . '.' . $this->name;
 
@@ -396,7 +397,7 @@ abstract class AdminEntityModel extends FormEntityModel
 			$this->newTags = $data['tags'];
 		}
 
-		$key = $this->getPrimaryKey();
+		$key = $this->entity->getPrimaryKey();
 		$pk = (!empty($data[$key])) ? $data[$key] : (int) $this->getState($this->getName() . '.id');
 
 		// Include the plugins for the save events.
@@ -407,20 +408,20 @@ abstract class AdminEntityModel extends FormEntityModel
 		// Load the row if saving an existing record.
 		if ($pk > 0)
 		{
-			$this->load($pk);
+			$this->entity->load($pk);
 		}
 
 		// Bind the data.
-		$this->bind($data);
+		$this->entity->bind($data);
 
 		// TODO Check the data.
-		if (!$this->check())
+		if (!$this->entity->check())
 		{
 			throw new \Exception("check failed");
 		}
 
 		// Trigger the before save event.
-		$result = \JFactory::getApplication()->triggerEvent($this->event_before_save, array($context, $this, !$this->exists, $data));
+		$result = \JFactory::getApplication()->triggerEvent($this->event_before_save, array($context, $this, !$this->entity->exists, $data));
 
 		if (in_array(false, $result, true))
 		{
@@ -429,7 +430,16 @@ abstract class AdminEntityModel extends FormEntityModel
 		}
 
 		// Store the data.
-		if (!$this->persist())
+		foreach ($relations as $relation)
+		{
+			if (!$relation->save($this->entity))
+			{
+				// TODO better exception
+				throw new \Exception("persist failed");
+			}
+		}
+
+		if (!$this->entity->persist())
 		{
 			// TODO better exception
 			throw new \Exception("persist failed");
@@ -439,7 +449,7 @@ abstract class AdminEntityModel extends FormEntityModel
 		$this->cleanCache();
 
 		// Trigger the after save event.
-		\JFactory::getApplication()->triggerEvent($this->event_after_save, array($context, $this, $isNew, $data));
+		\JFactory::getApplication()->triggerEvent($this->event_after_save, array($context, $this, !$this->entity->exists, $data));
 
 		if (isset($this->$key))
 		{
@@ -484,7 +494,7 @@ abstract class AdminEntityModel extends FormEntityModel
 	 */
 	protected function generateNewTitle($category_id, $alias, $title, $rows = false)
 	{
-		$rows = (is_array($rows)) ?: $this->where(['alias' => $alias, 'catid' => $category_id])->first();
+		$rows = (is_array($rows)) ?: $this->entity->where(['alias' => $alias, 'catid' => $category_id])->first();
 
 		// Alter the title & alias
 		foreach ($rows as $row)

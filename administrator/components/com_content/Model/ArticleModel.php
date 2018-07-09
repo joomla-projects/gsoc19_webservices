@@ -11,8 +11,8 @@ namespace Joomla\Component\Content\Administrator\Model;
 
 defined('_JEXEC') or die;
 
+use Joomla\CMS\Entity\Category;
 use Joomla\CMS\MVC\EntityModel\AdminEntityModel;
-use Joomla\Entity\Relations\Relation;
 
 /**
  * Entity Model for an Article.
@@ -46,79 +46,11 @@ class ArticleModel extends AdminEntityModel
 	protected $associationsContext = 'com_content.item';
 
 	/**
-	 * The table associated with the model.
+	 * The Model associated entity class. MUST be defined for each model.
 	 *
 	 * @var string
 	 */
-	protected $table = '#__content';
-
-	/**
-	 * The attributes that should be cast to native types.
-	 *
-	 * @var array
-	 */
-	protected $casts = [
-		'attribs' => 'array',
-		'metadata' => 'array',
-		'images' => 'array',
-		'urls' => 'array'
-	];
-
-	/**
-	 * The attributes that should be mutated to dates. Already aliased!
-	 *
-	 * @var array
-	 */
-	protected $dates = [
-		'created',
-		'modified',
-		'checked_out_time',
-		'publish_up',
-		'publish_down'
-	];
-
-	/**
-	 * Array with alias for "special" columns such as ordering, hits etc etc
-	 *
-	 * @var    array
-	 */
-	protected $columnAlias = [
-		'createdAt' => 'created',
-		'updatedAt' => 'modified'
-	];
-
-	/**
-	 * Get the category for the current article.
-	 * @return Relation
-	 */
-	public function category()
-	{
-		return $this->belongsTo('Joomla\Component\Content\Administrator\Model\CategoryModel','catid');
-	}
-
-
-	/**
-	 * Mutation for articletext
-	 * @return mixed|string
-	 */
-	public function getArticletextAttribute()
-	{
-		return trim($this->fulltext) != '' ? $this->introtext . "<hr id=\"system-readmore\">" . $this->fulltext : $this->introtext;
-	}
-
-	/**
-	 * Mutation for articletext
-	 *
-	 * @param   string  $value  intotext + fulltext
-	 * @return void
-	 */
-	public function setArticletextAttribute($value)
-	{
-		$value = explode("<hr id=\"system-readmore\">", $value, 2);
-
-		$this->introtext = $value[0];
-		$this->fulltext = $value[1];
-	}
+	protected $entityClass = 'Joomla\CMS\Entity\Content';
 
 	/**
 	 * Method to test whether a record can be deleted.
@@ -338,14 +270,14 @@ class ArticleModel extends AdminEntityModel
 	/**
 	 * Method to save the form data.
 	 *
-	 * @param   array $data The form data.
-	 *
+	 * @param   array $data      The form data.
+	 * @param   array $relations The relations associated with this entity. (Just for inheritance compatibility)
 	 * @return  boolean  True on success.
 	 *
 	 * @since   1.6
 	 * @throws \Exception
 	 */
-	public function save($data)
+	public function save(array $data, array $relations = [])
 	{
 		$input  = \JFactory::getApplication()->input;
 		$filter = \JFilterInput::getInstance();
@@ -365,7 +297,7 @@ class ArticleModel extends AdminEntityModel
 		// Cast catid to integer for comparison
 		$catid = (int) $data['catid'];
 
-		$category = (new CategoryModel($this->getDb()))->find($catid);
+		$category = (new Category($this->entity->getDb()))->find($catid);
 
 		// Check if New Category exists
 		if ($catid > 0 && !$category)
@@ -382,7 +314,7 @@ class ArticleModel extends AdminEntityModel
 				throw new \Exception("user cannot create category");
 			}
 
-			$category = new CategoryModel($this->getDb());
+			$category = new Category($this->entity->getDb());
 
 			$category->title = $data['catid'];
 			$category->parent_id = 1;
@@ -431,7 +363,7 @@ class ArticleModel extends AdminEntityModel
 					$data['alias'] = \JFilterOutput::stringURLSafe($data['title']);
 				}
 
-				if ($rows = $this->where(['alias' => $data['alias'], 'catid' => $data['catid']])->get([$category->getPrimaryKey()]))
+				if ($rows = $this->entity->where(['alias' => $data['alias'], 'catid' => $data['catid']])->get([$category->getPrimaryKey()]))
 				{
 					$msg = \JText::_('COM_CONTENT_SAVE_WARNING');
 				}
@@ -448,8 +380,9 @@ class ArticleModel extends AdminEntityModel
 			}
 		}
 
+		$relations = [$category->articles()];
 
-		if (parent::save($data))
+		if (parent::save($data, $relations))
 		{
 			if (isset($data['featured']))
 			{

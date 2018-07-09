@@ -7,19 +7,22 @@
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
 
-namespace Joomla\Component\Content\Administrator\Model;
-
+namespace Joomla\CMS\Entity;
 
 use Joomla\Entity\Model;
 use Joomla\Entity\Relations\Relation;
 
+defined('JPATH_PLATFORM') or die;
+
 /**
- * Entity Model for an Category.
+ * Entity Model for a Category.
  *
  * @since  __DEPLOY_VERSION__
  */
-class CategoryModel extends Model
+class Category extends Model
 {
+	use EntityTableTrait;
+
 	/**
 	 * The table associated with the model.
 	 *
@@ -73,7 +76,7 @@ class CategoryModel extends Model
 		 * Next, this CategoryModel certainly does not belong here, as I believe it is also used in other components.
 		 * Why not put it in the library?
 		 */
-		return $this->hasMany('Joomla\Component\Content\Administrator\Model\ArticleModel', 'catid');
+		return $this->hasMany('Joomla\CMS\Entity\Content', 'catid');
 	}
 
 }

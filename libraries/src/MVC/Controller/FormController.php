@@ -11,6 +11,7 @@ namespace Joomla\CMS\MVC\Controller;
 defined('JPATH_PLATFORM') or die;
 
 use Joomla\CMS\Application\CMSApplication;
+use Joomla\CMS\MVC\EntityModel\BaseEntityModel;
 use Joomla\CMS\MVC\Factory\MVCFactoryInterface;
 use Joomla\CMS\MVC\Model\BaseDatabaseModel;
 use Joomla\CMS\Form\FormFactoryAwareInterface;
@@ -516,14 +517,14 @@ class FormController extends BaseController implements FormFactoryAwareInterface
 	 * Function that allows child controller access to model data
 	 * after the data has been saved.
 	 *
-	 * @param   BaseDatabaseModel  $model      The data model object.
-	 * @param   array              $validData  The validated data.
+	 * @param   BaseDatabaseModel|BaseEntityModel  $model      The data model object.
+	 * @param   array                              $validData  The validated data.
 	 *
 	 * @return  void
 	 *
 	 * @since   1.6
 	 */
-	protected function postSaveHook(BaseDatabaseModel $model, $validData = array())
+	protected function postSaveHook($model, $validData = array())
 	{
 	}
 
@@ -780,8 +781,8 @@ class FormController extends BaseController implements FormFactoryAwareInterface
 		switch ($task)
 		{
 			case 'apply':
-				// Set the record data in the session.
-				$recordId = $model->getState($this->context . '.id');
+				// Set the record data in the session. TODO this is null..
+				// $recordId = $model->getState($this->context . '.id');
 				$this->holdEditId($context, $recordId);
 				$app->setUserState($context . '.data', null);
 				$model->checkout($recordId);
