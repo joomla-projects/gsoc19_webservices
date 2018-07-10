@@ -388,7 +388,6 @@ class ArticleModel extends AdminEntityModel
 		{
 			if (isset($data['featured']))
 			{
-				// TODO
 				$this->featured($this->entity->id, $data['featured']);
 			}
 
@@ -592,21 +591,21 @@ class ArticleModel extends AdminEntityModel
 	/**
 	 * Delete #__content_frontpage items if the deleted articles was featured
 	 *
-	 * @param   object  &$pks  The primary key related to the contents that was deleted.
+	 * @param   array  $pks  The primary key related to the contents that was deleted.
 	 *
 	 * @return  boolean
 	 *
 	 * @since   3.7.0
+	 * @throws \Exception
 	 */
-	public function deleteWithFeatured(&$pks)
+	public function delete(&$pks)
 	{
 		$return = parent::delete($pks);
 
-		// TODO how do we handle this?
 		if ($return)
 		{
 			// Now check to see if this articles was featured if so delete it from the #__content_frontpage table
-			$db = $this->getDbo();
+			$db = $this->entity->getDb();
 			$query = $db->getQuery(true)
 				->delete($db->quoteName('#__content_frontpage'))
 				->where('content_id IN (' . implode(',', $pks) . ')');

@@ -535,7 +535,7 @@ abstract class BaseEntityModel
 	/**
 	 * Method for backwards compatibility
 	 *
-	 * @return $this
+	 * @return Model
 	 */
 	public function getTable()
 	{
@@ -562,5 +562,28 @@ abstract class BaseEntityModel
 		$this->entity->$key = $value;
 
 		return true;
+	}
+
+	/**
+	 * Backwards compatibility in controllers
+	 *
+	 * @param   integer  $i         .
+	 * @param   boolean  $toString  .
+	 *
+	 * @return  string   .
+	 */
+	public function getError($i = null, $toString = true)
+	{
+		return '';
+	}
+
+	/**
+	 * Backwards compatibility in controllers
+	 *
+	 * @return  array  .
+	 */
+	public function getErrors()
+	{
+		return [];
 	}
 }

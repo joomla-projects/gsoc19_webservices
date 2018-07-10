@@ -10,6 +10,7 @@ namespace Joomla\CMS\MVC\EntityModel;
 
 defined('JPATH_PLATFORM') or die;
 
+use JForm;
 use Joomla\CMS\Event\AbstractEvent;
 use Joomla\CMS\MVC\EntityModel\BaseEntityModel;
 use Joomla\CMS\MVC\Factory\MVCFactoryInterface;
@@ -101,11 +102,8 @@ abstract class FormEntityModel extends BaseEntityModel implements FormFactoryAwa
 				return false;
 			}
 
-			$checkedOutField = $this->entity->getColumnAlias('checked_out');
-			$checkedOutTimeField = $this->entity->getColumnAlias('checked_out_time');
-
 			// If there is no checked_out or checked_out_time field, just return true.
-			if (!$this->entity->hasField($checkedOutField) || !$this->entity->hasField($checkedOutTimeField))
+			if (!$this->entity->hasField('checked_out') || !$this->entity->hasField('checked_out_time'))
 			{
 				return true;
 			}
@@ -113,7 +111,8 @@ abstract class FormEntityModel extends BaseEntityModel implements FormFactoryAwa
 			$user = \JFactory::getUser();
 
 			// Check if this is the user having previously checked out the row.
-			if ($this->entity->{$checkedOutField} > 0 && $this->entity->{$checkedOutField} != $user->get('id') && !$user->authorise('core.admin', 'com_checkin'))
+			if ($this->entity->checked_out > 0 && $this->entity->checked_out != $user->get('id')
+				&& !$user->authorise('core.admin', 'com_checkin'))
 			{
 				// TODO throw error here
 				// $this->setError(\JText::_('JLIB_APPLICATION_ERROR_CHECKIN_USER_MISMATCH'));
@@ -131,8 +130,8 @@ abstract class FormEntityModel extends BaseEntityModel implements FormFactoryAwa
 			);
 			$this->getDispatcher()->dispatch('onTableBeforeCheckin', $event);
 
-			$this->entity->$checkedOutField = '0';
-			$this->entity->$checkedOutTimeField = $this->entity->getDb()->getNullDate();
+			$this->entity->checked_out = '0';
+			$this->entity->checked_out_time = $this->entity->getDb()->getNullDate();
 
 			$this->entity->persist();
 
@@ -175,12 +174,8 @@ abstract class FormEntityModel extends BaseEntityModel implements FormFactoryAwa
 				return false;
 			}
 
-			$checkedOutField = $this->entity->getColumnAlias('checked_out');
-			$checkedOutTimeField = $this->entity->getColumnAlias('checked_out_time');
-
-
 			// If there is no checked_out or checked_out_time field, just return true.
-			if (!$this->entity->hasField($checkedOutField) || !$this->entity->hasField($checkedOutTimeField))
+			if (!$this->entity->hasField('checked_out') || !$this->entity->hasField('checked_out_time'))
 			{
 				return true;
 			}
@@ -188,7 +183,7 @@ abstract class FormEntityModel extends BaseEntityModel implements FormFactoryAwa
 			$user = \JFactory::getUser();
 
 			// Check if this is the user having previously checked out the row.
-			if ($this->entity->{$checkedOutField} > 0 && $this->entity->{$checkedOutField} != $user->get('id'))
+			if ($this->entity->checked_out > 0 && $this->entity->checked_out != $user->get('id'))
 			{
 				// TODO throw error here
 				// $this->setError(\JText::_('JLIB_APPLICATION_ERROR_CHECKOUT_USER_MISMATCH'));
@@ -210,8 +205,8 @@ abstract class FormEntityModel extends BaseEntityModel implements FormFactoryAwa
 			// Get the current time in the database format.
 			$time = \JFactory::getDate()->toSql();
 
-			$this->entity->$checkedOutField = (int) $user->get('id');
-			$this->entity->$checkedOutTimeField = $time;
+			$this->entity->checked_out = (int) $user->get('id');
+			$this->entity->checked_out_time = $time;
 
 			$this->entity->persist();
 
@@ -363,6 +358,7 @@ abstract class FormEntityModel extends BaseEntityModel implements FormFactoryAwa
 	 * @return  void
 	 *
 	 * @since   3.1
+	 * @throws \Exception
 	 */
 	protected function preprocessData($context, &$data, $group = 'content')
 	{
@@ -398,7 +394,7 @@ abstract class FormEntityModel extends BaseEntityModel implements FormFactoryAwa
 	/**
 	 * Method to validate the form data.
 	 *
-	 * @param   \JForm  $form   The form to validate against.
+	 * @param   JForm   $form   The form to validate against.
 	 * @param   array   $data   The data to validate.
 	 * @param   string  $group  The name of the field group to validate.
 	 *
@@ -407,6 +403,7 @@ abstract class FormEntityModel extends BaseEntityModel implements FormFactoryAwa
 	 * @see     \JFormRule
 	 * @see     \JFilterInput
 	 * @since   1.6
+	 * @throws \Exception
 	 */
 	public function validate($form, $data, $group = null)
 	{

@@ -10,11 +10,13 @@ namespace Joomla\CMS\MVC\EntityModel;
 
 defined('JPATH_PLATFORM') or die;
 
+use Exception;
 use Joomla\CMS\Event\Table\AbstractEvent;
 use Joomla\CMS\MVC\EntityModel\FormEntityModel;
 use Joomla\CMS\MVC\Factory\MVCFactoryInterface;
 use Joomla\CMS\Table\Table;
 use Joomla\CMS\Form\FormFactoryInterface;
+use Joomla\Database\DatabaseQuery;
 use Joomla\Entity\Model;
 use Joomla\String\StringHelper;
 
@@ -218,14 +220,12 @@ abstract class AdminEntityModel extends FormEntityModel
 			$pks = array((int) $this->getState($this->getName() . '.id'));
 		}
 
-		$checkedOutField = $this->entity->getColumnAlias('checked_out');
-
 		// Check in all items.
 		foreach ($pks as $pk)
 		{
 			if ($this->entity->load($pk))
 			{
-				if ($this->entity->{$checkedOutField} > 0)
+				if ($this->entity->checked_out > 0)
 				{
 					// TODO make checkin not load twice the Model
 					if (!parent::checkin($pk))
@@ -249,11 +249,12 @@ abstract class AdminEntityModel extends FormEntityModel
 	/**
 	 * Method override to check-out a record.
 	 *
-	 * @param   integer  $pk  The ID of the primary key.
+	 * @param   integer $pk The ID of the primary key.
 	 *
 	 * @return  boolean  True if successful, false if an error occurs.
 	 *
 	 * @since   1.6
+	 * @throws \Exception
 	 */
 	public function checkout($pk = null)
 	{
@@ -270,11 +271,64 @@ abstract class AdminEntityModel extends FormEntityModel
 	 * @return  boolean  True if successful, false if an error occurs.
 	 *
 	 * @since   1.6
+	 * @throws \Exception
 	 */
-	public function deleteMultiple(&$pks)
+	public function delete(&$pks)
 	{
-		// TODO
-		return false;
+		$pks = (array) $pks;
+
+		// Include the plugins for the delete events.
+		\JPluginHelper::importPlugin($this->events_map['delete']);
+
+		// Iterate the items to delete each one.
+		foreach ($pks as $i => $pk)
+		{
+			// TODO if we want to keep constraint loading, we can optimize this loads to only query the primary key.
+			if ($this->entity->load($pk))
+			{
+				if ($this->canDelete($this->entity))
+				{
+					$context = $this->option . '.' . $this->name;
+
+					// Trigger the before delete event.
+					$result = \JFactory::getApplication()->triggerEvent($this->event_before_delete, array($context, $this->entity));
+
+					if (in_array(false, $result, true))
+					{
+						// TODO better exception
+						throw new \Exception("no idea what exception this may be");
+					}
+
+					// TODO associations
+
+					if (!$this->entity->delete())
+					{
+						// TODO better exception
+						throw new \Exception("failed to delete");
+					}
+
+					// Trigger the after event.
+					\JFactory::getApplication()->triggerEvent($this->event_after_delete, array($context, $this->entity));
+				}
+				else
+				{
+					// Prune items that you can't change.
+					unset($pks[$i]);
+
+					\JLog::add(\JText::_('JLIB_APPLICATION_ERROR_DELETE_NOT_PERMITTED'), \JLog::WARNING, 'jerror');
+				}
+			}
+			else
+			{
+				// TODO better exception
+				throw new \Exception("failed to load entity for delete");
+			}
+		}
+
+		// Clear the component's cache
+		$this->cleanCache();
+
+		return true;
 	}
 
 	/**
@@ -349,12 +403,199 @@ abstract class AdminEntityModel extends FormEntityModel
 	 * @return  boolean  True on success.
 	 *
 	 * @since   1.6
+	 * @throws \Exception
 	 */
 	public function publish(&$pks, $value = 1)
 	{
-		// TODO publish
+		$user = \JFactory::getUser();
+		$pks = (array) $pks;
+
+		// Include the plugins for the change of state event.
+		\JPluginHelper::importPlugin($this->events_map['change_state']);
+
+		// Access checks.
+		foreach ($pks as $i => $pk)
+		{
+			if ($this->entity->load($pk, true))
+			{
+				if (!$this->canEditState($this->entity))
+				{
+					// Prune items that you can't change.
+					unset($pks[$i]);
+
+					\JLog::add(\JText::_('JLIB_APPLICATION_ERROR_EDITSTATE_NOT_PERMITTED'), \JLog::WARNING, 'jerror');
+
+					return false;
+				}
+
+				// If the table is checked out by another user, drop it and report to the user trying to change its state.
+				if ($this->entity->hasField('checked_out') && $this->entity->checked_out && ($this->entity->checked_out != $user->id))
+				{
+					\JLog::add(\JText::_('JLIB_APPLICATION_ERROR_CHECKIN_USER_MISMATCH'), \JLog::WARNING, 'jerror');
+
+					// Prune items that you can't change.
+					unset($pks[$i]);
+
+					return false;
+				}
+			}
+		}
+
+		// Attempt to change the state of the records.
+		$userId = (int) $user->get('id');
+		$state  = (int) $value;
+
+		// Pre-processing by observers
+		$event = AbstractEvent::create(
+			'onTableBeforePublish',
+			[
+				'subject'	=> $this,
+				'pks'		=> $pks,
+				'state'		=> $state,
+				'userId'	=> $userId,
+			]
+		);
+		$this->getDispatcher()->dispatch('onTableBeforePublish', $event);
+
+		// If there are no primary keys set check to see if the instance key is set.
+		if (empty($pks))
+		{
+			$pk = array();
+
+			// TODO we do not support composed primary keys.
+			if ($this->$key)
+			{
+				$pk[$key] = $this->$key;
+			}
+			// We don't have a full primary key - return false
+			else
+			{
+				throw new Exception(\JText::_('JLIB_DATABASE_ERROR_NO_ROWS_SELECTED'));
+			}
+
+			$pks = array($pk);
+		}
+
+		$publishedField = $this->entity->getColumnAlias('published');
+		$checkedOutField = $this->entity->getColumnAlias('checked_out');
+
+		$db = $this->entity->getDb();
+
+		foreach ($pks as $pk)
+		{
+			// Update the publishing state for rows with the given primary keys.
+			$query = $db->getQuery(true)
+				->update($this->entity->getTableName())
+				->set($db->quoteName($publishedField) . ' = ' . (int) $state);
+
+			// If publishing, set published date/time if not previously set
+			if ($state && $this->entity->hasField('publish_up') && (int) $this->entity->publish_up == 0)
+			{
+				$nowDate = $db->quote(\JFactory::getDate()->toSql());
+				$query->set($db->quoteName($this->entity->getColumnAlias('publish_up')) . ' = ' . $nowDate);
+			}
+
+			// Determine if there is checkin support for the table.
+			if (property_exists($this, 'checked_out') || property_exists($this, 'checked_out_time'))
+			{
+				$query->where('(' . $db->quoteName($checkedOutField) . ' = 0 OR ' . $db->quoteName($checkedOutField) . ' = ' . (int) $userId . ')');
+				$checkin = true;
+			}
+			else
+			{
+				$checkin = false;
+			}
+
+			// Build the WHERE clause for the primary keys.
+			$this->appendPrimaryKeys($query, $pk);
+
+			$db->setQuery($query);
+
+			$db->execute();
+
+			// If checkin is supported and all rows were adjusted, check them in. TODO I don't get this.
+			if ($checkin && (count($pks) == $db->getAffectedRows()))
+			{
+				$this->checkin($pk);
+			}
+
+			// If the Table instance value is in the list of primary keys that were set, set the instance.
+			$ours = true;
+
+			// TODO we do not suport composed primary keys yet
+			if ($this->$key != $pk[$key])
+			{
+				$ours = false;
+			}
+
+			if ($ours)
+			{
+				$this->$publishedField = $state;
+			}
+		}
+
+		// Pre-processing by observers
+		$event = AbstractEvent::create(
+			'onTableAfterPublish',
+			[
+				'subject'	=> $this,
+				'pks'		=> $pks,
+				'state'		=> $state,
+				'userId'	=> $userId,
+			]
+		);
+		$this->getDispatcher()->dispatch('onTableAfterPublish', $event);
+
+		$context = $this->option . '.' . $this->name;
+
+		// Trigger the change state event.
+		$result = \JFactory::getApplication()->triggerEvent($this->event_change_state, array($context, $pks, $value));
+
+		if (in_array(false, $result, true))
+		{
+			// TODO better exception
+			throw new \Exception("no idea what exception this may be");
+		}
+
+		// Clear the component's cache
+		$this->cleanCache();
 
 		return true;
+	}
+
+	/**
+	 * Method to append the primary keys for this table to a query.
+	 *
+	 * @param   DatabaseQuery  $query  A query object to append.
+	 * @param   mixed          $pk     Optional primary key parameter.
+	 *
+	 * @return  void
+	 *
+	 * @since   12.3
+	 */
+	public function appendPrimaryKeys($query, $pk = null)
+	{
+		if (is_null($pk))
+		{
+			foreach ($this->_tbl_keys as $k)
+			{
+				$query->where($this->_db->quoteName($k) . ' = ' . $this->_db->quote($this->$k));
+			}
+		}
+		else
+		{
+			if (is_string($pk))
+			{
+				$pk = array($this->_tbl_key => $pk);
+			}
+
+			$pk = (object) $pk;
+
+			foreach ($this->_tbl_keys as $k)
+			{
+				$query->where($this->_db->quoteName($k) . ' = ' . $this->_db->quote($pk->$k));
+			}
+		}
 	}
 
 	/**

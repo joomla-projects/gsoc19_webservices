@@ -62,7 +62,8 @@ class Content extends Model
 	 */
 	protected $columnAlias = [
 		'createdAt' => 'created',
-		'updatedAt' => 'modified'
+		'updatedAt' => 'modified',
+		'published' => 'state'
 	];
 
 	/**
