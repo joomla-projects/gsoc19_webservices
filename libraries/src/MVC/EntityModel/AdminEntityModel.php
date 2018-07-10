@@ -206,6 +206,7 @@ abstract class AdminEntityModel extends FormEntityModel
 	 * @return  integer|boolean  Boolean false if there is an error, otherwise the count of records checked in.
 	 *
 	 * @since   1.6
+	 * @throws \Exception
 	 */
 	public function checkin($pks = array())
 	{
@@ -237,10 +238,8 @@ abstract class AdminEntityModel extends FormEntityModel
 			}
 			else
 			{
-				// TODO throw error here
-				// $this->setError($table->getError());
-
-				return false;
+				// TODO better exception
+				throw new \Exception("falied to load Entity");
 			}
 		}
 
