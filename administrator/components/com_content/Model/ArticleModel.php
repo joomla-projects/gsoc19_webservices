@@ -12,7 +12,9 @@ namespace Joomla\Component\Content\Administrator\Model;
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Entity\Category;
+use Joomla\CMS\Entity\Featured;
 use Joomla\CMS\MVC\EntityModel\AdminEntityModel;
+use Joomla\Utilities\ArrayHelper;
 
 /**
  * Entity Model for an Article.
@@ -387,7 +389,7 @@ class ArticleModel extends AdminEntityModel
 			if (isset($data['featured']))
 			{
 				// TODO
-				$this->featured($this->getState($this->getName() . '.id'), $data['featured']);
+				$this->featured($this->entity->id, $data['featured']);
 			}
 
 			return true;
@@ -399,14 +401,78 @@ class ArticleModel extends AdminEntityModel
 	/**
 	 * Method to toggle the featured setting of articles.
 	 *
-	 * @param   array    $pks    The ids of the items to toggle.
-	 * @param   integer  $value  The value to toggle to.
+	 * @param   array   $pks   The ids of the items to toggle.
+	 * @param   integer $value The value to toggle to.
 	 *
 	 * @return  boolean  True on success.
+	 * @throws \Exception
 	 */
 	public function featured($pks, $value = 0)
 	{
-		// TODO
+		// Sanitize the ids.
+		$pks = (array) $pks;
+		$pks = ArrayHelper::toInteger($pks);
+
+		if (empty($pks))
+		{
+			throw new \Exception(\JText::_('COM_CONTENT_NO_ITEM_SELECTED'));
+		}
+
+		$db = $this->entity->getDb();
+		$query = $db->getQuery(true)
+			->update($db->quoteName('#__content'))
+			->set('featured = ' . (int) $value)
+			->where('id IN (' . implode(',', $pks) . ')');
+		$db->setQuery($query);
+		$db->execute();
+
+		if ((int) $value == 0)
+		{
+			// Adjust the mapping table.
+			// Clear the existing features settings.
+			$query = $db->getQuery(true)
+				->delete($db->quoteName('#__content_frontpage'))
+				->where('content_id IN (' . implode(',', $pks) . ')');
+			$db->setQuery($query);
+			$db->execute();
+		}
+		else
+		{
+			// First, we find out which of our new featured articles are already featured.
+			$query = $db->getQuery(true)
+				->select('f.content_id')
+				->from('#__content_frontpage AS f')
+				->where('content_id IN (' . implode(',', $pks) . ')');
+			$db->setQuery($query);
+
+			$oldFeatured = $db->loadColumn();
+
+			// We diff the arrays to get a list of the articles that are newly featured
+			$newFeatured = array_diff($pks, $oldFeatured);
+
+			// Featuring.
+			$tuples = array();
+
+			foreach ($newFeatured as $pk)
+			{
+				$tuples[] = $pk . ', 0';
+			}
+
+			if (count($tuples))
+			{
+				$columns = array('content_id', 'ordering');
+				$query = $db->getQuery(true)
+					->insert($db->quoteName('#__content_frontpage'))
+					->columns($db->quoteName($columns))
+					->values($tuples);
+				$db->setQuery($query);
+				$db->execute();
+			}
+		}
+
+		$this->reorderAll(new Featured($this->entity->getDb()));
+
+		$this->cleanCache();
 
 		return true;
 	}

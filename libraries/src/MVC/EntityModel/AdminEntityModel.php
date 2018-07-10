@@ -10,6 +10,7 @@ namespace Joomla\CMS\MVC\EntityModel;
 
 defined('JPATH_PLATFORM') or die;
 
+use Joomla\CMS\Event\Table\AbstractEvent;
 use Joomla\CMS\MVC\EntityModel\FormEntityModel;
 use Joomla\CMS\MVC\Factory\MVCFactoryInterface;
 use Joomla\CMS\Table\Table;
@@ -373,6 +374,86 @@ abstract class AdminEntityModel extends FormEntityModel
 	public function reorder($pks, $delta = 0)
 	{
 		// TODO reorder
+
+		return true;
+	}
+
+
+	/**
+	 * Method to compact the ordering values of rows in a group of rows defined by an SQL WHERE clause.
+	 *
+	 * @param   Model   $entity  Entity used for reordering
+	 * @param   string  $where   WHERE clause to use for limiting the selection of rows to compact the ordering values.
+	 *
+	 * @return  mixed  Boolean  True on success.
+	 *
+	 * @since   11.1
+	 * @throws  \UnexpectedValueException
+	 */
+	public function reorderAll($entity, $where = '')
+	{
+		// Check if there is an ordering field set
+		$orderingField = $entity->getColumnAlias('ordering');
+
+		if (!$entity->hasField($orderingField))
+		{
+			throw new \UnexpectedValueException(sprintf('%s does not support ordering.', get_class($this)));
+		}
+
+		$db = $entity->getDb();
+
+		$quotedOrderingField = $db->quoteName($orderingField);
+
+		$subquery = $db->getQuery(true)
+			->from($entity->getTableName())
+			->selectRowNumber($quotedOrderingField, 'new_ordering');
+
+		$query = $db->getQuery(true)
+			->update($entity->getTableName())
+			->set($quotedOrderingField . ' = sq.new_ordering');
+
+		$innerOn = array();
+
+		// Get the primary keys for the selection. TODO we only support one primary key
+
+		$subquery->select($db->quoteName($entity->getPrimaryKey(), "pk"));
+		$innerOn[] = $db->quoteName($entity->getPrimaryKey()) . ' = sq.' . $db->quoteName("pk");
+
+		// Setup the extra where and ordering clause data.
+		if ($where)
+		{
+			$subquery->where($where);
+			$query->where($where);
+		}
+
+		$subquery->where($quotedOrderingField . ' >= 0');
+		$query->where($quotedOrderingField . ' >= 0');
+
+		$query->innerJoin('(' . (string) $subquery . ') AS sq ON ' . implode(' AND ', $innerOn));
+
+		// Pre-processing by observers
+		$event = AbstractEvent::create(
+			'onTableBeforeReorder',
+			[
+				'subject'	=> $this,
+				'query'		=> $query,
+				'where'		=> $where,
+			]
+		);
+		$this->getDispatcher()->dispatch('onTableBeforeReorder', $event);
+
+		$db->setQuery($query);
+		$db->execute();
+
+		// Post-processing by observers
+		$event = AbstractEvent::create(
+			'onTableAfterReorder',
+			[
+				'subject'	=> $this,
+				'where'		=> $where,
+			]
+		);
+		$this->getDispatcher()->dispatch('onTableAfterReorder', $event);
 
 		return true;
 	}
