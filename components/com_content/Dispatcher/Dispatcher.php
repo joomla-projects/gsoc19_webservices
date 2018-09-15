@@ -11,12 +11,15 @@ namespace Joomla\Component\Content\Site\Dispatcher;
 
 defined('JPATH_PLATFORM') or die;
 
+use Joomla\CMS\Dispatcher\ComponentDispatcher;
+use Joomla\CMS\Language\Text;
+
 /**
- * Dispatcher class for com_content
+ * ComponentDispatcher class for com_content
  *
  * @since  4.0.0
  */
-class Dispatcher extends \Joomla\CMS\Dispatcher\Dispatcher
+class Dispatcher extends ComponentDispatcher
 {
 	/**
 	 * Dispatch a controller task. Redirecting the user if appropriate.
@@ -43,7 +46,7 @@ class Dispatcher extends \Joomla\CMS\Dispatcher\Dispatcher
 
 			if (!$hasAccess)
 			{
-				$this->app->enqueueMessage(\JText::_('JERROR_ALERTNOAUTHOR'), 'warning');
+				$this->app->enqueueMessage(Text::_('JERROR_ALERTNOAUTHOR'), 'warning');
 
 				return;
 			}

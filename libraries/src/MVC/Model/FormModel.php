@@ -10,12 +10,12 @@ namespace Joomla\CMS\MVC\Model;
 
 defined('JPATH_PLATFORM') or die;
 
-use Joomla\CMS\MVC\Factory\MVCFactoryInterface;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Form\FormFactoryAwareInterface;
 use Joomla\CMS\Form\FormFactoryAwareTrait;
 use Joomla\CMS\Form\FormFactoryInterface;
-use Joomla\CMS\Table\Table;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\MVC\Factory\MVCFactoryInterface;
 use Joomla\Utilities\ArrayHelper;
 
 /**
@@ -86,7 +86,7 @@ abstract class FormModel extends BaseDatabaseModel implements FormFactoryAwareIn
 		// Only attempt to check the row in if it exists.
 		if ($pk)
 		{
-			$user = \JFactory::getUser();
+			$user = Factory::getUser();
 
 			// Get an instance of the row to checkin.
 			$table = $this->getTable();
@@ -110,7 +110,7 @@ abstract class FormModel extends BaseDatabaseModel implements FormFactoryAwareIn
 			// Check if this is the user having previously checked out the row.
 			if ($table->{$checkedOutField} > 0 && $table->{$checkedOutField} != $user->get('id') && !$user->authorise('core.admin', 'com_checkin'))
 			{
-				$this->setError(\JText::_('JLIB_APPLICATION_ERROR_CHECKIN_USER_MISMATCH'));
+				$this->setError(Text::_('JLIB_APPLICATION_ERROR_CHECKIN_USER_MISMATCH'));
 
 				return false;
 			}
@@ -160,12 +160,12 @@ abstract class FormModel extends BaseDatabaseModel implements FormFactoryAwareIn
 				return true;
 			}
 
-			$user = \JFactory::getUser();
+			$user = Factory::getUser();
 
 			// Check if this is the user having previously checked out the row.
 			if ($table->{$checkedOutField} > 0 && $table->{$checkedOutField} != $user->get('id'))
 			{
-				$this->setError(\JText::_('JLIB_APPLICATION_ERROR_CHECKOUT_USER_MISMATCH'));
+				$this->setError(Text::_('JLIB_APPLICATION_ERROR_CHECKOUT_USER_MISMATCH'));
 
 				return false;
 			}
@@ -325,7 +325,7 @@ abstract class FormModel extends BaseDatabaseModel implements FormFactoryAwareIn
 		\JPluginHelper::importPlugin($group);
 
 		// Trigger the data preparation event.
-		\JFactory::getApplication()->triggerEvent('onContentPrepareData', array($context, &$data));
+		Factory::getApplication()->triggerEvent('onContentPrepareData', array($context, &$data));
 	}
 
 	/**
@@ -347,7 +347,7 @@ abstract class FormModel extends BaseDatabaseModel implements FormFactoryAwareIn
 		\JPluginHelper::importPlugin($group);
 
 		// Trigger the form preparation event.
-		\JFactory::getApplication()->triggerEvent('onContentPrepareForm', array($form, $data));
+		Factory::getApplication()->triggerEvent('onContentPrepareForm', array($form, $data));
 	}
 
 	/**
@@ -360,7 +360,7 @@ abstract class FormModel extends BaseDatabaseModel implements FormFactoryAwareIn
 	 * @return  array|boolean  Array of filtered data if valid, false otherwise.
 	 *
 	 * @see     \JFormRule
-	 * @see     \JFilterInput
+	 * @see     InputFilter
 	 * @since   1.6
 	 */
 	public function validate($form, $data, $group = null)
@@ -368,7 +368,7 @@ abstract class FormModel extends BaseDatabaseModel implements FormFactoryAwareIn
 		// Include the plugins for the delete events.
 		\JPluginHelper::importPlugin($this->events_map['validate']);
 
-		\JFactory::getApplication()->triggerEvent('onUserBeforeDataValidation', array($form, &$data));
+		Factory::getApplication()->triggerEvent('onUserBeforeDataValidation', array($form, &$data));
 
 		// Filter and validate the form data.
 		$data = $form->filter($data);

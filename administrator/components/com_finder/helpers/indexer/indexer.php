@@ -12,12 +12,10 @@ defined('_JEXEC') or die;
 use Joomla\String\StringHelper;
 
 JLoader::register('FinderIndexerHelper', __DIR__ . '/helper.php');
+JLoader::register('FinderIndexerLanguage', __DIR__ . '/language.php');
 JLoader::register('FinderIndexerParser', __DIR__ . '/parser.php');
-JLoader::register('FinderIndexerStemmer', __DIR__ . '/stemmer.php');
 JLoader::register('FinderIndexerTaxonomy', __DIR__ . '/taxonomy.php');
 JLoader::register('FinderIndexerToken', __DIR__ . '/token.php');
-
-jimport('joomla.filesystem.file');
 
 /**
  * Main indexer class for the Finder indexer package.
@@ -211,12 +209,6 @@ abstract class FinderIndexer
 		if (JFactory::getApplication()->get('debug'))
 		{
 			static::$profiler = JProfiler::getInstance('FinderIndexer');
-		}
-
-		// Setup the stemmer.
-		if ($data->options->get('stem', 1) && $data->options->get('stemmer', 'porter_en'))
-		{
-			FinderIndexerHelper::$stemmer = FinderIndexerStemmer::getInstance($data->options->get('stemmer', 'porter_en'));
 		}
 
 		// Set the state.
@@ -470,6 +462,11 @@ abstract class FinderIndexer
 
 		// Tokenize the input.
 		$tokens = FinderIndexerHelper::tokenize($input, $lang);
+
+		if (count($tokens) == 0)
+		{
+			return $count;
+		}
 
 		// Add the tokens to the database.
 		$count += $this->addTokensToDb($tokens, $context);

@@ -17,6 +17,8 @@ use Joomla\CMS\Component\Router\Rules\MenuRules;
 use Joomla\CMS\Component\Router\Rules\NomenuRules;
 use Joomla\CMS\Component\Router\Rules\StandardRules;
 use Joomla\CMS\Menu\AbstractMenu;
+use Joomla\CMS\Categories\Categories;
+use Joomla\CMS\Factory;
 
 /**
  * Routing class from com_contact
@@ -65,7 +67,7 @@ class ContactRouter extends RouterView
 	 */
 	public function getCategorySegment($id, $query)
 	{
-		$category = \JCategories::getInstance($this->getName())->get($id);
+		$category = Categories::getInstance($this->getName())->get($id);
 
 		if ($category)
 		{
@@ -111,11 +113,11 @@ class ContactRouter extends RouterView
 	{
 		if (!strpos($id, ':'))
 		{
-			$db = \JFactory::getDbo();
+			$db = Factory::getDbo();
 			$dbquery = $db->getQuery(true);
-			$dbquery->select($dbquery->qn('alias'))
-				->from($dbquery->qn('#__contact_details'))
-				->where('id = ' . $dbquery->q((int) $id));
+			$dbquery->select($dbquery->quoteName('alias'))
+				->from($dbquery->quoteName('#__contact_details'))
+				->where('id = ' . $dbquery->quote((int) $id));
 			$db->setQuery($dbquery);
 
 			$id .= ':' . $db->loadResult();
@@ -143,7 +145,7 @@ class ContactRouter extends RouterView
 	{
 		if (isset($query['id']))
 		{
-			$category = \JCategories::getInstance($this->getName(), array('access' => false))->get($query['id']);
+			$category = Categories::getInstance($this->getName(), array('access' => false))->get($query['id']);
 
 			if ($category)
 			{
@@ -195,12 +197,12 @@ class ContactRouter extends RouterView
 	{
 		if ($this->noIDs)
 		{
-			$db = \JFactory::getDbo();
+			$db = Factory::getDbo();
 			$dbquery = $db->getQuery(true);
-			$dbquery->select($dbquery->qn('id'))
-				->from($dbquery->qn('#__contact_details'))
-				->where('alias = ' . $dbquery->q($segment))
-				->where('catid = ' . $dbquery->q($query['id']));
+			$dbquery->select($dbquery->quoteName('id'))
+				->from($dbquery->quoteName('#__contact_details'))
+				->where('alias = ' . $dbquery->quote($segment))
+				->where('catid = ' . $dbquery->quote($query['id']));
 			$db->setQuery($dbquery);
 
 			return (int) $db->loadResult();

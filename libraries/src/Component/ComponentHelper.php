@@ -12,8 +12,12 @@ defined('JPATH_PLATFORM') or die;
 
 use Joomla\CMS\Access\Access;
 use Joomla\CMS\Component\Exception\MissingComponentException;
+use Joomla\CMS\Dispatcher\ComponentDispatcher;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Filter\InputFilter;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Log\Log;
 use Joomla\Registry\Registry;
-use Joomla\CMS\Dispatcher\Dispatcher;
 
 /**
  * Component helper class
@@ -116,11 +120,11 @@ class ComponentHelper
 	public static function filterText($text)
 	{
 		// Punyencoding utf8 email addresses
-		$text = \JFilterInput::getInstance()->emailToPunycode($text);
+		$text = InputFilter::getInstance()->emailToPunycode($text);
 
 		// Filter settings
 		$config     = static::getParams('com_config');
-		$user       = \JFactory::getUser();
+		$user       = Factory::getUser();
 		$userGroups = Access::getGroupsByUser($user->get('id'));
 
 		$filters = $config->get('filters');
@@ -231,7 +235,7 @@ class ComponentHelper
 			// Custom blacklist precedes Default blacklist
 			if ($customList)
 			{
-				$filter = \JFilterInput::getInstance(array(), array(), 1, 1);
+				$filter = InputFilter::getInstance(array(), array(), 1, 1);
 
 				// Override filter's default blacklist tags and attributes
 				if ($customListTags)
@@ -251,7 +255,7 @@ class ComponentHelper
 				$blackListTags       = array_diff($blackListTags, $whiteListTags);
 				$blackListAttributes = array_diff($blackListAttributes, $whiteListAttributes);
 
-				$filter = \JFilterInput::getInstance($blackListTags, $blackListAttributes, 1, 1);
+				$filter = InputFilter::getInstance($blackListTags, $blackListAttributes, 1, 1);
 
 				// Remove whitelisted tags from filter's default blacklist
 				if ($whiteListTags)
@@ -269,12 +273,12 @@ class ComponentHelper
 			elseif ($whiteList)
 			{
 				// Turn off XSS auto clean
-				$filter = \JFilterInput::getInstance($whiteListTags, $whiteListAttributes, 0, 0, 0);
+				$filter = InputFilter::getInstance($whiteListTags, $whiteListAttributes, 0, 0, 0);
 			}
 			// No HTML takes last place.
 			else
 			{
-				$filter = \JFilterInput::getInstance();
+				$filter = InputFilter::getInstance();
 			}
 
 			$text = $filter->clean($text, 'html');
@@ -296,8 +300,8 @@ class ComponentHelper
 	 */
 	public static function renderComponent($option, $params = array())
 	{
-		$app  = \JFactory::getApplication();
-		$lang = \JFactory::getLanguage();
+		$app  = Factory::getApplication();
+		$lang = Factory::getLanguage();
 
 		if (!$app->isClient('api'))
 		{
@@ -309,7 +313,7 @@ class ComponentHelper
 
 		if (empty($option))
 		{
-			throw new MissingComponentException(\JText::_('JLIB_APPLICATION_ERROR_COMPONENT_NOT_FOUND'), 404);
+			throw new MissingComponentException(Text::_('JLIB_APPLICATION_ERROR_COMPONENT_NOT_FOUND'), 404);
 		}
 
 		if (JDEBUG)
@@ -346,7 +350,7 @@ class ComponentHelper
 		// If component is disabled throw error
 		if (!static::isEnabled($option))
 		{
-			throw new MissingComponentException(\JText::_('JLIB_APPLICATION_ERROR_COMPONENT_NOT_FOUND'), 404);
+			throw new MissingComponentException(Text::_('JLIB_APPLICATION_ERROR_COMPONENT_NOT_FOUND'), 404);
 		}
 
 		ob_start();
@@ -378,7 +382,7 @@ class ComponentHelper
 	{
 		$loader = function ()
 		{
-			$db = \JFactory::getDbo();
+			$db = Factory::getDbo();
 			$query = $db->getQuery(true)
 				->select($db->quoteName(array('extension_id', 'element', 'params', 'namespace', 'enabled'), array('id', 'option', null, null, null)))
 				->from($db->quoteName('#__extensions'))
@@ -389,7 +393,7 @@ class ComponentHelper
 		};
 
 		/** @var \JCacheControllerCallback $cache */
-		$cache = \JFactory::getCache('_system', 'callback');
+		$cache = Factory::getCache('_system', 'callback');
 
 		try
 		{
@@ -406,13 +410,13 @@ class ComponentHelper
 			// Log deprecated warning and display missing component warning only if using deprecated format.
 			try
 			{
-				\JLog::add(
+				Log::add(
 					sprintf(
 						'Passing a parameter into %s() is deprecated and will be removed in 4.0. Read %s::$components directly after loading the data.',
 						__METHOD__,
 						__CLASS__
 					),
-					\JLog::WARNING,
+					Log::WARNING,
 					'deprecated'
 				);
 			}
@@ -426,20 +430,20 @@ class ComponentHelper
 				/*
 				 * Fatal error
 				 *
-				 * It is possible for this error to be reached before the global \JLanguage instance has been loaded so we check for its presence
+				 * It is possible for this error to be reached before the global Language instance has been loaded so we check for its presence
 				 * before logging the error to ensure a human friendly message is always given
 				 */
 
-				if (\JFactory::$language)
+				if (Factory::$language)
 				{
-					$msg = \JText::sprintf('JLIB_APPLICATION_ERROR_COMPONENT_NOT_LOADING', $option, \JText::_('JLIB_APPLICATION_ERROR_COMPONENT_NOT_FOUND'));
+					$msg = Text::sprintf('JLIB_APPLICATION_ERROR_COMPONENT_NOT_LOADING', $option, Text::_('JLIB_APPLICATION_ERROR_COMPONENT_NOT_FOUND'));
 				}
 				else
 				{
 					$msg = sprintf('Error loading component: %1$s, %2$s', $option, 'Component not found.');
 				}
 
-				\JLog::add($msg, \JLog::WARNING, 'jerror');
+				Log::add($msg, Log::WARNING, 'jerror');
 
 				return false;
 			}
@@ -480,7 +484,7 @@ class ComponentHelper
 	{
 		$reflect = new \ReflectionClass($object);
 
-		if (!$reflect->getNamespaceName() || get_class($object) == Dispatcher::class)
+		if (!$reflect->getNamespaceName() || get_class($object) == ComponentDispatcher::class)
 		{
 			return 'com_' . strtolower($alternativeName);
 		}

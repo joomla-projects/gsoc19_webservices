@@ -12,14 +12,15 @@ namespace Joomla\Component\Modules\Site\Dispatcher;
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Access\Exception\NotAllowed;
+use Joomla\CMS\Dispatcher\ComponentDispatcher;
 use Joomla\CMS\MVC\Controller\BaseController;
 
 /**
- * Dispatcher class for com_modules
+ * ComponentDispatcher class for com_modules
  *
  * @since  4.0.0
  */
-class Dispatcher extends \Joomla\CMS\Dispatcher\Dispatcher
+class Dispatcher extends ComponentDispatcher
 {
 	/**
 	 * Load the language
@@ -41,16 +42,16 @@ class Dispatcher extends \Joomla\CMS\Dispatcher\Dispatcher
 	 *
 	 * @since   4.0.0
 	 */
-	public function dispatch()
+	public function checkAccess()
 	{
+		parent::checkAccess();
+
 		if ($this->input->get('view') === 'modules'
 			&& $this->input->get('layout') === 'modal'
 			&& !$this->app->getIdentity()->authorise('core.create', 'com_modules'))
 		{
 			throw new NotAllowed;
 		}
-
-		parent::dispatch();
 	}
 
 	/**

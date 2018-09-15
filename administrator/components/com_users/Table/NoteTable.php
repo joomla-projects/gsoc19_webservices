@@ -6,16 +6,17 @@
  * @copyright   Copyright (C) 2005 - 2018 Open Source Matters, Inc. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
+
 namespace Joomla\Component\Users\Administrator\Table;
 
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Entity\EntityTableFormTrait;
-use Joomla\CMS\Entity\EntityTableTrait;
 use Joomla\CMS\Entity\UserNote;
 use Joomla\Database\DatabaseDriver;
 use Joomla\Utilities\ArrayHelper;
 use Joomla\CMS\Table\TableInterface;
+use Joomla\CMS\Factory;
 
 /**
  * User notes table class
