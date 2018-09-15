@@ -11,8 +11,8 @@ namespace Joomla\Entity\ModelHelpers;
 use Carbon\Carbon;
 
 /**
- * Trait Timestamps
- * @package Joomla\Entity\Helpers
+ * Timestamp Trait
+ *
  * @since 1.0
  */
 trait Timestamps

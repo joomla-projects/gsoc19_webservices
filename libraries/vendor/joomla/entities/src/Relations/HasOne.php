@@ -8,17 +8,15 @@
 
 namespace Joomla\Entity\Relations;
 
-use Joomla\Entity\Model;
 use Joomla\Entity\Helpers\Collection;
 
 /**
- * Class HasOne
- * @package Joomla\Entity\Relations
- * @since   1.0
+ * Joomla Framework Has one relation
+ *
+ * @since  1.0
  */
 class HasOne extends HasOneOrMany
 {
-
 	/**
 	 * Get the results of the relation.
 	 *

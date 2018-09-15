@@ -9,6 +9,8 @@
 namespace Joomla\Entity\Helpers;
 
 use ArrayAccess;
+use Closure;
+use Countable;
 use Joomla\Entity\Exceptions\JsonEncodingException;
 use JsonSerializable;
 use IteratorAggregate;
@@ -17,11 +19,11 @@ use Joomla\Entity\Model;
 
 
 /**
- * Class Collection
- * @package Joomla\Entity\Helpers
+ * Collection Helper class
+ *
  * @since   1.0
  */
-class Collection implements ArrayAccess, IteratorAggregate, JsonSerializable
+class Collection implements ArrayAccess, Countable, IteratorAggregate, JsonSerializable
 {
 	/**
 	 * The items contained in the collection.
@@ -226,5 +228,67 @@ class Collection implements ArrayAccess, IteratorAggregate, JsonSerializable
 	public function add($item)
 	{
 		$this->items[] = $item;
+	}
+
+	/**
+	 * Count elements of the collection. The return value is cast to an integer.
+	 *
+	 * @return   integer  The custom count as an integer.
+	 *
+	 */
+	public function count()
+	{
+		return count($this->items);
+	}
+
+	/**
+	 * Sort through each item with a callback.
+	 *
+	 * @param   Closure|null  $callback  callback function for sorting
+	 * @return static
+	 */
+	public function sort(Closure $callback = null)
+	{
+		$items = $this->items;
+
+		$callback
+			? usort($items, $callback)
+			: sort($items);
+
+		return new static($items);
+	}
+
+	/**
+	 * Sort through each item by an SQL ordering clause.
+	 *
+	 * @param   string  $ordering  SQL friendly ordering clause
+	 * @return static
+	 */
+	public function sortByOrdering($ordering)
+	{
+		$split = explode(' ', $ordering);
+		$asc = (count($split) > 1 && strtoupper($split[1] == 'DESC')) ? false : true;
+
+		$items = $this->items;
+
+		usort($items,
+			function ($a, $b) use ($split, $asc)
+			{
+				$valueA = $a->getAttributeNested($split[0]);
+				$valueB = $b->getAttributeNested($split[0]);
+
+				if ($valueA == $valueB)
+				{
+					return 0;
+				}
+
+				$return = ($valueA < $valueB) ? -1 : 1;
+				$return = ($asc) ? $return : -$return;
+
+				return $return;
+			}
+		);
+
+		return new static($items);
 	}
 }

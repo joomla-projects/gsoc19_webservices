@@ -168,7 +168,7 @@ trait EntityTableTrait
 		}
 
 		// Bind the source value, excluding the ignored fields.
-		foreach ($this->getAttributes() as $k => $v)
+		foreach ($this->getDbo()->getTableColumns($this->getTableName()) as $k => $v)
 		{
 			// Only process fields not in the ignore array.
 			if (!in_array($k, $ignore))

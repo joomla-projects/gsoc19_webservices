@@ -14,8 +14,8 @@ use Joomla\Entity\Helpers\Collection;
 use Joomla\Entity\Model;
 
 /**
- * Trait Attributes
- * @package Joomla\Entity\Helpers
+ * Serialization Trait
+ *
  * @since 1.0
  */
 trait Serialization

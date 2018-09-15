@@ -9,8 +9,8 @@
 namespace Joomla\Entity\Helpers;
 
 /**
- * Class ArrayHelper
- * @package Joomla\Entity\Helpers
+ * Array Helper class
+ *
  * @since   1.0
  */
 class ArrayHelper

@@ -14,9 +14,9 @@ use Joomla\Entity\Query;
 use Joomla\Entity\Helpers\Collection;
 
 /**
- * Relation Abstract Class
- * @package Joomla\Entity\Relations
- * @since 1.0
+ * Joomla Framework Base relation class
+ *
+ * @since  1.0
  */
 abstract class Relation
 {
@@ -74,7 +74,8 @@ abstract class Relation
 	 * Run a callback with constraints disabled on the relation.
 	 *
 	 * @param   Closure  $callback callback function
-	 * @return mixed
+	 *
+	 * @return  mixed
 	 */
 	public static function noConstraints(Closure $callback)
 	{
@@ -106,7 +107,8 @@ abstract class Relation
 	 * Set the constraints for an eager load of the relation.
 	 *
 	 * @param   array  $models eager load the relation on the specified models
-	 * @return void
+	 *
+	 * @return  void
 	 */
 	abstract public function addEagerConstraints(array $models);
 
@@ -115,7 +117,8 @@ abstract class Relation
 	 *
 	 * @param   array   $models   the array of Model instances
 	 * @param   string  $relation relation name
-	 * @return array
+	 *
+	 * @return  array
 	 */
 	abstract public function initRelation(array $models, $relation);
 
@@ -125,7 +128,8 @@ abstract class Relation
 	 * @param   array       $models   array of model instances
 	 * @param   Collection  $results  Collection of results (Relation Instances)
 	 * @param   string      $relation relation name
-	 * @return array
+	 *
+	 * @return  array
 	 */
 	abstract public function match(array $models, Collection $results, $relation);
 
@@ -149,7 +153,8 @@ abstract class Relation
 	/**
 	 * Execute the query as a "select" statement.
 	 *
-	 * @param   array  $columns columns to be selected
+	 * @param   array  $columns  Columns to be selected
+	 *
 	 * @return Collection
 	 */
 	public function get($columns = ['*'])
@@ -160,7 +165,7 @@ abstract class Relation
 	/**
 	 * Get the underlying query for the relation.
 	 *
-	 * @return \Joomla\Entity\Query;
+	 * @return  \Joomla\Entity\Query;
 	 */
 	public function getQuery()
 	{
@@ -170,7 +175,7 @@ abstract class Relation
 	/**
 	 * Get the parent model of the relation.
 	 *
-	 * @return Model
+	 * @return  Model
 	 */
 	public function getParent()
 	{
@@ -180,7 +185,7 @@ abstract class Relation
 	/**
 	 * Get the fully qualified parent key name.
 	 *
-	 * @return string
+	 * @return  string
 	 */
 	public function getQualifiedParentKey()
 	{
@@ -190,7 +195,7 @@ abstract class Relation
 	/**
 	 * Get the related model of the relation.
 	 *
-	 * @return Model
+	 * @return  Model
 	 */
 	public function getRelated()
 	{
@@ -203,7 +208,8 @@ abstract class Relation
 	 *
 	 * @param   array   $models the array of Model instances
 	 * @param   string  $key    the key name
-	 * @return array
+	 *
+	 * @return  array
 	 */
 	protected function getKeys(array $models, $key = null)
 	{
@@ -243,4 +249,11 @@ abstract class Relation
 	{
 		$this->query = clone $this->query;
 	}
+
+	/**
+	 * Get the qualified foreign key.
+	 *
+	 * @return string
+	 */
+	abstract public function getQualifiedForeignKey();
 }

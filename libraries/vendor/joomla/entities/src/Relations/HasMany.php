@@ -6,16 +6,14 @@
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
-
 namespace Joomla\Entity\Relations;
 
 use Joomla\Entity\Helpers\Collection;
 
-
 /**
- * Class HasMany
- * @package Joomla\Entity\Relations
- * @since   1.0
+ * Joomla Framework Has many relation
+ *
+ * @since  1.0
  */
 class HasMany extends HasOneOrMany
 {

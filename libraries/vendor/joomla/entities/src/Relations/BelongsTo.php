@@ -12,11 +12,10 @@ use Joomla\Entity\Helpers\Collection;
 use Joomla\Entity\Model;
 use Joomla\Entity\Query;
 
-
 /**
- * Class BelongsTo
- * @package Joomla\Entity\Relations
- * @since   1.0
+ * Joomla Framework Belongs to relation
+ *
+ * @since  1.0
  */
 class BelongsTo extends Relation
 {
@@ -82,7 +81,7 @@ class BelongsTo extends Relation
 			 */
 			$table = $this->related->getTableName();
 
-			$this->query->where($table . '.' . $this->ownerKey . '=' . $this->child->{$this->foreignKey});
+			$this->query->where($this->ownerKey, $this->child->{$this->foreignKey});
 		}
 	}
 
@@ -179,5 +178,25 @@ class BelongsTo extends Relation
 	public function getResults()
 	{
 		return $this->query->first();
+	}
+
+	/**
+	 * Get the qualified foreign key.
+	 *
+	 * @return string
+	 */
+	public function getQualifiedForeignKey()
+	{
+		return $this->parent->qualifyColumn($this->foreignKey);
+	}
+
+	/**
+	 * Get the fully qualified parent key name.
+	 *
+	 * @return string
+	 */
+	public function getQualifiedParentKey()
+	{
+		return $this->related->qualifyColumn($this->ownerKey);
 	}
 }

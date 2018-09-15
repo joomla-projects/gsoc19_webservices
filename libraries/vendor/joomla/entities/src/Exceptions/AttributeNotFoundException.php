@@ -11,8 +11,8 @@ namespace Joomla\Entity\Exceptions;
 use RuntimeException;
 
 /**
- * Class AttributeNotFoundException
- * @package Joomla\Entity\Exeptions
+ * AttributeNotFoundException
+ *
  * @since   1.0
  */
 class AttributeNotFoundException extends RuntimeException

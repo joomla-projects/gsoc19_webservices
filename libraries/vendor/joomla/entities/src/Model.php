@@ -10,11 +10,11 @@ namespace Joomla\Entity;
 
 use ArrayAccess;
 use BadMethodCallException;
+use Closure;
 use Joomla\Entity\Helpers\ArrayHelper;
 use JsonSerializable;
 use Joomla\Database\DatabaseDriver;
 use Joomla\String\Inflector;
-use Joomla\Entity\Exceptions\JsonEncodingException;
 use Joomla\Entity\Helpers\StringHelper;
 use Joomla\String\Normalise;
 
@@ -26,10 +26,12 @@ use Joomla\String\Normalise;
  * @method first()      first(array $columns = ['*'])
  * @method exists()     exists(mixed $id)
  * @method select()     select(array $columns)
- * @method where()      where(array $conditions, string $glue = 'AND')
+ * @method where()      where($conditions, string $glue = 'AND')
+ * @method order()      order($columns)
  * @method get()        get(array $columns = ['*'])
+ * @method count()      count()
+ * @method filter()     filter(string $relation, Closure $callback)
  *
- * @package Joomla\Entity
  * @since 1.0
  */
 abstract class Model implements ArrayAccess, JsonSerializable
@@ -52,6 +54,20 @@ abstract class Model implements ArrayAccess, JsonSerializable
 	 * @var string
 	 */
 	protected $table;
+
+	/**
+	 * The table associated alias for the query.
+	 *
+	 * @var string
+	 */
+	protected $alias = null;
+
+	/**
+	 * The model associated query. On each call to the database, the query is reset in the Query class.
+	 *
+	 * @var string
+	 */
+	protected $query;
 
 	/**
 	 * The primary key for the model.
@@ -94,7 +110,7 @@ abstract class Model implements ArrayAccess, JsonSerializable
 	 * @var array
 	 */
 	protected $passThrough = array(
-		'find', 'findLast', 'first', 'exists', 'select', 'where', 'whereIn', 'get'
+		'count', 'exists', 'filter', 'find', 'findLast', 'first', 'get', 'order', 'select', 'where', 'whereIn'
 	);
 
 	/**
@@ -122,11 +138,22 @@ abstract class Model implements ArrayAccess, JsonSerializable
 			$this->setDefaultTable();
 		}
 
+		/**
+		 * Model needs a default value for the primary key,
+		 * both for empty forms in Joomla CMS and filtering
+		 * (instantiating relations on empty instances)
+		 *
+		 * @todo this should be refactored in a better way later on
+		 */
+		$this->setAttribute($this->getPrimaryKey(), 0);
+
 		$this->setAttributes($attributes);
 
 		$this->syncOriginal();
 
 		$this->casts[$this->primaryKey] = $this->primaryKeyType;
+
+		$this->query = $this->newQuery();
 	}
 
 	/**
@@ -202,12 +229,18 @@ abstract class Model implements ArrayAccess, JsonSerializable
 	 * Qualify the given column name by the model's table.
 	 * If table alias is specified, but does not contain the '#__' keyword,
 	 * we add it manually because it is needed for prefix replacement in the Query
+	 * If an alias is set for the table, we use the alias for qualifying.
 	 *
 	 * @param   string  $column column name to by qualifies
 	 * @return string
 	 */
 	public function qualifyColumn($column)
 	{
+		if ($this->getAlias())
+		{
+			return $this->getAlias() . '.' . $column;
+		}
+
 		if (StringHelper::contains($column, '.'))
 		{
 			if (!StringHelper::startWith($column, '#__'))
@@ -219,6 +252,18 @@ abstract class Model implements ArrayAccess, JsonSerializable
 		}
 
 		return $this->getTableName() . '.' . $column;
+	}
+
+	/**
+	 * Qualify the given column name from a related model
+	 *
+	 * @param   string  $relation relation name
+	 * @param   string  $column   column name to by qualifies
+	 * @return string
+	 */
+	public function qualifyRelatedColumn($relation, $column)
+	{
+		return $this->query->getRelation($relation)->getRelated()->qualifyColumn($column);
 	}
 
 	/**
@@ -295,9 +340,7 @@ abstract class Model implements ArrayAccess, JsonSerializable
 		 */
 		$this->touchOwners();
 
-		$query = $this->newQuery();
-
-		return $this->performDelete($query);
+		return $this->performDelete($this->query);
 	}
 
 	/**
@@ -309,8 +352,6 @@ abstract class Model implements ArrayAccess, JsonSerializable
 	 */
 	public function persist($nulls = false)
 	{
-		$query = $this->newQuery();
-
 		// First we update the timestamps on the model if needed.
 		if ($this->usesTimestamps())
 		{
@@ -324,7 +365,7 @@ abstract class Model implements ArrayAccess, JsonSerializable
 		if ($this->exists)
 		{
 			$saved = $this->isDirty() ?
-				$this->performUpdate($query, $nulls) : true;
+				$this->performUpdate($this->query, $nulls) : true;
 		}
 
 		/** If the model is brand new, we'll insert it into our database and set the
@@ -333,7 +374,7 @@ abstract class Model implements ArrayAccess, JsonSerializable
 		 */
 		else
 		{
-			$saved = $this->performInsert($query, $nulls);
+			$saved = $this->performInsert($this->query, $nulls);
 		}
 
 		/** If the model is successfully saved, we need to sync the original array
@@ -453,7 +494,7 @@ abstract class Model implements ArrayAccess, JsonSerializable
 			}
 		}
 
-		return $this->newQuery()->$method(...$parameters);
+		return $this->query->$method(...$parameters);
 	}
 
 	/**
@@ -754,7 +795,7 @@ abstract class Model implements ArrayAccess, JsonSerializable
 	 */
 	public function with($relations)
 	{
-		return $this->newQuery()->with(
+		return $this->query->with(
 			is_string($relations) ? func_get_args() : $relations
 		);
 	}
@@ -767,7 +808,7 @@ abstract class Model implements ArrayAccess, JsonSerializable
 	 */
 	public function eagerLoad($relations)
 	{
-		$query = $this->newQuery()->with(
+		$query = $this->query->with(
 			is_string($relations) ? func_get_args() : $relations
 		);
 
@@ -829,5 +870,23 @@ abstract class Model implements ArrayAccess, JsonSerializable
 		}
 
 		return static::$fieldsCache[$this->getTableName()];
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getAlias()
+	{
+		return $this->alias;
+	}
+
+
+	/**
+	 * @param   string  $alias  table alias
+	 * @return void
+	 */
+	public function setAlias(string $alias)
+	{
+		$this->alias = $alias;
 	}
 }

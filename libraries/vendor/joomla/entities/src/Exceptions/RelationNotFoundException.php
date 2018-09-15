@@ -11,8 +11,8 @@ namespace Joomla\Entity\Exceptions;
 use RuntimeException;
 
 /**
- * Class RelationNotFoundException
- * @package Joomla\Entity\Exeptions
+ * RelationNotFoundException
+ *
  * @since   1.0
  */
 class RelationNotFoundException extends RuntimeException

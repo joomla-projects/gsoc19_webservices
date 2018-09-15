@@ -9,8 +9,8 @@
 namespace Joomla\Entity\Helpers;
 
 /**
- * Class StringHelper
- * @package Joomla\Entity\Helpers
+ * String Helper
+ *
  * @since   1.0
  */
 class StringHelper extends \Joomla\String\StringHelper

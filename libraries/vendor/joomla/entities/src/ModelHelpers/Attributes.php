@@ -19,8 +19,8 @@ use Joomla\Entity\Helpers\StringHelper;
 use Joomla\Entity\Relations\Relation;
 
 /**
- * Trait Attributes
- * @package Joomla\Entity\Helpers
+ * Attribute Trait
+ *
  * @since 1.0
  */
 trait Attributes
@@ -244,7 +244,7 @@ trait Attributes
 		/** If the aliased attribute does not exist as a column in the table and
 		 * if a get mutator is not defined for this key, we throw an exception.
 		 */
-		if (!$this->hasField($key))
+		if (!$this->hasField($key) || !array_key_exists($key, $this->attributesRaw))
 		{
 			throw AttributeNotFoundException::make($this, $key, 'get');
 		}
@@ -1120,5 +1120,28 @@ trait Attributes
 		$key = $this->getColumnAlias($key);
 
 		return in_array($key, $this->getDefaultFields());
+	}
+
+	/**
+	 * Get a nested attribute from the model.
+	 *
+	 * @param   string  $key attribute full name separated by . (SQL ordering friendly)
+	 *
+	 * @return mixed
+	 *
+	 * @throws AttributeNotFoundException
+	 */
+	public function getAttributeNested($key)
+	{
+		$path = explode('.', $key);
+
+		$current = $this;
+
+		foreach ($path as $key)
+		{
+			$current = $current->$key;
+		}
+
+		return $current;
 	}
 }

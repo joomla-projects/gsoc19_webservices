@@ -11,8 +11,8 @@ namespace Joomla\Entity\Exceptions;
 use RuntimeException;
 
 /**
- * Class JsonEncodingException
- * @package Joomla\Entity
+ * JsonEncodingException
+ *
  * @since   1.0
  */
 class JsonEncodingException extends RuntimeException
