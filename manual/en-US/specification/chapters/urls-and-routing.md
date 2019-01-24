@@ -7,11 +7,11 @@ URL Route: The REST API will always start with /api.
 
 #### Component Example
 The following are examples for the Joomla content component (com_content)
-  - List Articles (GET /api/v1/articles)
-  - Retrieve a Article (GET /api/v1/articles/999)
-  - Create a Article (POST /api/v1/articles)
-  - Update a Article (PUT /api/v1/articles/999)
-  - Delete a Article (DELETE /api/v1/articles/999)
+  - List Articles (GET /api/v1/article)
+  - Retrieve a Article (GET /api/v1/article/999)
+  - Create a Article (POST /api/v1/article)
+  - Update a Article (PUT /api/v1/article/999)
+  - Delete a Article (DELETE /api/v1/article/999)
 
 > Api/v1/ should be defined by the extension routes (v1 is not static). Versioning is probably going to be something defined at a component level.
 
