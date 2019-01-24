@@ -7,20 +7,20 @@ core components. You must authenticate with basic authentication. For the exampl
 
 You can curl a list of articles with the following:
 
-`curl -H 'Authorization: Basic YWRtaW46MTIz' -X GET /api/index.php/article`
+`curl -H 'Authorization: Basic YWRtaW46MTIz' -X GET /api/index.php/v1/article`
 
 you can also get a single article with:
 
-`curl -H 'Authorization: Basic YWRtaW46MTIz' -X GET /api/index.php/article/{article_id}`
+`curl -H 'Authorization: Basic YWRtaW46MTIz' -X GET /api/index.php/v1/article/{article_id}`
 
 You can delete an article with:
 
-`curl -H 'Authorization: Basic YWRtaW46MTIz' -X DELETE /api/index.php/article/{article_id}`
+`curl -H 'Authorization: Basic YWRtaW46MTIz' -X DELETE /api/index.php/v1/article/{article_id}`
 
 You can create an article with:
 
-`curl -H 'Authorization: Basic YWRtaW46MTIz' -X POST -H "Content-Type: application/json" /api/index.php/article -d '{"title": "Just for you", "catid": 64, "articletext": "My text", "metakey": "", "metadesc": "", "language": "*", "alias": "tobias"}'`	
+`curl -H 'Authorization: Basic YWRtaW46MTIz' -X POST -H "Content-Type: application/json" /api/index.php/v1/article -d '{"title": "Just for you", "catid": 64, "articletext": "My text", "metakey": "", "metadesc": "", "language": "*", "alias": "tobias"}'`	
 
 Finally you can update an article with:
 
-`curl -H 'Authorization: Basic YWRtaW46MTIz' -X PUT -H "Content-Type: application/json" /api/index.php/article/{article_id} -d '{"title": "Just for you part 2", "catid": 64}'`	
+`curl -H 'Authorization: Basic YWRtaW46MTIz' -X PUT -H "Content-Type: application/json" /api/index.php/v1/article/{article_id} -d '{"title": "Just for you part 2", "catid": 64}'`	
