@@ -1,5 +1,5 @@
 ## How to install the webservices branch
-Checkout the `lib_api` branch in this repository. Install Joomla as normal. You then need to discover install the 'Webservices - Content'
+Checkout the `lib_api` branch in this repository (NOTE: As of the start of GSOC 2019 you are better using the main Joomla 4 repo Nightly builds or Alpha 7 or later all of which contain more code than in this repo). Install Joomla as normal. You then need to discover install the 'Webservices - Content'
 plugin (and publish it). Currently as the plugin name suggests webservices is only being worked on for com_content - however
 it is being built in such a way that once it works for com_content it should be easy to apply across the rest of our
 core components. You must authenticate with basic authentication. For the examples below we shall use a username of
