@@ -4,7 +4,7 @@
 
 * Project Description: Integrating a rest API endpoint (like API/) into the Joomla Core.
 * Expected Results: Working REST API for the core. Including com_content as the reference implementation.
-* Official repository: [joomla-projects/gsoc18_webservices](https://github.com/joomla-projects/gsoc18_webservices)
+* Official repository: [joomla-projects/gsoc19_webservices](https://github.com/joomla-projects/gsoc19_webservices)
 
 * **Status: Draft**
 * **Version: 0.5-dev**
