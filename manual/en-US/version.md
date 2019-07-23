@@ -1,1 +1,1 @@
-Version 0.5-dev
+Version 0.6-dev
