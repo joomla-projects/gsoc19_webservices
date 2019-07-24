@@ -29,6 +29,7 @@ Continue the rollout of the API to all core components:
 
 * com_content
 * com_contact
+* com_fields
 * com_newsfeeds
 * com_weblinks 
 * com_media (custom)
