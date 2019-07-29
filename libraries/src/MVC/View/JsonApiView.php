@@ -58,6 +58,13 @@ abstract class JsonApiView extends JsonView
 	protected $fieldsToRenderList = [];
 
 	/**
+	 * Checks for an associations property to add into the JSON API Response
+	 *
+	 * @type  bool
+	 */
+	protected $hasAssociations = false;
+
+	/**
 	 * Constructor.
 	 *
 	 * @param   array  $config  A named configuration array for object construction.
@@ -134,7 +141,7 @@ abstract class JsonApiView extends JsonView
 		$lastPageQuery['offset'] = $totalPagesAvailable - $pagination->limit;
 		$lastPage->setVar('page', $lastPageQuery);
 
-		$collection = (new Collection($items, new JoomlaSerializer($this->type)))
+		$collection = (new Collection($items, new JoomlaSerializer($this->type, false)))
 			->fields([$this->type => $this->fieldsToRenderList]);
 
 		// Set the data into the document and render it
@@ -178,7 +185,7 @@ abstract class JsonApiView extends JsonView
 			throw new \RuntimeException('Content type missing');
 		}
 
-		$serializer = new JoomlaSerializer($this->type);
+		$serializer = new JoomlaSerializer($this->type, $this->hasAssociations);
 		$element = (new Resource($item, $serializer))
 			->fields([$this->type => $this->fieldsToRenderItem]);
 

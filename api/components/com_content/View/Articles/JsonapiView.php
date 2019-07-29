@@ -24,6 +24,13 @@ use Joomla\Component\Fields\Administrator\Helper\FieldsHelper;
 class JsonapiView extends BaseApiView
 {
 	/**
+	 * Checks for an associations property to add into the JSON API Response
+	 *
+	 * @type  bool
+	 */
+	protected $hasAssociations = true;
+
+	/**
 	 * The fields to render item in the documents
 	 *
 	 * @var  array
