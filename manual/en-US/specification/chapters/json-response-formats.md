@@ -187,12 +187,12 @@ It is referred as an Internet Draft a “work in progress” standard convention
 
 |Name|Structure|HyperMedia Support|Migration|Documentation|Ease of Use <br />(for third parties)|
 |----|----|----|----|----|----|
-JSON API|Flattened Nodes|Medium/High|CN|Extensive|Easy
-JSON-LD|Nested Nodes|Medium/High|NCN|Extensive (Complex)|Hard
-Collection+JSON|Collection Nodes|High|CN|Inadequate|Average
-JSend|Flattened Nodes|Low|NCN|Inadequate|Easy
-OData|Flattened Nodes|Medium|CN|Extensive |Average
-Siren|Flattened Nodes|Medium|CN|Adequate|Easy
+|JSON API|Flattened Nodes|Medium/High|CN|Extensive|Easy|
+|JSON-LD|Nested Nodes|Medium/High|NCN|Extensive (Complex)|Hard|
+|Collection+JSON|Collection Nodes|High|CN|Inadequate|Average|
+|JSend|Flattened Nodes|Low|NCN|Inadequate|Easy|
+|OData|Flattened Nodes|Medium|CN|Extensive |Average|
+|Siren|Flattened Nodes|Medium|CN|Adequate|Easy|
 
 CN*: (Major) Changes needed for the back-end.
 <br />NCN*: No/Minor change(s) needed for the back-end.
